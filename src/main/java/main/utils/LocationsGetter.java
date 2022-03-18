@@ -13,18 +13,18 @@ public class LocationsGetter {
     *           kind will be affected unless exceptIn says otherwise.
     * exceptIn: selects some subtrees. All those nodes won't be affected
     * 
-    * Example:
-    * A          continent
-    * |\
-    * | \
-    * |  \
-    * B   C      city
+    * Example:  --inEvery district --inAreas C --exceptIn F
+    *   A       continent
+    *  / \
+    * B   C     city
     * |\  |\
-    * D E F G    district
-    * 
-    * inEvery "district": D E F G
-    * inAreas "C": F G
-    * exceptIn "F": G
+    * D E F G   district
+    *
+    * Execution:
+    * 1. inEvery "district": D E F G
+    * 2. inAreas "C": F G
+    * 3. exceptIn "F": G
+    * 4. Result: G
     * */
 
     private static int targetLevel;
