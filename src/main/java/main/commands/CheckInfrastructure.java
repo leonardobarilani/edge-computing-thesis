@@ -1,0 +1,31 @@
+package main.commands;
+
+import com.google.gson.Gson;
+import main.infrastucture.Infrastructure;
+import main.utils.InfrastructureParser;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class CheckInfrastructure {
+
+    public static void checkInfrastructure(String fileName)
+    {
+        Gson g = new Gson();
+        Infrastructure infrastructure = null;
+        try {
+            infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
+
+            // Check correctness of infrastructure file.
+            System.err.println("🔄 Checking if infrastructure is correct.");
+            if(!InfrastructureParser.isInfrastructureJsonCorrect(infrastructure)) {
+                System.err.println("❌ The infrastructure JSON is NOT correct.");
+                return;
+            }
+            System.err.println("✅ The infrastructure JSON is correct.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
