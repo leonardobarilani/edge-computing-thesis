@@ -2,17 +2,18 @@ package main;
 
 import main.commands.CheckInfrastructure;
 import main.commands.Deploy;
+import main.commands.DisplayInfrastructure;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
 
-
     public static void main(String[] args) {
         String helpString = """
 Available commands:
 check-infrastructure <path to infrastructure file>
+display-infrastructure <path to infrastructure file>
 deploy <function name> <path to infrastructure file>
     --inEvery <areaTypeIdentifier>: In which area type to deploy the function. If not specified the function is deployed to the lowest level.
     --inAreas <area>: The name of the areas in which to deploy the function. If not specified the function is deployed everywhere.
@@ -32,6 +33,13 @@ help
                     return;
                 }
                 CheckInfrastructure.checkInfrastructure(args[1]);
+            }
+            case "display-infrastructure" -> {
+                if (args.length < 2) {
+                    System.err.println("Missing parameter: <path to infrastructure file>.");
+                    return;
+                }
+                DisplayInfrastructure.displayInfrastructure(args[1]);
             }
             case "deploy" -> {
                 if (args.length < 3) {
