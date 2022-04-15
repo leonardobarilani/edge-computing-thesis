@@ -1,11 +1,11 @@
-package main.commands;
+package cli.commands;
 
 import com.google.gson.Gson;
-import main.infrastucture.Area;
-import main.infrastucture.Infrastructure;
-import main.infrastucture.OpenFaaSRedisConfiguration;
-import main.utils.InfrastructureParser;
-import main.utils.LocationsGetter;
+import cli.infrastucture.Area;
+import cli.infrastucture.Infrastructure;
+import cli.infrastucture.OpenFaaSRedisConfiguration;
+import cli.utils.InfrastructureParser;
+import cli.utils.LocationsGetter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +16,12 @@ import java.nio.file.Path;
 public class Deploy {
 
     // infrastructureFileName was infrastructure
-    public static void deploy(String functionName, String infrastructureFileName,
-                              String inEvery, String[] inAreas, String[] exceptIn, String yaml)
+    public static void deploy(String functionName,
+                              String infrastructureFileName,
+                              String inEvery,
+                              String[] inAreas,
+                              String[] exceptIn,
+                              String yaml)
     {
         Gson g = new Gson();
         Infrastructure infrastructure = null;
@@ -69,7 +73,7 @@ public class Deploy {
             String envVariablesString =
                 "--env=LOCATION_ID=" + location.areaName +
                 " --env=EDGE_DEPLOYMENT_IN_EVERY=" + inEvery +
-                " --env=EDGE_INFRASTRUCTURE='" + infrastructureString + "'" +
+                " --env=EDGE_INFRASTRUCTURE='" + infrastructureString.replaceAll("\\s+","") + "'" +
                 " --env=REDIS_HOST=" + conf.redis_host +
                 " --env=REDIS_PORT=" + conf.redis_port +
                 " --env=REDIS_PASSWORD=" + conf.redis_password;

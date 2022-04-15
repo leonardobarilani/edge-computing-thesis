@@ -1,8 +1,8 @@
-package main.utils;
+package cli.utils;
 
-import main.infrastucture.Area;
-import main.infrastucture.Infrastructure;
-import main.infrastucture.OpenFaaSRedisConfiguration;
+import cli.infrastucture.Area;
+import cli.infrastucture.Infrastructure;
+import cli.infrastucture.OpenFaaSRedisConfiguration;
 
 import java.util.*;
 

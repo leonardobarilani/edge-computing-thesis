@@ -1,4 +1,4 @@
-package main.infrastucture;
+package cli.infrastucture;
 
 public class OpenFaaSRedisConfiguration {
 

@@ -38,7 +38,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>main.Main</mainClass>
+                            <mainClass>cli.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

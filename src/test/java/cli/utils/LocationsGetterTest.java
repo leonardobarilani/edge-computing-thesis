@@ -1,8 +1,8 @@
-package main.utils;
+package cli.utils;
 
 import com.google.gson.Gson;
-import main.infrastucture.Area;
-import main.infrastucture.Infrastructure;
+import cli.infrastucture.Area;
+import cli.infrastucture.Infrastructure;
 import org.junit.Test;
 
 import java.io.IOException;

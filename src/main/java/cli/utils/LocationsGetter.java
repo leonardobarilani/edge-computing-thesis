@@ -1,7 +1,7 @@
-package main.utils;
+package cli.utils;
 
-import main.infrastucture.Area;
-import main.infrastucture.Infrastructure;
+import cli.infrastucture.Area;
+import cli.infrastucture.Infrastructure;
 
 import java.util.*;
 
@@ -48,6 +48,7 @@ public class LocationsGetter {
 
         // if inAreas is not specified, we target all locations
         if (inAreas.length == 0)
+			// TODO this is wrong, we have to get the root of the tree (example: p1)
             inAreas = new String[]{infrastructure.areaTypesIdentifiers[0]};
 
         // if inEvery is not specified, we target the lowest level

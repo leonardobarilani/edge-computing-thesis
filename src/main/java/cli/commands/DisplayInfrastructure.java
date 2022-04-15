@@ -1,9 +1,9 @@
-package main.commands;
+package cli.commands;
 
 import com.google.gson.Gson;
-import main.infrastucture.Area;
-import main.infrastucture.Infrastructure;
-import main.utils.InfrastructureParser;
+import cli.infrastucture.Area;
+import cli.infrastucture.Infrastructure;
+import cli.utils.InfrastructureParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
