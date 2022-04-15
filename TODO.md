@@ -1,3 +1,7 @@
 # TODO
 
 * Replace System.out and System.err with Logger and implement verbosity parameter
+* Run an openfaas "ping" before deploying even for unused nodes (silent if online)
+* Change the check-infrastructures inside deploy command to be silent if there are no errors
+* Remove redundant "infrastructure" in check-infrastructure and print-infrastructure
+* Fix --inAreas bug (when not specified it uses the first location in the names' array instead of the name of the root location)
