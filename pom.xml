@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>location-aware-edge-api-java-port</artifactId>
+    <groupId>it.polimi.edge-computing-cli</groupId>
+    <artifactId>edge-deployer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -28,6 +28,14 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- BEGIN LIBRARY DEPENDENCIES-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <!-- END LIBRARY DEPENDENCIES-->
     </dependencies>
 
     <!-- https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven -->
