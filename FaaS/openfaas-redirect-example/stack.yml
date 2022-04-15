@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  echo:
+    lang: java11
+    handler: ./echo
+    image: carrone/echo:latest
+  redirect:
+    lang: java11
+    handler: ./redirect
+    image: carrone/redirect:latest
+
