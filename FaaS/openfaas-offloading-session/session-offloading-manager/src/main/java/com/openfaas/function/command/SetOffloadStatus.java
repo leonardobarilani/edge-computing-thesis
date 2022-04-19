@@ -1,20 +1,19 @@
 package com.openfaas.function.command;
 
-import com.openfaas.function.common.JedisHandler;
+import com.openfaas.function.common.RedisHandler;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
-import com.openfaas.model.Response;
 
 public class SetOffloadStatus implements Command {
 
     public void Handle(IRequest req, IResponse res) {
-        JedisHandler redis = new JedisHandler();
+        RedisHandler redis = new RedisHandler();
 
         String offloading = req.getQuery().get("status");
 
-        if (!offloading.equals("yes") && !offloading.equals("no"))
+        if (!offloading.equals("accept") && !offloading.equals("reject"))
         {
-            String message = "Malformed request: <" + offloading + "> is not a valid offloading status (valid offloading statuses: yes/no)";
+            String message = "Malformed request: <" + offloading + "> is not a valid offloading status (valid offloading statuses: accept/reject)";
 
             System.out.println(message);
             res.setBody(message);
@@ -29,5 +28,6 @@ public class SetOffloadStatus implements Command {
             res.setBody(message);
             res.setStatusCode(200);
         }
+        redis.close();
     }
 }

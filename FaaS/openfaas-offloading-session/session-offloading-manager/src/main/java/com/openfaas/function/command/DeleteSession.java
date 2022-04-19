@@ -1,20 +1,18 @@
 package com.openfaas.function.command;
 
-import com.google.gson.Gson;
 import com.openfaas.function.common.HTTPUtils;
-import com.openfaas.function.common.JedisHandler;
+import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
-import com.openfaas.model.Response;
 
 public class DeleteSession implements Command {
 
     public void Handle(IRequest req, IResponse res) {
         String sessionToDelete = req.getQuery().get("session");
-        JedisHandler redis = new JedisHandler();
+        RedisHandler redis = new RedisHandler();
 
-        if (sessionToDelete.isEmpty())
+        if (sessionToDelete == null || sessionToDelete.isEmpty())
         {
             System.out.println("Received a malformed request");
             // malformed request
@@ -34,14 +32,16 @@ public class DeleteSession implements Command {
             }
             else
             {
-                SessionToken sessionToken = new Gson().fromJson(sessionValue, SessionToken.class);
+                SessionToken sessionToken = new SessionToken();
+                sessionToken.initJson(sessionValue);
 
                 // delete the session remotely (if it is offloaded)
                 if (!sessionToken.currentLocation.equals(sessionToken.proprietaryLocation)) {
                     System.out.println("Deleting the session remotely (" + sessionToken.currentLocation + ")");
                     HTTPUtils.sendGET(
                             sessionToken.currentLocation +
-                                    "/session-offloading-manager?command=delete-session&session=" + sessionToken.session
+                                    "/session-offloading-manager?command=delete-session&session=" + sessionToken.session,
+                            ""
                     );
                 }
 
@@ -53,5 +53,6 @@ public class DeleteSession implements Command {
                 res.setStatusCode(200);
             }
         }
+        redis.close();
     }
 }

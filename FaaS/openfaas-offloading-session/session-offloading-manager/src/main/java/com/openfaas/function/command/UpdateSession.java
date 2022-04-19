@@ -1,17 +1,17 @@
 package com.openfaas.function.command;
 
 import com.google.gson.Gson;
-import com.openfaas.function.common.JedisHandler;
+import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
-import com.openfaas.model.Response;
 
 public class UpdateSession implements Command {
 
     public void Handle(IRequest req, IResponse res) {
-        JedisHandler redis = new JedisHandler();
+        RedisHandler redis = new RedisHandler();
 
+        // TODO usiamo gson o json simpler?
         SessionToken sessionToken = new Gson().fromJson(req.getBody(), SessionToken.class);
         String sessionJson = req.getBody();
 
@@ -53,5 +53,6 @@ public class UpdateSession implements Command {
             res.setBody(message);
             res.setStatusCode(200);
         }
+        redis.close();
     }
 }

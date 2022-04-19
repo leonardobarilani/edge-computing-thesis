@@ -17,11 +17,13 @@ dependencies {
     compile 'com.openfaas:model:0.1.1'
     compile 'com.openfaas:entrypoint:0.1.0'
 
-    // Jedis dependency
-    compile "redis.clients:jedis:4.2.0"
+    // README: apparently using 'implementation' breaks the
+    // function that use those libraries, so 'compile' its advised
     // Gson dependency
-    implementation 'com.google.code.gson:gson:2.9.0'
-    // Lettuce
+    compile 'com.google.code.gson:gson:2.9.0'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
 }
 
