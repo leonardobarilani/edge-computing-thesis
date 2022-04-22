@@ -50,12 +50,12 @@ public class OffloadSession implements Command {
             String url = EdgeInfrastructureUtils.getParentHost() +
                     "/function/session-offloading-manager?command=offload-session";
             System.out.println("Redirecting session to parent:\n\t" + url + "\n\t" + req.getBody());
-            HTTPUtils.sendGETWithoutResponse(url, req.getBody());
-            /*try {
+            //HTTPUtils.sendGETWithoutResponse(url, req.getBody());
+            try {
                 HTTPUtils.sendAsyncJsonPOST(url, req.getBody());
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
         redis.close();
     }
