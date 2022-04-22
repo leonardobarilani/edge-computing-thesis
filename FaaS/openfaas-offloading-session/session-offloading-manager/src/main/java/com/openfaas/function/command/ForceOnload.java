@@ -8,6 +8,8 @@ import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
+import java.io.IOException;
+
 public class ForceOnload implements Command {
 
     public void Handle(IRequest req, IResponse res) {
@@ -31,7 +33,12 @@ public class ForceOnload implements Command {
         String urlLeaf = EdgeInfrastructureUtils.getGateway(session.proprietaryLocation) +
                 "/function/session-offloading-manager?command=update-session";
         System.out.println("Updating proprietary:\n\t" + urlLeaf + "\n\t" + jsonNewSession);
-        HTTPUtils.sendGETWithoutResponse(urlLeaf, jsonNewSession);
+        //HTTPUtils.sendGETWithoutResponse(urlLeaf, jsonNewSession);
+        try {
+            HTTPUtils.sendAsyncJsonPOST(urlLeaf, jsonNewSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         res.setStatusCode(200);
         res.setBody("Unloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + jsonNewSession);
