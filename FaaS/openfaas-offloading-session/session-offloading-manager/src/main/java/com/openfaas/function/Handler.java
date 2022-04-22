@@ -3,6 +3,7 @@ package com.openfaas.function;
 import com.openfaas.function.command.*;
 import com.openfaas.model.*;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +13,11 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         IResponse res = new Response();
         try {
 
-            System.out.println("----------NEW COMMAND----------");
+            System.out.println("\n\n----------BEGIN NEW COMMAND----------");
+            System.out.println(Calendar.getInstance().getTime());
             System.out.println("Query raw: " + req.getQueryRaw());
             for (var v : req.getQuery().keySet())
-                System.out.println("Query key: " + v + ". Value: " + req.getQuery().get(v));
+                System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
 
             String command = req.getQuery().get("command");
 
@@ -30,15 +32,17 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             commands.put("update-session", new UpdateSession());
             commands.put("test-function", new TestFunction());
             commands.put("set-offload-status", new SetOffloadStatus());
+            commands.put("redis", new Redis());
 
             if (commands.containsKey(command)) {
-                System.out.println("----------START HANDLE----------");
+                System.out.println("----------BEGIN COMMAND <" + command + "> HANDLE----------");
                 commands.get(command).Handle(req, res);
-                System.out.println("----------END HANDLE----------");
+                System.out.println("----------END COMMAND HANDLE----------");
             } else {
                 res.setBody("Unrecognized command: " + command + "\nAvailable commands: " + commands.keySet());
                 res.setStatusCode(404);
             }
+            System.out.println("----------END NEW COMMAND----------");
 
         } catch(Exception e) { e.printStackTrace(); }
 	    return res;

@@ -7,7 +7,7 @@ import com.openfaas.model.IRequest;
 public class SetOffloadStatus implements Command {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.OFFLOAD);
 
         String offloading = req.getQuery().get("status");
 

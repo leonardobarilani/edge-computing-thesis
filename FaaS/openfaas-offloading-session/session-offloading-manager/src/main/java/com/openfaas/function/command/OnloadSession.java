@@ -12,7 +12,7 @@ public class OnloadSession implements Command {
         RedisHandler redis = new RedisHandler();
 
         // get a random session to onload
-        SessionToken randomSession = new Gson().fromJson(redis.getRandomSession(), SessionToken.class);
+        SessionToken randomSession = new Gson().fromJson(redis.getRandom(), SessionToken.class);
 
         if (randomSession == null)
         {
@@ -23,7 +23,7 @@ public class OnloadSession implements Command {
         else
         {
             // remove the local reference of the session
-            redis.set(randomSession.session, null);
+            redis.delete(randomSession.session);
 
             String unloadedSession = new Gson().toJson(randomSession);
             System.out.println("Onloading:\n\t" + unloadedSession);

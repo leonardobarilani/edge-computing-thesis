@@ -2,33 +2,55 @@
 # Offload a session and access it succesfully
 
 # API calls:
-# create-session
-# force-offload
-# test-session
-# delete-session
-# test-session
+# p3 redis delete-all-sessions
+# p2 redis delete-all-sessions
+# p3 set-offload-status accept
+# p2 set-offload-status accept
+# p3 create-session
+# p3 force-offload
+# (p2 offload-session)
+# (p3 update-session)
+# p3 test-session
+# p2 test-session
+# p3 delete-session
+# p3 test-session
+# p2 test-session
 
 import requests
 import os
+import time
+
+# string, string, (string,string)
+def send(command, ip, auth):
+	session = requests.get('http://' + ip + ':31112/function/' + command, auth=auth, timeout=5)
+	print (ip + "  " + command + " response: \n" + str(session.content, "utf-8") + "\n")
+	return str(session.content, "utf-8")
+	
 
 p3_ip = os.popen('minikube ip -p p3').read().translate(str.maketrans('', '', ' \n\t\r'))
-p3_auth = ('admin','dwTPP2jqw0HE')
+p3_auth = ('admin','AtwatNsxwnUw')
 
-offloading = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=set-offload-status&status=no', auth=p3_auth, timeout=5)
-print ("Session received: \n" + str(offloading.content))
+p2_ip = os.popen('minikube ip -p p2').read().translate(str.maketrans('', '', ' \n\t\r'))
+p2_auth = ('admin','cU5X45xVOSql')
 
-session = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=create-session', auth=p3_auth, timeout=5)
-session_text = str(session.content)
-print ("Session received: \n" + session_text)
+send('session-offloading-manager?command=redis&redis-command=delete-all-sessions', p3_ip, p3_auth)
+send('session-offloading-manager?command=redis&redis-command=delete-all-sessions', p2_ip, p2_auth)
+send('session-offloading-manager?command=set-offload-status&status=accept', p3_ip, p3_auth)
+send('session-offloading-manager?command=set-offload-status&status=accept', p2_ip, p2_auth)
+input("Press Enter to continue...")
 
-force = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=force-offload', auth=p3_auth, timeout=5)
-print ("Force offload received: \n" + str(force.content))
+session = send('session-offloading-manager?command=create-session', p3_ip, p3_auth)
+input("Press Enter to continue...")
 
-test = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=test-function', auth=p3_auth, timeout=5, params={"session":session.content})
-print ("Test (should work): \n" + str(test.content))
+send('session-offloading-manager?command=force-offload', p3_ip, p3_auth)
+input("Press Enter to continue...")
 
-delete = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=delete-session', auth=p3_auth, timeout=5, params={"session":session.content})
-print ("Delete message received: \n" + str(delete.content))
+send('session-offloading-manager?command=test-function&session='+session, p3_ip, p3_auth)
+send('session-offloading-manager?command=test-function&session='+session, p2_ip, p2_auth)
+input("Press Enter to continue...")
 
-test = requests.get('http://' + p3_ip + ':31112/function/session-offloading-manager?command=test-function', auth=p3_auth, timeout=5, params={"session":session.content})
-print ("Test (should fail): \n" + str(test.content))
+send('session-offloading-manager?command=delete-session&session='+session, p3_ip, p3_auth)
+input("Press Enter to continue...")
+
+send('session-offloading-manager?command=test-function&session='+session, p3_ip, p3_auth)
+send('session-offloading-manager?command=test-function&session='+session, p2_ip, p2_auth)

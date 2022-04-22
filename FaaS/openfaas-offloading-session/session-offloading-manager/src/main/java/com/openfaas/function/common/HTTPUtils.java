@@ -1,10 +1,11 @@
 package com.openfaas.function.common;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 
 public class HTTPUtils {
 
@@ -12,50 +13,72 @@ public class HTTPUtils {
 
     public static Response sendGET(String urlString, String body){
         // https://www.baeldung.com/java-http-request
-        URL url = null;
         try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpURLConnection con = null;
-        try {
-            con = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(urlString).openConnection();
             con.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedWriter outputStream = new BufferedWriter(new
-                    OutputStreamWriter(con.getOutputStream()));
-            outputStream.write(body);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuilder response = new StringBuilder();
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
+            con.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.writeBytes(body);
+            out.flush();
+            out.close();
+
+            StringBuilder response = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
+
             in.close();
-        } catch (IOException e) {
+            int responseCode = con.getResponseCode();
+            con.disconnect();
+            return new Response(responseCode, response.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        con.disconnect();
-        int responseCode = -1;
+        return null;
+    }
+    public static void sendGETWithoutResponse(String urlString, String body){
+        // https://www.baeldung.com/java-http-request
         try {
-            responseCode = con.getResponseCode();
-        } catch (IOException e) {
+            HttpURLConnection con = (HttpURLConnection) new URL(urlString).openConnection();
+            con.setRequestMethod("GET");
+            con.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.writeBytes(body);
+            out.flush();
+            out.close();
+            con.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Response(responseCode, response.toString());
+    }
+
+    public static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,
+                                                                            String body)
+            throws IOException
+    {
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        return HttpClient.newHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

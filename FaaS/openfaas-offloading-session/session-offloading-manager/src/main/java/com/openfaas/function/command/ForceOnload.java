@@ -28,10 +28,10 @@ public class ForceOnload implements Command {
         redis.set(session.session, jsonNewSession);
 
         // send new json object to proprietaryLocation
-        String urlLeaf = session.proprietaryLocation +
-                "/session-offloading-manager?command=update-session";
+        String urlLeaf = EdgeInfrastructureUtils.getGateway(session.proprietaryLocation) +
+                "/function/session-offloading-manager?command=update-session";
         System.out.println("Updating proprietary:\n\t" + urlLeaf + "\n\t" + jsonNewSession);
-        HTTPUtils.sendGET(urlLeaf, jsonNewSession);
+        HTTPUtils.sendGETWithoutResponse(urlLeaf, jsonNewSession);
 
         res.setStatusCode(200);
         res.setBody("Unloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + jsonNewSession);

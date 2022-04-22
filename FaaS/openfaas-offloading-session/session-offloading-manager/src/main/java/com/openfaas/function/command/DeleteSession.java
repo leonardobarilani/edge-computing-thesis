@@ -1,10 +1,18 @@
 package com.openfaas.function.command;
 
+import com.openfaas.function.common.EdgeInfrastructureUtils;
 import com.openfaas.function.common.HTTPUtils;
 import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
+
+import java.io.IOException;
+import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class DeleteSession implements Command {
 
@@ -35,22 +43,49 @@ public class DeleteSession implements Command {
                 SessionToken sessionToken = new SessionToken();
                 sessionToken.initJson(sessionValue);
 
-                // delete the session remotely (if it is offloaded)
-                if (!sessionToken.currentLocation.equals(sessionToken.proprietaryLocation)) {
+                CompletableFuture<HttpResponse<String>> future = null;
+                // delete the session remotely (if it is offloaded, and I am the proprietary)
+                if (!sessionToken.currentLocation.equals(sessionToken.proprietaryLocation) &&
+                    sessionToken.proprietaryLocation.equals(System.getenv("LOCATION_ID"))) {
                     System.out.println("Deleting the session remotely (" + sessionToken.currentLocation + ")");
-                    HTTPUtils.sendGET(
-                            sessionToken.currentLocation +
-                                    "/session-offloading-manager?command=delete-session&session=" + sessionToken.session,
-                            ""
-                    );
+                    try {
+                        future = HTTPUtils.sendAsyncJsonPOST(
+                                EdgeInfrastructureUtils.getGateway(sessionToken.currentLocation) +
+                                        "/function/session-offloading-manager?command=delete-session&session=" + sessionToken.session,
+                                ""
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 System.out.println("Deleting the session locally");
                 // delete the session locally
-                redis.set(sessionToDelete, null);
+                redis.delete(sessionToDelete);
 
-                res.setBody("Session <" + sessionToDelete + "> successfully deleted");
-                res.setStatusCode(200);
+
+                if (future != null)
+                {
+                    try {
+                        if (future.get().statusCode() != 200)
+                        {
+                            res.setBody("Session <" + sessionToDelete + "> unsuccessfully deleted remotely. Remote response ("+future.get().statusCode()+"): " + future.get().body());
+                            res.setStatusCode(future.get().statusCode());
+                        }
+                        else
+                        {
+                            res.setBody("Session <" + sessionToDelete + "> successfully deleted remotely and locally");
+                            res.setStatusCode(200);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    res.setBody("Session <" + sessionToDelete + "> successfully deleted");
+                    res.setStatusCode(200);
+                }
             }
         }
         redis.close();

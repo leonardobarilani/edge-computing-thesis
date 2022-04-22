@@ -14,8 +14,10 @@ public class TestFunction implements Command {
 
         System.out.println("About to test: " + sessionRequested);
 
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
         String sessionJson = redis.get(sessionRequested);
+        redis.close();
+        redis = new RedisHandler(RedisHandler.OFFLOAD);
 
         if (sessionJson == null || sessionJson.isEmpty())
         {
