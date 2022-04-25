@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 
 public class Deploy {
 
@@ -70,13 +71,15 @@ public class Deploy {
         // Deploy to all locations.
         for (Area location : listOfLocations) {
             OpenFaaSRedisConfiguration conf = location.mainLocation;
+            String infrastructureBase64 = Base64.getEncoder().encodeToString(infrastructureString.getBytes());
             String envVariablesString =
                 "--env=LOCATION_ID=" + location.areaName +
                 " --env=EDGE_DEPLOYMENT_IN_EVERY=" + inEvery +
-                " --env=EDGE_INFRASTRUCTURE='" + infrastructureString.replaceAll("\\s+","") + "'" +
+                " --env=EDGE_INFRASTRUCTURE=" + infrastructureBase64 +
                 " --env=REDIS_HOST=" + conf.redis_host +
                 " --env=REDIS_PORT=" + conf.redis_port +
-                " --env=REDIS_PASSWORD=" + conf.redis_password;
+                " --env=REDIS_PASSWORD=" + conf.redis_password +
+                " --label com.openfaas.scale.min=2";
             System.out.println(
                     "📶 Deploying on location: \"" + location.areaName +
                             "\", gateway: \"" + conf.openfaas_gateway + "\".");
