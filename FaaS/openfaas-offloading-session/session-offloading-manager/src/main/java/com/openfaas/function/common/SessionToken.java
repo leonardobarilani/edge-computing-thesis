@@ -11,15 +11,17 @@ public class SessionToken {
 	public String session;
     public String proprietaryLocation;
     public String currentLocation;
+    public String function;
 
     public SessionToken () { }
 
-    public void init() {
+    public void init(String functionName) {
         session = System.getenv("LOCATION_ID") + "_" +
                 Calendar.getInstance().getTimeInMillis() + "_" +
                 ThreadLocalRandom.current().nextInt();
         proprietaryLocation = System.getenv("LOCATION_ID");
         currentLocation = System.getenv("LOCATION_ID");
+        function = functionName;
     }
 
     public void initJson(String json) {
@@ -28,6 +30,7 @@ public class SessionToken {
             session = (String) jo.get("session");
             proprietaryLocation = (String) jo.get("proprietaryLocation");
             currentLocation = (String) jo.get("currentLocation");
+            function = (String) jo.get("function");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -38,6 +41,7 @@ public class SessionToken {
         return
             "{\"session\":\"" + session + "\"," +
             "\"proprietaryLocation\":\"" + proprietaryLocation + "\"," +
-            "\"currentLocation\":\"" + currentLocation + "\"}";
+            "\"currentLocation\":\"" + currentLocation + "\"," +
+            "\"function\":\"" + function + "\"}";
     }
 }

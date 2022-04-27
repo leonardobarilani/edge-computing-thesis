@@ -6,7 +6,7 @@ import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
-public class OnloadSession implements Command {
+public class OnloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();

@@ -12,7 +12,7 @@ echo Deploying ROOT functions
 # MIDDLE NODES
 echo Deploying MIDDLE NODES functions
 
-deploy session-offloading-manager infrastructure.json --inEvery city --inAreas p2
+#deploy session-offloading-manager infrastructure.json --inEvery city --inAreas p2
 
 # EDGE
 echo Deploying EDGE functions

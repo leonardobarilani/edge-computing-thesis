@@ -1,13 +1,10 @@
 package com.openfaas.function.command;
 
-import com.openfaas.function.common.EdgeInfrastructureUtils;
-import com.openfaas.function.common.HTTPUtils;
 import com.openfaas.function.common.RedisHandler;
-import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
-public class Redis implements Command {
+public class Redis implements ICommand {
     @Override
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();

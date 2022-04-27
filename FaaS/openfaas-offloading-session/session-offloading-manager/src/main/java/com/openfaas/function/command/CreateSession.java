@@ -5,12 +5,12 @@ import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
-public class CreateSession implements Command {
+public class CreateSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();
         SessionToken sessionToken = new SessionToken();
-        sessionToken.init();
+        sessionToken.init(req.getQuery().get("function"));
         String sessionJson = sessionToken.getJson();
         System.out.println("New session created: \n\t"+ sessionJson);
 

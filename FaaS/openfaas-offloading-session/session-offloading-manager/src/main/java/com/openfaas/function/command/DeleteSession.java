@@ -7,14 +7,10 @@ import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
-import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-public class DeleteSession implements Command {
+public class DeleteSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         String sessionToDelete = req.getQuery().get("session");

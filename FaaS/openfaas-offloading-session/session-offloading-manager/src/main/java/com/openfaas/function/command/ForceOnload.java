@@ -10,7 +10,7 @@ import com.openfaas.model.IRequest;
 
 import java.io.IOException;
 
-public class ForceOnload implements Command {
+public class ForceOnload implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();

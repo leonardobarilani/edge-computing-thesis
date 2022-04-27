@@ -18,10 +18,11 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             System.out.println("Query raw: " + req.getQueryRaw());
             for (var v : req.getQuery().keySet())
                 System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
+            System.out.println("Headers: " + req.getHeaders());
 
             String command = req.getQuery().get("command");
 
-            Map<String, Command> commands = new HashMap<>();
+            Map<String, ICommand> commands = new HashMap<>();
 
             commands.put("create-session", new CreateSession());
             commands.put("delete-session", new DeleteSession());
@@ -33,6 +34,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             commands.put("test-function", new TestFunction());
             commands.put("set-offload-status", new SetOffloadStatus());
             commands.put("redis", new Redis());
+            commands.put("call-function", new CallFunction());
 
             if (commands.containsKey(command)) {
                 System.out.println("----------BEGIN COMMAND <" + command + "> HANDLE----------");

@@ -10,7 +10,7 @@ import com.openfaas.model.IRequest;
 
 import java.io.IOException;
 
-public class OffloadSession implements Command {
+public class OffloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();
@@ -34,7 +34,6 @@ public class OffloadSession implements Command {
             String url = EdgeInfrastructureUtils.getGateway(session.proprietaryLocation) +
                     "/function/session-offloading-manager?command=update-session";
             System.out.println("Updating proprietary:\n\t" + url + "\n\t" + jsonNewSession);
-            //HTTPUtils.sendGETWithoutResponse(url, jsonNewSession);
             try {
                 HTTPUtils.sendAsyncJsonPOST(url, jsonNewSession);
             } catch (IOException e) {
@@ -50,7 +49,6 @@ public class OffloadSession implements Command {
             String url = EdgeInfrastructureUtils.getParentHost() +
                     "/function/session-offloading-manager?command=offload-session";
             System.out.println("Redirecting session to parent:\n\t" + url + "\n\t" + req.getBody());
-            //HTTPUtils.sendGETWithoutResponse(url, req.getBody());
             try {
                 HTTPUtils.sendAsyncJsonPOST(url, req.getBody());
             } catch (IOException e) {

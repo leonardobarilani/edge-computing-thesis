@@ -4,7 +4,7 @@ import com.openfaas.function.common.RedisHandler;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
-public class TestFunction implements Command {
+public class TestFunction implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
 

@@ -4,7 +4,7 @@ import com.openfaas.function.common.RedisHandler;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
-public class SetOffloadStatus implements Command {
+public class SetOffloadStatus implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler(RedisHandler.OFFLOAD);

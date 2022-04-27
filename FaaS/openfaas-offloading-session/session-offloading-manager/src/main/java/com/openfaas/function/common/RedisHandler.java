@@ -11,6 +11,8 @@ public class RedisHandler {
 
     public static final String OFFLOAD = "0";
     public static final String SESSIONS = "1";
+    public static final String SESSIONS_KEYS = "2";
+    public static final String SESSIONS_DATA = "3";
 
     private String url;
     private RedisClient redisClient;
