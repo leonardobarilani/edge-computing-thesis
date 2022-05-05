@@ -1,12 +1,18 @@
 class Main {
     public static void main(String[] args) {
+
+        /**
+         * We don't use this client anymore
+         * ( https://i.kym-cdn.com/photos/images/original/002/139/758/0c4.jpg )
+         */
+
         StateFulFunction function = new StateFulFunction();
         function.setLog(false);
         try {
             function.init(
                     "admin",
-                    "AtwatNsxwnUw",
-                    "172.26.92.43",
+                    "Xa41ubfm4hiq",
+                    "172.26.94.11",
                     "stateful-append");
 
             System.out.println(function.call("H"));
