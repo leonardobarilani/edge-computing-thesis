@@ -1,5 +1,6 @@
 package com.openfaas.function;
 
+import com.openfaas.function.api.EdgeDB;
 import com.openfaas.model.IHandler;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
@@ -15,8 +16,8 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
         System.out.println("Headers: " + req.getHeaders());
 
-        UserRedisHandler redis = new UserRedisHandler(req);
-        System.out.println("UserRedisHandler executed");
+        EdgeDB redis = new EdgeDB(req);
+        System.out.println("EdgeDB executed");
         String oldString = redis.get("string");
         System.out.println("Redis.get executed");
         if (oldString == null)

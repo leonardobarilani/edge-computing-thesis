@@ -28,8 +28,8 @@
 						{
 							"areaName":"p3",
 							"mainLocation":{
-								"openfaas_gateway":"http://172.26.92.43:31112",
-								"openfaas_password":"AtwatNsxwnUw",
+								"openfaas_gateway":"http://172.26.94.11:31112",
+								"openfaas_password":"Xa41ubfm4hiq",
 								"redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
 								"redis_port":6379,
 								"redis_password":"customRedisPassword"
