@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  products-counter:
+    lang: java11
+    handler: ./products-counter
+    image: carrone/products-counter:latest
+  shopping-cart:
+    lang: java11
+    handler: ./shopping-cart
+    image: carrone/shopping-cart:latest
+
