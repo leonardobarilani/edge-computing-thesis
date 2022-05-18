@@ -1,10 +1,11 @@
 package com.openfaas.function.command;
 
 import com.google.gson.Gson;
-import com.openfaas.function.common.EdgeInfrastructureUtils;
-import com.openfaas.function.common.HTTPUtils;
+import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.common.utils.HTTPUtils;
 import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.SessionToken;
+import com.openfaas.function.common.utils.MigrateUtils;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
@@ -21,9 +22,12 @@ public class OffloadSession implements ICommand {
             System.out.println("Offloading accepted");
             // offload accepted
 
+            String migrateFrom;
+
             // update json object
             SessionToken session = new SessionToken();
             session.initJson(req.getBody());
+            migrateFrom = session.currentLocation;
             session.currentLocation = System.getenv("LOCATION_ID");
             String jsonNewSession = new Gson().toJson(session);
 
@@ -39,6 +43,12 @@ public class OffloadSession implements ICommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            // migrate data from the current location where the session data is to this node
+            String location = EdgeInfrastructureUtils.getGateway(migrateFrom);
+            String sessionToMigrate = session.session;
+            System.out.println("Migrating session from:\n\t" + location);
+            MigrateUtils.callRemoteMigrate(location, sessionToMigrate);
         }
         else
         {

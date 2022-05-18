@@ -6,7 +6,7 @@ functions:
   session-offloading-manager:
     lang: java11
     handler: ./session-offloading-manager
-    image: carrone/session-offloading-manager:latest    
+    image: carrone/session-offloading-manager:latest
     environment:
       write_debug: true
       write_timeout: 2m30s

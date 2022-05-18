@@ -1,7 +1,7 @@
 package com.openfaas.function.command;
 
-import com.openfaas.function.common.EdgeInfrastructureUtils;
-import com.openfaas.function.common.HTTPUtils;
+import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.common.utils.HTTPUtils;
 import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;

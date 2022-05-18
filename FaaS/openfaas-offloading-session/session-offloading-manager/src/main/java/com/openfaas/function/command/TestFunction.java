@@ -1,6 +1,7 @@
 package com.openfaas.function.command;
 
 import com.openfaas.function.common.RedisHandler;
+import com.openfaas.function.common.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
@@ -34,6 +35,19 @@ public class TestFunction implements ICommand {
             String message =
                     "Session <" + sessionRequested + ">: " + sessionJson + "\n" +
                     "Offloading status: " + (redis.get("offloading").equals("accept") ? "accept" : "reject");
+
+            SessionToken session = new SessionToken();
+            session.initJson(sessionJson);
+            if (session.currentLocation.equals(System.getenv("LOCATION_ID")))
+            {
+                RedisHandler redisSession = new RedisHandler(RedisHandler.SESSIONS_DATA);
+                message += "\nSession data: " + redisSession.getSessionData(session.session);
+                redis.close();
+            }
+            else
+            {
+                message += "\nSession data: <data_not_on_this_node>";
+            }
 
             System.out.println(message);
             res.setBody(message);

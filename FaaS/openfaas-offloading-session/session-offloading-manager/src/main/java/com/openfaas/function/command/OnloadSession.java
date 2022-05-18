@@ -11,6 +11,11 @@ public class OnloadSession implements ICommand {
     public void Handle(IRequest req, IResponse res) {
         RedisHandler redis = new RedisHandler();
 
+        // FIXME
+        // Fix onload-session bug (example: A with children B and C. B offload to A.
+        // C call onload on A. A onload session of node B to node C)
+        // Use EdgeInfrastructures.getLocationsSubTree(request.sender)
+
         // get a random session to onload
         SessionToken randomSession = new Gson().fromJson(redis.getRandom(), SessionToken.class);
 

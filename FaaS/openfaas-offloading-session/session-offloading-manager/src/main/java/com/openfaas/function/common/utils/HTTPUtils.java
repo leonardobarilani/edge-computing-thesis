@@ -1,4 +1,4 @@
-package com.openfaas.function.common;
+package com.openfaas.function.common.utils;
 
 import java.io.*;
 import java.net.*;
@@ -11,14 +11,14 @@ public class HTTPUtils {
 
     private HTTPUtils() { }
 
-    public static Response sendGET(String urlString, String body){
+    public static String sendGET(String urlString){
         // https://www.baeldung.com/java-http-request
         try {
             HttpURLConnection con = (HttpURLConnection) new URL(urlString).openConnection();
             con.setRequestMethod("GET");
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes(body);
+            out.writeBytes("");
             out.flush();
             out.close();
 
@@ -32,26 +32,11 @@ public class HTTPUtils {
             in.close();
             int responseCode = con.getResponseCode();
             con.disconnect();
-            return new Response(responseCode, response.toString());
+            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    }
-    public static void sendGETWithoutResponse(String urlString, String body){
-        // https://www.baeldung.com/java-http-request
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(urlString).openConnection();
-            con.setRequestMethod("GET");
-            con.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes(body);
-            out.flush();
-            out.close();
-            con.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,

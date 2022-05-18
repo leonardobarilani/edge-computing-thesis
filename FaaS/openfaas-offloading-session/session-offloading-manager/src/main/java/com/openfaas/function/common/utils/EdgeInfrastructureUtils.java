@@ -1,10 +1,12 @@
-package com.openfaas.function.common;
+package com.openfaas.function.common.utils;
 
 import com.google.gson.Gson;
 import com.openfaas.function.common.infrastucture.Area;
 import com.openfaas.function.common.infrastucture.Infrastructure;
 
 import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EdgeInfrastructureUtils {
 
@@ -73,5 +75,32 @@ public class EdgeInfrastructureUtils {
                 return gateway;
         }
         return null;
+    }
+
+    /**
+     * Return the list of all the locations contained in the subtree with the specified root
+     * @param root the name of the root node. It must be an areaName that is contained in the infrastructure.json
+     * @return the list of the nodes in the subtree, including the root. Empty list if the specified root is not found in the infrastructure.json
+     */
+    public static List<String> getLocationsSubTree (String root) {
+        if (infrastructure == null)
+        {
+            String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
+            infrastructure = new Gson().fromJson(json, Infrastructure.class);
+        }
+
+        List<String> locations = new LinkedList<>();
+        getLocationsSubTreeRecursive(infrastructure.hierarchy[0], root, false, locations);
+        return locations;
+    }
+    private static void getLocationsSubTreeRecursive (Area area, String root, boolean rootFound, List<String> locationsList) {
+        if (area.areaName.equals(root))
+            rootFound = true;
+
+        if (rootFound)
+            locationsList.add(area.areaName);
+
+        for (var a : area.areas)
+            getLocationsSubTreeRecursive(a, root, rootFound, locationsList);
     }
 }
