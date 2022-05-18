@@ -22,7 +22,9 @@ deploy <function name> <path to infrastructure file>
     --inAreas <area>: The name of the areas in which to deploy the function. If not specified the function is deployed everywhere.
     --exceptIn <area>: The name of the areas in which to NOT deploy the function.
     -f, --yaml <path>: Path to the YAML file describing the function.
-
+    --minReplicas <number_of_replicas>: Number of replicas for the function. Default: 2
+    --receivePropagate: Set this function to be a receiver of propagate() calls.
+    
 help
 """;
         if (args.length == 0)
@@ -57,17 +59,43 @@ help
                 List<String> inAreas = new LinkedList<>();
                 List<String> exceptIn = new LinkedList<>();
                 String pathToFunction = "./stack.yml";
+                String minReplicas = "2";
+                boolean receivePropagate = false;
 
-                for(int i = 3;i < args.length - 1;i += 2)
-                    switch (args[i])
-                    {
-                        case "--inEvery" -> inEvery = args[i + 1];
-                        case "--inAreas" -> inAreas.add(args[i + 1]);
-                        case "--exceptIn" -> exceptIn.add(args[i + 1]);
-                        case "-f" -> pathToFunction = args[i + 1];
-                        case "--yaml" -> pathToFunction = args[i + 1];
-                        default -> System.err.println("Not sure what '" + args[i] + "' refers to.\n" + helpString);
-                    }
+                int i = 3;
+                try {
+                    while (i < args.length)
+                        switch (args[i]) {
+                            case "--inEvery" -> {
+                                inEvery = args[i + 1];
+                                i += 2;
+                            }
+                            case "--inAreas" -> {
+                                inAreas.add(args[i + 1]);
+                                i += 2;
+                            }
+                            case "--exceptIn" -> {
+                                exceptIn.add(args[i + 1]);
+                                i += 2;
+                            }
+                            case "-f", "--yaml" -> {
+                                pathToFunction = args[i + 1];
+                                i += 2;
+                            }
+                            case "--minReplicas" -> {
+                                minReplicas = args[i + 1];
+                                i += 2;
+                            }
+                            case "--receivePropagate" -> {
+                                receivePropagate = true;
+                                i += 1;
+                            }
+                            default -> {
+                                System.err.println("Not sure what '" + args[i] + "' refers to.\n" + helpString);
+                                i += 1;
+                            }
+                        }
+                } catch (IndexOutOfBoundsException e) { }
 
                 Deploy.deploy(
                         functionName,
@@ -75,7 +103,9 @@ help
                         inEvery,
                         inAreas.toArray(new String[0]),
                         exceptIn.toArray(new String[0]),
-                        pathToFunction
+                        pathToFunction,
+                        minReplicas,
+                        receivePropagate
                 );
             }
             case "help" -> System.out.println(helpString);

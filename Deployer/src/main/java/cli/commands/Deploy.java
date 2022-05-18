@@ -10,9 +10,14 @@ import cli.utils.LocationsGetter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.concurrent.ExecutionException;
 
 public class Deploy {
 
@@ -22,7 +27,9 @@ public class Deploy {
                               String inEvery,
                               String[] inAreas,
                               String[] exceptIn,
-                              String yaml)
+                              String yaml,
+                              String minReplicas,
+                              boolean isReceivePropagate)
     {
         Gson g = new Gson();
         Infrastructure infrastructure = null;
@@ -79,7 +86,7 @@ public class Deploy {
                 " --env=REDIS_HOST=" + conf.redis_host +
                 " --env=REDIS_PORT=" + conf.redis_port +
                 " --env=REDIS_PASSWORD=" + conf.redis_password +
-                " --label com.openfaas.scale.min=2";
+                " --label com.openfaas.scale.min=" + minReplicas;
             System.out.println(
                     "📶 Deploying on location: \"" + location.areaName +
                             "\", gateway: \"" + conf.openfaas_gateway + "\".");
@@ -104,6 +111,29 @@ public class Deploy {
                 printOutput(proc);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+
+            // If it is a receivePropagate function I have to register it in
+            if (isReceivePropagate) {
+                String url = conf.openfaas_gateway + "/function/session-offloading-manager?command=register-receive-propagate&function=" + functionName;
+                HttpRequest request = HttpRequest.newBuilder(URI.create(
+                        url
+                        )).GET().build();
+
+                System.out.println("Registering function at: " + url);
+
+                try {
+                    var res = HttpClient.newHttpClient()
+                            .send(request, HttpResponse.BodyHandlers.ofString());
+                    if (res.statusCode() == 200)
+                        System.out.println("Function correctly registered as ReceivingFunction");
+                    else
+                        System.out.println("Unable to register function as ReceivingFunction: " +
+                                "\nResponse code: " + res.statusCode() +
+                                "\nResponse body: " + res.body());
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
