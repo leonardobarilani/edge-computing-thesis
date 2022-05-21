@@ -86,6 +86,7 @@ public class Deploy {
                 " --env=REDIS_HOST=" + conf.redis_host +
                 " --env=REDIS_PORT=" + conf.redis_port +
                 " --env=REDIS_PASSWORD=" + conf.redis_password +
+                " --env=FUNCTION_NAME=" + functionName +
                 " --label com.openfaas.scale.min=" + minReplicas;
             System.out.println(
                     "📶 Deploying on location: \"" + location.areaName +

@@ -1,6 +1,4 @@
-package com.openfaas.function.api;
-
-import java.util.List;
+package com.openfaas.function.common;
 
 public class PropagateData {
     public String value;
