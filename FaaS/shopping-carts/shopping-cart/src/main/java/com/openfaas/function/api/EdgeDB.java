@@ -1,10 +1,10 @@
 package com.openfaas.function.api;
 
 import com.google.gson.Gson;
+import com.openfaas.function.common.datastructures.PropagateData;
 import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.common.utils.HTTPUtils;
 import com.openfaas.model.IRequest;
-import io.lettuce.core.Range;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -46,6 +46,20 @@ public class EdgeDB {
         connection = redisClient.connect();
         syncCommands = connection.sync();
     }
+    public EdgeDB(String session) {
+        String host = System.getenv("REDIS_HOST");
+        String password = System.getenv("REDIS_PASSWORD");
+        String port = System.getenv("REDIS_PORT");
+        url = "redis://" + password + "@" + host + ":" + port + "/" + SESSIONS_DATA;
+        sessionId = session;
+
+        System.out.println("(EdgeDB) (Constructor) X-session: <" + sessionId + "> Url: " + url);
+
+        redisClient = RedisClient.create(url);
+        redisClient.setDefaultTimeout(20, TimeUnit.SECONDS);
+        connection = redisClient.connect();
+        syncCommands = connection.sync();
+    }
 
     public void close() {
         connection.close();
@@ -63,6 +77,7 @@ public class EdgeDB {
 
     public List<String> getList(String key){
         System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zrangebyscore with key: " + key);
+        System.out.println("(EdgeDB) [WARNING] Lists still don't use the session");
         return syncCommands.zrange(key, Long.MIN_VALUE, Long.MAX_VALUE);
         //return syncCommands.zrangebyscore(key, Range.create(0, Integer.MAX_VALUE));
     }
@@ -75,6 +90,7 @@ public class EdgeDB {
      */
     public void addToList(String key, String value){
         System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zadd with key, value: " + key + ", " + value);
+        System.out.println("(EdgeDB) [WARNING] Lists still don't use the session");
         syncCommands.zadd(key, Calendar.getInstance().getTimeInMillis(), value);
     }
 

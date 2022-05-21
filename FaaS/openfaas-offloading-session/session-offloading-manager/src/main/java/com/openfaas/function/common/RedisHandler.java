@@ -72,6 +72,8 @@ public class RedisHandler {
     public String getRandom () {
         System.out.println("Redis randomkey");
         String randomKey = syncCommands.randomkey();
+        if (randomKey == null)
+            return null;
         System.out.println("Redis get with key: " + randomKey);
         return syncCommands.get(randomKey);
     }

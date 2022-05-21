@@ -1,7 +1,7 @@
 package com.openfaas.function.common;
 
-import com.openfaas.function.common.sessiondata.SessionData;
-import com.openfaas.function.common.sessiondata.SessionRecord;
+import com.openfaas.function.common.datastructures.session.SessionData;
+import com.openfaas.function.common.datastructures.session.SessionRecord;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -60,6 +60,9 @@ public class RedisHandler {
     }
 
     public String get(String key){
+        System.out.println("Redis exists with key: " + key);
+        if (syncCommands.exists(key) == 0)
+            return null;
         System.out.println("Redis get with key: " + key);
         return syncCommands.get(key);
     }

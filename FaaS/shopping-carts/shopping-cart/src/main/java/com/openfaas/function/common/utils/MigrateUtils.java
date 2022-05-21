@@ -2,7 +2,7 @@ package com.openfaas.function.common.utils;
 
 import com.google.gson.Gson;
 import com.openfaas.function.common.RedisHandler;
-import com.openfaas.function.common.sessiondata.SessionData;
+import com.openfaas.function.common.datastructures.session.SessionData;
 
 public class MigrateUtils {
 

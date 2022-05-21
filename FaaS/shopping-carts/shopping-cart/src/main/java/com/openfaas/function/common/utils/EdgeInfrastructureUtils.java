@@ -1,8 +1,8 @@
 package com.openfaas.function.common.utils;
 
 import com.google.gson.Gson;
-import com.openfaas.function.common.infrastucture.Area;
-import com.openfaas.function.common.infrastucture.Infrastructure;
+import com.openfaas.function.common.datastructures.infrastucture.Area;
+import com.openfaas.function.common.datastructures.infrastucture.Infrastructure;
 
 import java.util.Base64;
 import java.util.LinkedList;

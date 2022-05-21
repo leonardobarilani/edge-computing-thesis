@@ -41,7 +41,7 @@ public class TestFunction implements ICommand {
             if (session.currentLocation.equals(System.getenv("LOCATION_ID")))
             {
                 RedisHandler redisSession = new RedisHandler(RedisHandler.SESSIONS_DATA);
-                message += "\nSession data: " + redisSession.getSessionData(session.session);
+                message += "\nSession data: " + redisSession.getSessionData(session.session).toJSON();
                 redis.close();
             }
             else

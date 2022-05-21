@@ -1,4 +1,4 @@
-package com.openfaas.function.common.infrastucture;
+package com.openfaas.function.common.datastructures.infrastucture;
 
 public class Area {
 

@@ -1,4 +1,4 @@
-package com.openfaas.function.common;
+package com.openfaas.function.common.datastructures;
 
 public class PropagateData {
     public String value;

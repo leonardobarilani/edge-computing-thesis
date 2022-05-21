@@ -22,6 +22,14 @@ public class Redis implements ICommand {
                 res.setBody("Deleted all sessions");
                 res.setStatusCode(200);
                 break;
+            case "get-session-data":
+                RedisHandler redisData = new RedisHandler(RedisHandler.SESSIONS_DATA);
+                var response = redis.getSessionData (req.getQuery().get("session")).toJSON();
+                System.out.println(response);
+                res.setBody(response);
+                res.setStatusCode(200);
+                redisData.close();
+                break;
             default:
                 System.out.println("Command not recognized");
                 res.setBody("Command not recognized");

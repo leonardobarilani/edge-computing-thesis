@@ -44,7 +44,7 @@ public class OffloadSession implements ICommand {
                 e.printStackTrace();
             }
 
-            // migrate data from the current location where the session data is to this node
+            // migrate data from the location that has the session data, to this node
             String location = EdgeInfrastructureUtils.getGateway(migrateFrom);
             String sessionToMigrate = session.session;
             System.out.println("Migrating session from:\n\t" + location);

@@ -1,4 +1,4 @@
-package com.openfaas.function.common;
+package com.openfaas.function.common.datastructures.session;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

@@ -1,4 +1,4 @@
-package com.openfaas.function.common.sessiondata;
+package com.openfaas.function.common.datastructures.session;
 
 public class SessionRecord {
     public String key;

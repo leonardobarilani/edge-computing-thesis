@@ -25,5 +25,5 @@ p3_auth = ('admin','w18iQEwcZNx5')
 send('session-offloading-manager?command=set-offload-status&status=accept', p3_ip, p3_auth)
 input("Press Enter to continue...")
 
-send('shopping-cart?product=anguria', p3_ip, p3_auth)
+send('shopping-cart?product=kiwi', p3_ip, p3_auth)
 input("Press Enter to continue...")

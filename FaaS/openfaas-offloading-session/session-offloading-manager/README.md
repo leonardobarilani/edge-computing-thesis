@@ -14,12 +14,12 @@ TODO:
 
 ### Extends
 
-`Offloadable`: meant to replace `com.openfaas.model.AbstractHandler` to manage the offloading of a function. `com.openfaas.model.AbstractHandler` and `Offloadable` have the same interface.
+`Offloadable`: meant to replace `com.openfaas.model.AbstractHandler` to manage the offloading of a function. Instead of implementing `Handle` method, programmers have to implement `HandleOffload` method.
 
 ```java
-public abstract class Offloadable extends OffloadableWrapper {
+public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
     
-    public IResponse Handle (IRequest req) ;
+    public IResponse HandleOffload (IRequest req) ;
 }
 ```
 

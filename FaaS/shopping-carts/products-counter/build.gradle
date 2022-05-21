@@ -25,6 +25,10 @@ dependencies {
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
+
+    // Build: shopping-cart -> Tasks -> distribution -> assembleDist
+    // Copy from: build/libs/shopping-cart.jar
+    implementation files('./libs/shopping-cart.jar')
 }
 
 // In this section you declare where to find the dependencies of your project
