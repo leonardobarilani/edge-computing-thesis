@@ -12,7 +12,7 @@ import requests
 import os
 import time
 
-session='mario'
+session='wario'
 
 # string, string, (string,string)
 def send(command, ip, auth):
@@ -32,7 +32,7 @@ print("Starting tests:\n\n")
 #send('session-offloading-manager?command=set-offload-status&status=accept', p2_ip, p2_auth)
 #input("Press Enter to continue...")
 
-send('shopping-cart?product=banana', p3_ip, p3_auth)
+send('shopping-cart?product=kiwi', p3_ip, p3_auth)
 input("Press Enter to continue...")
 
 #send('session-offloading-manager?command=redis&redis-command=get-session-data&session='+session, p3_ip, p3_auth)

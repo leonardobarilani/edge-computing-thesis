@@ -21,8 +21,7 @@ public class Handler extends Offloadable {
         IResponse res = new Response();
         System.out.println("\n\n\n--------BEGIN CART--------");
         EdgeDB db = new EdgeDB(req);
-        db.set("lolk", "lolv");
-        db.get("lolk");
+
         String newProduct = req.getQuery().get("product");
         if (newProduct != null)
         {
