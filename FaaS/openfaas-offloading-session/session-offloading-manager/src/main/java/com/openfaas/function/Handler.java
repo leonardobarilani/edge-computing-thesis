@@ -3,7 +3,6 @@ package com.openfaas.function;
 import com.openfaas.function.command.*;
 import com.openfaas.model.*;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 

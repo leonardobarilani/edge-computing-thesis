@@ -14,7 +14,7 @@ import java.io.IOException;
 public class OffloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
 
         String offloading = new RedisHandler(RedisHandler.OFFLOAD).get("offloading");
         if (offloading.equals("accept"))

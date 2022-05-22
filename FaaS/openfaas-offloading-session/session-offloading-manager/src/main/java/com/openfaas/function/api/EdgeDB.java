@@ -1,7 +1,7 @@
 package com.openfaas.function.api;
 
 import com.google.gson.Gson;
-import com.openfaas.function.common.datastructures.PropagateData;
+import com.openfaas.function.common.PropagateData;
 import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.common.utils.HTTPUtils;
 import com.openfaas.model.IRequest;
@@ -9,7 +9,9 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -152,7 +154,7 @@ public class EdgeDB {
         syncCommands.hdel(sessionId, key);
     }
 
-    class HList {
+    private class HList {
         List<String> list = new ArrayList<>();
     }
 }

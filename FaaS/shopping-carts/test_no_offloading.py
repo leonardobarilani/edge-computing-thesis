@@ -20,7 +20,7 @@ def send(command, ip, auth):
 	
 
 p3_ip = os.popen('minikube ip -p p3').read().translate(str.maketrans('', '', ' \n\t\r'))
-p3_auth = ('admin','w18iQEwcZNx5')
+p3_auth = ('admin','baDMaR9ByI7O')
 
 send('session-offloading-manager?command=set-offload-status&status=accept', p3_ip, p3_auth)
 input("Press Enter to continue...")

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.openfaas.function.common.PropagateData;
 import com.openfaas.function.common.RedisHandler;
 import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
-import com.openfaas.function.common.utils.HTTPUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -12,7 +11,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

@@ -7,7 +7,7 @@ import com.openfaas.model.IResponse;
 public class Redis implements ICommand {
     @Override
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
 
         String command = req.getQuery().get("redis-command");
         if (command == null)

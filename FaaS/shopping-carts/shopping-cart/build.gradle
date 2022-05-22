@@ -22,7 +22,11 @@ dependencies {
     // Gson dependency
     compile 'com.google.code.gson:gson:2.9.0'
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    // compile 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    // Build: shopping-cart -> Tasks -> distribution -> assembleDist
+    // Copy from: build/libs/session-offloading-manager.jar
+    compile files('./libs/session-offloading-manager.jar')
 }
 
 // In this section you declare where to find the dependencies of your project

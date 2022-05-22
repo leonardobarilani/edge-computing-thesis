@@ -9,7 +9,7 @@ import com.openfaas.model.IRequest;
 public class OnloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
 
         // FIXME
         // Fix onload-session bug (example: A with children B and C. B offload to A.

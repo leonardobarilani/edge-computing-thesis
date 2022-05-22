@@ -1,7 +1,7 @@
 package com.openfaas.function.api;
 
 import com.openfaas.function.common.RedisHandler;
-import com.openfaas.function.common.datastructures.session.SessionToken;
+import com.openfaas.function.common.SessionToken;
 import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -24,7 +24,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
         if (sessionJson == null)
         {
-            // We are in the proprietary node, we create the session
+            // We are in the proprietary location, we create the session
 
             System.out.println("(Offloadable) The session doesn't exists. About to create a new session, sessionId: " + sessionId);
             sessionToken = new SessionToken();
@@ -67,7 +67,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             }
             else
             {
-                // session exist and it is here
+                // session exist and it is in this location
 
                 System.out.println("(Offloadable) Session exists and it is here. About to handle the request...");
                 res = HandleOffload(req);

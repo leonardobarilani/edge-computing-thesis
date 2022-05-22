@@ -24,21 +24,6 @@ public class RedisHandler {
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> syncCommands;
 
-    /**
-     * The default constructor will use env variables for host, password and port.
-     * The table used is the sessions table (table 1)
-     */
-    public RedisHandler() {
-        String host = System.getenv("REDIS_HOST");
-        String password = System.getenv("REDIS_PASSWORD");
-        String port = System.getenv("REDIS_PORT");
-        url = "redis://" + password + "@" + host + ":" + port + "/" + SESSIONS;
-
-        redisClient = RedisClient.create(url);
-        redisClient.setDefaultTimeout(20, TimeUnit.SECONDS);
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
-    }
 
     /**
      * This constructor will use env variables for host, password and port.

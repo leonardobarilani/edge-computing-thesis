@@ -9,9 +9,8 @@ import com.openfaas.model.IRequest;
 public class UpdateSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler();
+        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
 
-        // TODO usiamo gson o json simpler?
         SessionToken sessionToken = new Gson().fromJson(req.getBody(), SessionToken.class);
         String sessionJson = req.getBody();
 

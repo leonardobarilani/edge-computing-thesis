@@ -22,13 +22,13 @@ dependencies {
     // Gson dependency
     compile 'com.google.code.gson:gson:2.9.0'
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
 
     // Build: shopping-cart -> Tasks -> distribution -> assembleDist
     // Copy from: build/libs/shopping-cart.jar
-    implementation files('./libs/shopping-cart.jar')
+    compile files('./libs/session-offloading-manager.jar')
 }
 
 // In this section you declare where to find the dependencies of your project

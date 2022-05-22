@@ -1,12 +1,7 @@
 package com.openfaas.function;
 
 import com.openfaas.function.api.EdgeDB;
-import com.openfaas.function.common.RedisHandler;
 import com.openfaas.model.*;
-
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Handler extends com.openfaas.model.AbstractHandler {
 
@@ -17,15 +12,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         String propagatedValue = req.getBody();
         //RedisHandler db = new RedisHandler("4");
         EdgeDB db = new EdgeDB("counter");
-
-        // publish this
-        // deploy this
-        // py this
-        // cry on this
-
-        db.set("lolk", "lolv");
-        db.get("lolk");
-
 
         String quantityString = db.get(propagatedValue);
         if (quantityString == null)

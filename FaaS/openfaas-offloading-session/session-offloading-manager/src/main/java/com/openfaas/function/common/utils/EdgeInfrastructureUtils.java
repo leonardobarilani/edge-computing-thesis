@@ -103,4 +103,65 @@ public class EdgeInfrastructureUtils {
         for (var a : area.areas)
             getLocationsSubTreeRecursive(a, root, rootFound, locationsList);
     }
+
+
+    // TODO testing this would be nice
+    /**
+     * Get all the locations from the level of the hierarchy to the specified nodeName
+     * @param nodeName
+     * @param level
+     * @return
+     */
+    public static List<String> getLocationsFromNodeToLevel(String nodeName, String level) {
+        if (infrastructure == null)
+        {
+            String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
+            infrastructure = new Gson().fromJson(json, Infrastructure.class);
+        }
+
+        List<String> locations = new LinkedList<>();
+
+        // nodeName not found
+        if (!getLocationsFromRootToNodeRecursive(
+                nodeName,
+                infrastructure.hierarchy[0],
+                locations
+        ))
+            return List.of();
+
+        // find the depth of the level
+        int levelDepth = -1;
+        for (int i = 0;i < infrastructure.areaTypesIdentifiers.length;i++)
+            if (infrastructure.areaTypesIdentifiers[i].equals(level))
+                levelDepth = i;
+
+        // level not found
+        if (levelDepth == -1)
+            return List.of();
+
+        // level is deeper than in the hierarchy than the node
+        if (levelDepth >= locations.size())
+            return List.of();
+
+        // trim the locations from the top level to the bottom location
+        return locations.subList(levelDepth, locations.size());
+    }
+    // Get all the locations from the root of the hierarchy to the specified nodeName
+    private static boolean getLocationsFromRootToNodeRecursive(String nodeName, Area area, List<String> locations) {
+        locations.add(area.areaName);
+        if (area.areaName.equals(nodeName))
+            return true;
+
+        for(Area a : area.areas)
+            if (getLocationsFromRootToNodeRecursive(
+                    nodeName,
+                    a,
+                    locations
+            ))
+                return true;
+
+        if (!locations.isEmpty())
+            locations.remove(locations.size() - 1);
+        return false;
+    }
 }
