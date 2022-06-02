@@ -10,7 +10,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         System.out.println("\n\n----------BEGIN COUNTER----------");
 
         String propagatedValue = req.getBody();
-        //RedisHandler db = new RedisHandler("4");
+
         EdgeDB db = new EdgeDB("counter");
 
         String quantityString = db.get(propagatedValue);
