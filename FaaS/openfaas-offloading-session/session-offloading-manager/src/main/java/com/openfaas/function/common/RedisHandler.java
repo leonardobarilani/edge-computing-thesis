@@ -24,7 +24,6 @@ public class RedisHandler {
     private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> syncCommands;
 
-
     /**
      * This constructor will use env variables for host, password and port.
      * @param table has to be 0 (OFFLOAD), 1 (SESSIONS), 2 (SESSIONS_DATA), 3 (RECEIVE_PROPAGATE_FUNCTIONS)
@@ -34,6 +33,8 @@ public class RedisHandler {
         String password = System.getenv("REDIS_PASSWORD");
         String port = System.getenv("REDIS_PORT");
         url = "redis://" + password + "@" + host + ":" + port + "/" + table;
+
+        System.out.println("(Redis Handler) (Constructor) Url: " + url);
 
         redisClient = RedisClient.create(url);
         redisClient.setDefaultTimeout(20, TimeUnit.SECONDS);
@@ -47,19 +48,21 @@ public class RedisHandler {
     }
 
     public String get(String key){
-        System.out.println("Redis get with key: " + key);
+        System.out.println("(Redis Handler) Redis get with key: " + key);
+        if (key == null)
+            return null;
         return syncCommands.get(key);
     }
     public void set(String key, String value){
-        System.out.println("Redis set with key, value: " + key + ", " + value);
+        System.out.println("(Redis Handler) Redis set with key, value: " + key + ", " + value);
         syncCommands.set(key, value);
     }
     public String getRandom () {
-        System.out.println("Redis randomkey");
+        System.out.println("(Redis Handler) Redis randomkey");
         String randomKey = syncCommands.randomkey();
         if (randomKey == null)
             return null;
-        System.out.println("Redis get with key: " + randomKey);
+        System.out.println("(Redis Handler) Redis get with key: " + randomKey);
         return syncCommands.get(randomKey);
     }
 
@@ -81,12 +84,12 @@ public class RedisHandler {
      * @return
      */
     public SessionData getSessionData (String sessionId) {
-        System.out.println("Redis hlen");
+        System.out.println("(Redis Handler) Redis hlen");
         Long length = syncCommands.hlen(sessionId);
         SessionData data = new SessionData();
         data.session_data = new SessionRecord[Math.toIntExact(length)];
 
-        System.out.println("Redis hgetall");
+        System.out.println("(Redis Handler) Redis hgetall");
         var map = syncCommands.hgetall(sessionId);
 
         int i = 0;
@@ -96,7 +99,7 @@ public class RedisHandler {
             i++;
         }
 
-        System.out.println("Redis returning session_data");
+        System.out.println("(Redis Handler) Redis returning session_data");
         return data;
     }
 

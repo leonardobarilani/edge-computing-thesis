@@ -50,5 +50,6 @@ public class ReceivePropagate implements ICommand {
                             .sendAsync(request, HttpResponse.BodyHandlers.ofString()));
         });
         functions.forEach(CompletableFuture::join);
+        System.out.println("Forwarded to all registered functions");
     }
 }

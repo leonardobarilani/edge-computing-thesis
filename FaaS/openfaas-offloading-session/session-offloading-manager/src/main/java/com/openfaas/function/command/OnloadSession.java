@@ -27,14 +27,16 @@ public class OnloadSession implements ICommand {
         }
         else
         {
-            // remove the local reference of the session
-            redis.delete(randomSession.session);
-
             String unloadedSession = new Gson().toJson(randomSession);
             System.out.println("Onloading:\n\t" + unloadedSession);
 
             res.setStatusCode(200);
             res.setBody(unloadedSession);
+
+            // to allow a correct redirect from this node to the node that actually has the session,
+            // we redirect to the proprietary that will finally redirect to the correct node
+            randomSession.currentLocation = randomSession.proprietaryLocation;
+            redis.set(randomSession.session, new Gson().toJson(randomSession));
         }
         redis.close();
     }

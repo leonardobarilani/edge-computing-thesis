@@ -2,12 +2,18 @@
 
 TODO:
 
+* Add parameter <session> to /force-offload and /offload-session to allow the Oracle to offload a specific session
+* Fix onload-session bug (example: A with children B and C. B offload to A. C call onload on A. A onload session of node B to node C, which is wrong)
+* Implement iterative (parent-up-to-root) onload-session
+* Maybe use [this](https://redis.io/commands/memory-usage/) to choose what sessions to offload
+* Maybe use [this](https://github.com/kubernetes-sigs/metrics-server)
+
+Optional TODO:
+
 * Move `String EdgeInfrastructureUtils.getParentHost()` to Deployer jar. Should be an env variable created in `faas-cli deploy`.
 * Completely hide internal serialization/deserialization type (json) from function calls (SessionToken.initJson())
-* Replace json.simple with Gson
-* Implement iterative (node-up-to-root) onload-session
-* Reduce number of redis replicas (just 1 read container)
-* Fix onload-session bug (example: A with children B and C. B offload to A. C call onload on A. A onload session of node B to node C)
+* ~~Replace json.simple with Gson~~
+* ~~Reduce number of redis replicas (just 1 read container)~~
 * Refactor RedisHandler
 
 ## Exposed Edge API
