@@ -1,0 +1,23 @@
+
+S	java:S106"9Replace this use of System.out or System.err by a logger.(¤õÏ„ÿÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(½Å³¶
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ø©Ó¸8ï¶Ø¬‘0
+G
+java:S1135 "2Complete the task associated to this TODO comment.(£û§z
+U	java:S1063"9Replace this use of System.out or System.err by a logger.(¯Ïýû8ÔõØ¬‘0
+Q
+java:S11727"6Remove this unused method parameter "cameraCrowdness".(Û©ºžÿÿÿÿÿ
+N
+java:S11358"2Complete the task associated to this TODO comment.(ÃÚço8Ã¶Í¬‘0
+{
+java:S2142<"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8—­Ì¬‘0
+m
+java:S2236;"PRefactor the synchronisation mechanism to not use a Thread instance as a monitor(žÃ›8—­Ì¬‘0
+}
+java:S2273;"`Move this call to "wait()" into a synchronized block to be sure the monitor on "Thread" is held.(žÃ›8—­Ì¬‘0
+W
+java:S2274;":Remove this call to "wait" or move it into a "while" loop.(žÃ›8—­Ì¬‘0
+N
+java:S1128"8Remove this unused import 'com.openfaas.model.IHandler'.(³â’ž
+P
+java:S1128"5Remove this unused import 'org.ietf.jgss.GSSContext'.(ƒÆ’üÿÿÿÿ

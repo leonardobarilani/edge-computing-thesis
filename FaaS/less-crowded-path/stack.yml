@@ -1,0 +1,17 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  get-less-crowded-path:
+    lang: java11
+    handler: ./get-less-crowded-path
+    image: carrone/get-less-crowded-path:latest
+  video-footage-receiver:
+    lang: java11
+    handler: ./video-footage-receiver
+    image: carrone/video-footage-receiver:latest
+  store-crowdness:
+    lang: java11
+    handler: ./store-crowdness
+    image: carrone/store-crowdness:latest
