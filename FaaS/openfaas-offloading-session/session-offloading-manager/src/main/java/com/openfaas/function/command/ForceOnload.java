@@ -20,12 +20,19 @@ public class ForceOnload implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
 
+        // TODO wrap this into a cycle to iterate until we reached the root or exit if we onloaded something
+        // while {
+
         // call parent node to receive a session
         String url = EdgeInfrastructureUtils.getParentHost() +
                 "/function/session-offloading-manager?command=onload-session";
         System.out.println("Onloading from:\n\t" + url);
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
+        HttpRequest request = HttpRequest
+                .newBuilder(URI.create(url))
+                .GET()
+                .header("X-onload-location", System.getenv("LOCATION_ID"))
+                .build();
         HttpResponse<String> response;
         try {
             response = HttpClient.newHttpClient()
@@ -40,7 +47,7 @@ public class ForceOnload implements ICommand {
             return;
         }
 
-        String sessionJson = response.body();
+        // } end while
 
         if (response.statusCode() != 200)
         {
@@ -50,31 +57,8 @@ public class ForceOnload implements ICommand {
             return;
         }
 
-        // update json object
-        SessionToken session = new Gson().fromJson(sessionJson, SessionToken.class);
-        session.currentLocation = System.getenv("LOCATION_ID");
-        String jsonNewSession = new Gson().toJson(session);
-
-        // save new json object in redis
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-        redis.set(session.session, jsonNewSession);
-        redis.close();
-
-        // send new json object to proprietaryLocation
-        String urlLeaf = EdgeInfrastructureUtils.getGateway(session.proprietaryLocation) +
-                "/function/session-offloading-manager?command=update-session";
-        System.out.println("Updating proprietary:\n\t" + urlLeaf + "\n\t" + jsonNewSession);
-        try {
-            HTTPUtils.sendAsyncJsonPOST(urlLeaf, jsonNewSession);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // migrate data from the current location where the session data is to this node
-        String location = EdgeInfrastructureUtils.getParentHost();
-        String sessionToMigrate = session.session;
-        System.out.println("Migrating session from:\n\t" + location);
-        MigrateUtils.callRemoteMigrate(location, sessionToMigrate);
+        String sessionJson = response.body();
+        String jsonNewSession = MigrateUtils.migrateSession(sessionJson);
 
         res.setStatusCode(200);
         res.setBody("Unloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + jsonNewSession);

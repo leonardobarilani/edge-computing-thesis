@@ -2,14 +2,16 @@
 
 TODO:
 
-* Add parameter <session> to /force-offload and /offload-session to allow the Oracle to offload a specific session
-* Fix onload-session bug (example: A with children B and C. B offload to A. C call onload on A. A onload session of node B to node C, which is wrong)
+* Guide on how to deploy everything (setup of containers, writing functions, calling functions)
+* ~~Add parameter <session> to /force-offload to allow the Oracle to offload a specific session~~
+* ~~Fix onload-session bug (example: A with children B and C. B offload to A. C call onload on A. A onload session of node B to node C, which is wrong)~~
 * Implement iterative (parent-up-to-root) onload-session
 * Maybe use [this](https://redis.io/commands/memory-usage/) to choose what sessions to offload
 * Maybe use [this](https://github.com/kubernetes-sigs/metrics-server)
 
 Optional TODO:
 
+* Embed Offloadable into openfaas:entrypoint
 * Move `String EdgeInfrastructureUtils.getParentHost()` to Deployer jar. Should be an env variable created in `faas-cli deploy`.
 * Completely hide internal serialization/deserialization type (json) from function calls (SessionToken.initJson())
 * ~~Replace json.simple with Gson~~
@@ -49,8 +51,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 {
     "session": "session_id", 
     "proprietaryLocation": "location_id", 
-    "currentLocation": "location_id",
-    "function": "function_name"
+    "currentLocation": "location_id"
 }
 ```
 
@@ -59,7 +60,6 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 | `session`                 | Id of the session                                                                  | Y        |
 | `proprietaryLocation`     | Location where this session was created                                            | Y        |
 | `currentLocation`         | Location where the session is currently offloaded (where the function is executed) | N        |
-| `function`                | Function associated to the session                                                 | Y        |
 
 * SessionData:
 
@@ -108,7 +108,14 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 | `offload-session` | JSON of session object |                        | All except leafs | Nodes that are offloading a session | Called to offload a session. The receiving node can decide if offload the session also or accept it based on the current offloading status. If the local node actually accept the offloading it has to update the session object and perform the migration from `currentLocation` to itself and update `proprietaryLocation`'s session object |                                                                                                                                                                                                                                                                                     |
 | `onload-session`  |                        | JSON of session object | All except leafs | All except root                     | Children call it on parent to unload sessions, if the parent has some sessions coming from the child subtree. Returns an arbitrary number of sessions objects                                                                                                                                                                                 |
 | `update-session`  | JSON of session object |                        | Leaf             | All except leafs                    | The local node has just accepted an offload, so it has to update the session object of the leaf                                                                                                                                                                                                                                               |
-| `migrate-session` | `session=<session_id>` | SessionPacket (JSON)   | All              | All                                 | Called on the nodes that have a session that is not theirs anymore                                                                                                                                                                                                                                                                            |
+| `migrate-session` | `session=<session_id>` | JSON of SessionPacket  | All              | All                                 | Called on the nodes that have a session that is not theirs anymore                                                                                                                                                                                                                                                                            |
+
+### Propagate
+
+| Function                     | Parameters            | Return | Deployed on | Called by                                    | Description                                                             |
+|------------------------------|-----------------------|--------|-------------|----------------------------------------------|-------------------------------------------------------------------------|
+| `register-receive-propagate` |                       |        | All         | Deployer when deploying a receiving function | Called to register a receiving function                                 |
+| `receive-propagate`          | JSON of PropagateData |        | All         | All                                          | Called by `propagate()` to forward a new value to the correct functions |
 
 ### Debug
 

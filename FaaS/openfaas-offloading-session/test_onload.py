@@ -22,11 +22,13 @@ import requests
 import os
 import time
 
+session='marco'
+
 # string, string, (string,string)
 def send(command, ip, auth):
-	session = requests.get('http://' + ip + ':31112/function/' + command, auth=auth, timeout=5)
-	print (ip + "  " + command + " response: \n" + str(session.content, "utf-8") + "\n")
-	return str(session.content, "utf-8")
+	response = requests.get('http://' + ip + ':31112/function/' + command, auth=auth, timeout=20, headers={'X-session':session,'X-forced-session':session})
+	print (ip + "  " + command + " response: \n" + str(response.content, "utf-8") + "\n")
+	return str(response.content, "utf-8")
 	
 p3_ip = os.popen('minikube ip -p p3').read().translate(str.maketrans('', '', ' \n\t\r'))
 p3_auth = ('admin', 'AtwatNsxwnUw')
@@ -36,13 +38,12 @@ p2_auth = ('admin', 'cU5X45xVOSql')
 
 send('session-offloading-manager?command=redis&redis-command=delete-all-sessions', p3_ip, p3_auth)
 send('session-offloading-manager?command=redis&redis-command=delete-all-sessions', p2_ip, p2_auth)
-input("Press Enter to continue...")
 
 send('session-offloading-manager?command=set-offload-status&status=accept', p3_ip, p3_auth)
 send('session-offloading-manager?command=set-offload-status&status=accept', p2_ip, p2_auth)
 input("Press Enter to continue...")
 
-session = send('session-offloading-manager?command=create-session', p3_ip, p3_auth)
+send('session-offloading-manager?command=redis&redis-command=init-session&key=key'+session+'&value=value'+session, p3_ip, p3_auth)
 input("Press Enter to continue...")
 
 send('session-offloading-manager?command=force-offload', p3_ip, p3_auth)

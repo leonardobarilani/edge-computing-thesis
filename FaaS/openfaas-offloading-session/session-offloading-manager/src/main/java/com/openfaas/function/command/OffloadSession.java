@@ -19,41 +19,19 @@ public class OffloadSession implements ICommand {
         String offloading = new RedisHandler(RedisHandler.OFFLOAD).get("offloading");
         if (offloading.equals("accept"))
         {
-            System.out.println("Offloading accepted");
             // offload accepted
+            System.out.println("Offloading accepted");
 
-            String migrateFrom;
+            String sessionJson = req.getBody();
+            String jsonNewSession = MigrateUtils.migrateSession(sessionJson);
 
-            // update json object
-            SessionToken session = new SessionToken();
-            session.initJson(req.getBody());
-            migrateFrom = session.currentLocation;
-            session.currentLocation = System.getenv("LOCATION_ID");
-            String jsonNewSession = new Gson().toJson(session);
-
-            // save new json object in redis
-            redis.set(session.session, jsonNewSession);
-
-            // send new json object to proprietaryLocation
-            String url = EdgeInfrastructureUtils.getGateway(session.proprietaryLocation) +
-                    "/function/session-offloading-manager?command=update-session";
-            System.out.println("Updating proprietary:\n\t" + url + "\n\t" + jsonNewSession);
-            try {
-                HTTPUtils.sendAsyncJsonPOST(url, jsonNewSession);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // migrate data from the location that has the session data, to this node
-            String location = EdgeInfrastructureUtils.getGateway(migrateFrom);
-            String sessionToMigrate = session.session;
-            System.out.println("Migrating session from:\n\t" + location);
-            MigrateUtils.callRemoteMigrate(location, sessionToMigrate);
+            res.setStatusCode(200);
+            res.setBody("Offloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + jsonNewSession);
         }
         else
         {
-            System.out.println("Offloading not accepted");
             // offload redirected to parent
+            System.out.println("Offloading not accepted");
 
             // call parent node to offload the session
             String url = EdgeInfrastructureUtils.getParentHost() +

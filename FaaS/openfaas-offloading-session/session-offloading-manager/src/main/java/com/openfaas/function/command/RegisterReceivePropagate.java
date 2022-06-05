@@ -19,5 +19,7 @@ public class RegisterReceivePropagate implements ICommand {
         redis.addReceivingFunction(function);
 
         System.out.println("Function registered!");
+
+        res.setStatusCode(200);
     }
 }
