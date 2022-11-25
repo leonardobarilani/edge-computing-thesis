@@ -5,7 +5,7 @@ Master of Science Thesis in Computer Science and Engineering at Politecnico di M
 ## Repository Structure
 
 * Deployer: project folder containing the source of the `edge-deployer` command, used to deploy the OpenFaaS functions
-* FaaS: folder containing edge API functions deployed on the infrastructure
+* FaaS: folder containing edge API functions deployed on the infrastructure - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/FaaS/openfaas-offloading-session/session-offloading-manager)
 
 ## Acknowledgements
 
