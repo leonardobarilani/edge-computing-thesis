@@ -73,7 +73,7 @@ public class Deploy {
         if (isWindows)
             shellPreamble = "cmd.exe /c ";
         else
-            shellPreamble = "sh -c ";
+            shellPreamble = "";
 
         // Deploy to all locations.
         for (Area location : listOfLocations) {
@@ -101,6 +101,7 @@ public class Deploy {
                     "--username admin " +
                     "--password-stdin " +
                     "--gateway " + conf.openfaas_gateway;
+                System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
 
@@ -108,6 +109,7 @@ public class Deploy {
                     "faas-cli deploy --filter " + functionName +
                     " --yaml " + yaml +
                     " --gateway " + conf.openfaas_gateway + " " + envVariablesString;
+                System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
             } catch (IOException e) {
