@@ -18,7 +18,19 @@ dependencies {
     compile 'com.openfaas:entrypoint:0.1.0'
 
     // Lettuce dependency
+    // README: apparently using 'implementation' breaks the
+    // function that use those libraries, so 'compile' its advised
+    // Gson dependency
+    compile 'com.google.code.gson:gson:2.9.0'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    //compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
+
+
+    // Build: stateful-append -> Tasks -> distribution -> assembleDist
+    // Copy from: build/libs/session-offloading-manager.jar
+    compile files('./libs/session-offloading-manager.jar')
 }
 
 // In this section you declare where to find the dependencies of your project

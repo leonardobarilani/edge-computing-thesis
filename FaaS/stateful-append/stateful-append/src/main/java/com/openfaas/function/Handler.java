@@ -10,7 +10,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
     public IResponse Handle(IRequest req) {
         Response res = new Response();
-        System.out.println("---------BEGIN STATEFUL APPEND---------");
+        System.out.println("\n\n\n---------BEGIN STATEFUL APPEND---------");
         System.out.println("Query raw: " + req.getQueryRaw());
         for (var v : req.getQuery().keySet())
             System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
