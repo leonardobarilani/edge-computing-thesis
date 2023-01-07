@@ -80,7 +80,7 @@ public class Deploy {
             OpenFaaSRedisConfiguration conf = location.mainLocation;
             String infrastructureBase64 = Base64.getEncoder().encodeToString(infrastructureString.getBytes());
             String envVariablesString =
-                "--env=LOCATION_ID=" + location.areaName +
+                " --env=LOCATION_ID=" + location.areaName +
                 " --env=EDGE_DEPLOYMENT_IN_EVERY=" + inEvery +
                 " --env=EDGE_INFRASTRUCTURE=" + infrastructureBase64 +
                 " --env=REDIS_HOST=" + conf.redis_host +
@@ -96,17 +96,16 @@ public class Deploy {
             String command;
             try {
                 command =
-                    "echo " + conf.openfaas_password +
-                    " | faas-cli login " + 
-                    "--username admin " +
-                    "--password-stdin " +
-                    "--gateway " + conf.openfaas_gateway;
+                    " faas-cli login " +
+                    " --username admin " +
+                    " --password " + conf.openfaas_password +
+                    " --gateway " + conf.openfaas_gateway;
                 System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
 
                 command =
-                    "faas-cli deploy --filter " + functionName +
+                    " faas-cli deploy --filter " + functionName +
                     " --yaml " + yaml +
                     " --gateway " + conf.openfaas_gateway + " " + envVariablesString;
                 System.out.println("Executing: " + shellPreamble + command);
