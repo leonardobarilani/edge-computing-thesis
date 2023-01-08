@@ -18,8 +18,8 @@
 				{
 					"areaName":"p2",
 					"mainLocation":{
-						"openfaas_gateway":"http://172.31.191.25:31112",
-						"openfaas_password":"gK2NxtzKpzbL",
+						"openfaas_gateway":"http://172.21.0.3:31112",
+						"openfaas_password":"password",
 						"redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
 						"redis_port":6379,
 						"redis_password":"customRedisPassword"
@@ -28,8 +28,8 @@
 						{
 							"areaName":"p3",
 							"mainLocation":{
-								"openfaas_gateway":"http://172.31.181.69:31112",
-								"openfaas_password":"baDMaR9ByI7O",
+								"openfaas_gateway":"http://172.19.0.2:31112",
+								"openfaas_password":"password",
 								"redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
 								"redis_port":6379,
 								"redis_password":"customRedisPassword"
