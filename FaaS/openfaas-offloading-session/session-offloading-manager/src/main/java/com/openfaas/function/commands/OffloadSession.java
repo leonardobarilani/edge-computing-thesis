@@ -1,8 +1,8 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.utils.HTTPUtils;
-import com.openfaas.function.daos.RedisHandler;
 import com.openfaas.function.utils.MigrateUtils;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
@@ -12,9 +12,7 @@ import java.io.IOException;
 public class OffloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-
-        String offloading = new RedisHandler(RedisHandler.OFFLOAD).get("offloading");
+        String offloading = ConfigurationDAO.getOffloading();
         if (offloading.equals("accept"))
         {
             // offload accepted
@@ -41,6 +39,5 @@ public class OffloadSession implements ICommand {
                 e.printStackTrace();
             }
         }
-        redis.close();
     }
 }
