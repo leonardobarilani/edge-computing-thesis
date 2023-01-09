@@ -1,7 +1,8 @@
 package com.openfaas.function.utils;
 
 import com.google.gson.Gson;
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.SessionsDAO;
+import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.model.sessiondata.SessionData;
 
@@ -23,9 +24,7 @@ public class MigrateUtils {
         String jsonNewSession = sessionToken.getJson();
 
         // save new json object in redis
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-        redis.set(sessionToken.session, jsonNewSession);
-        redis.close();
+        SessionsDAO.setSessionToken(new SessionToken().initJson(jsonNewSession));
 
         // send new json object to proprietaryLocation
         String url = EdgeInfrastructureUtils.getGateway(sessionToken.proprietaryLocation) +
@@ -43,8 +42,7 @@ public class MigrateUtils {
                 "/function/session-offloading-manager?command=migrate-session&session=" + sessionToMigrate;
         System.out.println("Migrating session from:\n\t" + fromLocation);
         SessionData data = new Gson().fromJson(HTTPUtils.sendGET(urlCurrentLocation), SessionData.class);
-        RedisHandler redisSessionData = new RedisHandler(RedisHandler.SESSIONS_DATA);
-        redisSessionData.setSessionData(sessionToMigrate, data);
+        SessionsDataDAO.setSessionData(sessionToMigrate, data);
 
         return jsonNewSession;
     }
