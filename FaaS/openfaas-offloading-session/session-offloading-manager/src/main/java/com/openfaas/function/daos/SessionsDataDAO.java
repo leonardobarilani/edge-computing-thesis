@@ -14,7 +14,7 @@ public class SessionsDataDAO extends RedisDAO {
         super(Tables.SESSIONS);
     }
 
-    public void setSessionData (String sessionId, SessionData data) {
+    public static void setSessionData (String sessionId, SessionData data) {
         Map<String, String> mapData = new HashMap<>();
 
         for(var entry : data.session_data)
@@ -23,11 +23,11 @@ public class SessionsDataDAO extends RedisDAO {
         instance.hset(sessionId, mapData);
     }
 
-    public void deleteSessionData (String sessionId) {
+    public static void deleteSessionData (String sessionId) {
         instance.del(sessionId);
     }
 
-    public SessionData getSessionData (String sessionId) {
+    public static SessionData getSessionData (String sessionId) {
         Long length = instance.hlen(sessionId);
         SessionData data = new SessionData();
         data.session_data = new SessionRecord[Math.toIntExact(length)];
