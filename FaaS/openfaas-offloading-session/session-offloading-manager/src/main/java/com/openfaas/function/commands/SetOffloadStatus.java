@@ -1,14 +1,12 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
 public class SetOffloadStatus implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler(RedisHandler.OFFLOAD);
-
         String offloading = req.getQuery().get("status");
 
         if (!offloading.equals("accept") && !offloading.equals("reject"))
@@ -21,13 +19,15 @@ public class SetOffloadStatus implements ICommand {
         }
         else
         {
-            String message = "Offloading status from <" + redis.get("offloading") + "> to <" + offloading + ">";
-            redis.set("offloading", offloading);
+            String message = "Offloading status from <" + ConfigurationDAO.getOffloading() + "> to <" + offloading + ">";
+            if (offloading.equals("accept"))
+                ConfigurationDAO.acceptOffloading();
+            else
+                ConfigurationDAO.rejectOffloading();
 
             System.out.println(message);
             res.setBody(message);
             res.setStatusCode(200);
         }
-        redis.close();
     }
 }
