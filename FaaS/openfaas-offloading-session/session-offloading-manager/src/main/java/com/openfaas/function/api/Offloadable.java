@@ -1,8 +1,8 @@
 package com.openfaas.function.api;
 
-import com.openfaas.function.common.RedisHandler;
-import com.openfaas.function.common.SessionToken;
-import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.Response;

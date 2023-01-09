@@ -1,9 +1,9 @@
 package com.openfaas.function.api;
 
 import com.google.gson.Gson;
-import com.openfaas.function.common.PropagateData;
-import com.openfaas.function.common.utils.EdgeInfrastructureUtils;
-import com.openfaas.function.common.utils.HTTPUtils;
+import com.openfaas.function.model.PropagateData;
+import com.openfaas.function.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.utils.HTTPUtils;
 import com.openfaas.model.IRequest;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Map.entry;
 
-public class EdgeDB {
+public class EdgeDB implements IEdgeDB {
 
     private static final String SESSIONS_DATA = "2";
 

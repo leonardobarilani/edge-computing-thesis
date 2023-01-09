@@ -1,6 +1,6 @@
 package com.openfaas.function;
 
-import com.openfaas.function.command.*;
+import com.openfaas.function.commands.*;
 import com.openfaas.model.*;
 
 import java.util.HashMap;
