@@ -1,7 +1,7 @@
 package com.openfaas.function.commands;
 
 import com.google.gson.Gson;
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
@@ -9,8 +9,6 @@ import com.openfaas.model.IRequest;
 public class UpdateSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-
         SessionToken sessionToken = new Gson().fromJson(req.getBody(), SessionToken.class);
         String sessionJson = req.getBody();
 
@@ -26,7 +24,7 @@ public class UpdateSession implements ICommand {
             res.setBody(message);
             res.setStatusCode(400);
         }
-        else if (redis.get(sessionToken.session).isEmpty())
+        else if (SessionsDAO.getSessionToken(sessionToken.session) == null)
         {
             // the session doesn't exist
 
@@ -41,9 +39,9 @@ public class UpdateSession implements ICommand {
         {
             // the session gets updated
 
-            String oldSession = redis.get(sessionToken.session);
+            SessionToken oldSession = SessionsDAO.getSessionToken(sessionToken.session);
             
-            redis.set(sessionToken.session, sessionJson);
+            SessionsDAO.setSessionToken(new SessionToken().initJson(sessionJson));
 
             String message = "Session updated:\n\t" +
                     oldSession + " -> " + sessionJson;
@@ -52,6 +50,5 @@ public class UpdateSession implements ICommand {
             res.setBody(message);
             res.setStatusCode(200);
         }
-        redis.close();
     }
 }
