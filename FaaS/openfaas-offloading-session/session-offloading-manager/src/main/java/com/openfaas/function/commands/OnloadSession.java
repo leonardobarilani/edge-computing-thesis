@@ -1,6 +1,7 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.SessionsDAO;
+import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IResponse;
@@ -25,8 +26,6 @@ public class OnloadSession implements ICommand {
             return;
         }
 
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-
         // FIXME
         // Fix onload-session bug (example: A with children B and C. B offload to A.
         // C call onload on A. A onload session of node B to node C)
@@ -36,13 +35,10 @@ public class OnloadSession implements ICommand {
         // (the proprietaryLocation has to be a sub node of the onloadingLocation)
         SessionToken onloadedSession = null;
         List<String> subNodes = EdgeInfrastructureUtils.getLocationsSubTree(onloadLocation);
-        RedisHandler sessionData = new RedisHandler(RedisHandler.SESSIONS_DATA);
-        List<String> localSessionsIds = sessionData.getAllSessionsIds();
-        sessionData.close();
+        List<String> localSessionsIds = SessionsDataDAO.getAllSessionsIds();
         for (var session : localSessionsIds)
         {
-            SessionToken token = new SessionToken();
-            token.initJson(redis.get(session));
+            SessionToken token = SessionsDAO.getSessionToken(session);
             if (subNodes.contains(token.proprietaryLocation))
             {
                 onloadedSession = token;
@@ -67,8 +63,7 @@ public class OnloadSession implements ICommand {
             // to allow a correct redirect from this node to the node that actually has the session,
             // we redirect to the proprietary that will finally redirect to the correct node
             onloadedSession.currentLocation = onloadedSession.proprietaryLocation;
-            redis.set(onloadedSession.session, onloadedSession.getJson());
+            SessionsDAO.setSessionToken(onloadedSession);
         }
-        redis.close();
     }
 }
