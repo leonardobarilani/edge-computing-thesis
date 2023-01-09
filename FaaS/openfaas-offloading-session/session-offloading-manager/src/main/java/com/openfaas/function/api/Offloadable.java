@@ -1,6 +1,6 @@
 package com.openfaas.function.api;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
@@ -17,35 +17,26 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             System.out.println("(Offloadable) X-session: " + sessionId);
             if (sessionId == null)
                 System.out.println("(Offloadable) [Warning] X-session is null, it shouldn't happen");
-            SessionToken sessionToken;
 
-            RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-            String sessionJson = redis.get(sessionId);
-            redis.close();
+            SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);;
 
             System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
 
-            if (sessionJson == null) {
+            if (sessionToken == null) {
                 // We are in the proprietary location, we create the session
 
                 System.out.println("(Offloadable) The session doesn't exists. About to create a new session, sessionId: " + sessionId);
                 sessionToken = new SessionToken();
                 sessionToken.init(sessionId);
-                sessionJson = sessionToken.getJson();
-                System.out.println("(Offloadable) New session created: \n\t" + sessionJson);
+                System.out.println("(Offloadable) New session created: \n\t" + sessionToken.getJson());
 
-                redis = new RedisHandler(RedisHandler.SESSIONS);
-                redis.set(sessionToken.session, sessionJson);
-                redis.close();
+                SessionsDAO.setSessionToken(sessionToken);
 
                 System.out.println("(Offloadable) Session saved in Redis");
 
                 res = HandleOffload(req);
             } else {
                 System.out.println("(Offloadable) Session exists. Detecting if locally or offloaded...");
-
-                sessionToken = new SessionToken();
-                sessionToken.initJson(sessionJson);
 
                 if (!sessionToken.currentLocation.equals(System.getenv("LOCATION_ID"))) {
                 /*  currentLocation doesn't match with this location,
@@ -59,7 +50,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
                                     System.getenv("FUNCTION_NAME") + "?" +
                                     req.getQueryRaw();
 
-                    System.out.println("(Offloadable) Redirecting session <" + sessionJson + "> to: " + redirectUrl);
+                    System.out.println("(Offloadable) Redirecting session <" + sessionToken.getJson() + "> to: " + redirectUrl);
 
                     res = new Response();
                     res.setStatusCode(307);
