@@ -1,6 +1,6 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -14,15 +14,11 @@ public class MigrateSession implements ICommand {
 
         System.out.println("About to migrate Session Id: " + sessionId);
 
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS_DATA);
-
-        SessionData data = redis.getSessionData(sessionId);
+        SessionData data = SessionsDataDAO.getSessionData(sessionId);
 
         res.setBody(data.toJSON());
         res.setStatusCode(200);
 
-        redis.deleteSession(sessionId);
-
-        redis.close();
+        SessionsDataDAO.deleteSessionData(sessionId);
     }
 }
