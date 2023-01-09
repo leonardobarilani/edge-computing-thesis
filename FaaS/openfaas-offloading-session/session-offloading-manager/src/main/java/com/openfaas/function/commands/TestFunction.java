@@ -1,6 +1,8 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.ConfigurationDAO;
+import com.openfaas.function.daos.SessionsDAO;
+import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
@@ -15,16 +17,13 @@ public class TestFunction implements ICommand {
 
         System.out.println("About to test: " + sessionRequested);
 
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-        String sessionJson = redis.get(sessionRequested);
-        redis.close();
-        redis = new RedisHandler(RedisHandler.OFFLOAD);
+        SessionToken sessionToken = SessionsDAO.getSessionToken(sessionRequested);
 
-        if (sessionJson == null || sessionJson.isEmpty())
+        if (sessionToken == null)
         {
             String message =
                     "Session <" + sessionRequested + "> doesn't exist\n" +
-                    "Offloading status: " + (redis.get("offloading").equals("accept") ? "accept" : "reject");
+                    "Offloading status: " + ConfigurationDAO.getOffloading();
 
             System.out.println(message);
             res.setBody(message);
@@ -32,17 +31,13 @@ public class TestFunction implements ICommand {
         }
         else
         {
-            String message =
-                    "Session <" + sessionRequested + ">: " + sessionJson + "\n" +
-                    "Offloading status: " + (redis.get("offloading").equals("accept") ? "accept" : "reject");
+            String message  =
+                    "Session <" + sessionRequested + ">: " + sessionToken.getJson() + "\n" +
+                    "Offloading status: " + ConfigurationDAO.getOffloading();
 
-            SessionToken session = new SessionToken();
-            session.initJson(sessionJson);
-            if (session.currentLocation.equals(System.getenv("LOCATION_ID")))
+            if (sessionToken.currentLocation.equals(System.getenv("LOCATION_ID")))
             {
-                RedisHandler redisSession = new RedisHandler(RedisHandler.SESSIONS_DATA);
-                message += "\nSession data: " + redisSession.getSessionData(session.session).toJSON();
-                redis.close();
+                message += "\nSession data: " + SessionsDataDAO.getSessionData(sessionToken.session).toJSON();
             }
             else
             {
@@ -53,6 +48,5 @@ public class TestFunction implements ICommand {
             res.setBody(message);
             res.setStatusCode(200);
         }
-        redis.close();
     }
 }
