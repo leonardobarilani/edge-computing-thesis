@@ -47,7 +47,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
                 res.setBody("Unrecognized command: " + command + "\nAvailable commands: " + commands.keySet());
                 res.setStatusCode(404);
             }
-            System.out.println("----------END NEW COMMAND----------");
+            System.out.println("----------END NEW COMMAND----------\n\n");
 
         } catch(Exception e) { e.printStackTrace(); }
 	    return res;

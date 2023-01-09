@@ -16,7 +16,7 @@ public class SessionsDAO extends RedisDAO {
         if (sessionId != null)
             json = instance.get(sessionId);
 
-        System.out.println("session Token: "+json);
+        System.out.println("(SessionsDAO.getSessionToken) Session fetched from local storage: " + json);
 
         if (json != null)
             return new SessionToken().initJson(json);
@@ -27,7 +27,7 @@ public class SessionsDAO extends RedisDAO {
     public static SessionToken getRandomSessionToken () {
         String json = instance.getRandom();
 
-        System.out.println("session Token: "+json);
+        System.out.println("(SessionsDAO.getRandomSessionToken) Session fetched from local storage: " + json);
 
         if (json != null)
             return new SessionToken().initJson(json);
