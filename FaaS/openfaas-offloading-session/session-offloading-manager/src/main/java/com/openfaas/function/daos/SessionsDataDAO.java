@@ -8,17 +8,10 @@ import java.util.Map;
 
 public class SessionsDataDAO extends RedisDAO {
 
-    private static SessionsDataDAO instance;
+    private static SessionsDataDAO instance = new SessionsDataDAO();
 
     private SessionsDataDAO() {
         super(Tables.SESSIONS);
-    }
-
-    public static SessionsDataDAO getInstance() {
-        if (instance == null) {
-            instance = new SessionsDataDAO();
-        }
-        return instance;
     }
 
     public void setSessionData (String sessionId, SessionData data) {

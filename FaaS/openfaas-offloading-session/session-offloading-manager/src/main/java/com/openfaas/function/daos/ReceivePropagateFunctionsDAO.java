@@ -4,17 +4,10 @@ import java.util.Set;
 
 public class ReceivePropagateFunctionsDAO extends RedisDAO {
 
-    private static ReceivePropagateFunctionsDAO instance;
+    private static ReceivePropagateFunctionsDAO instance = new ReceivePropagateFunctionsDAO();
 
     private ReceivePropagateFunctionsDAO() {
         super(Tables.RECEIVE_PROPAGATE_FUNCTIONS);
-    }
-
-    public static ReceivePropagateFunctionsDAO getInstance() {
-        if (instance == null) {
-            instance = new ReceivePropagateFunctionsDAO();
-        }
-        return instance;
     }
 
     public static void addReceivingFunction (String function) {

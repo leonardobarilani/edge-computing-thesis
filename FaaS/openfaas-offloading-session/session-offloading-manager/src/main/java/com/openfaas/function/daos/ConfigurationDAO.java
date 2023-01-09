@@ -2,17 +2,10 @@ package com.openfaas.function.daos;
 
 public class ConfigurationDAO extends RedisDAO {
 
-    private static ConfigurationDAO instance;
+    private static ConfigurationDAO instance = new ConfigurationDAO();
 
     private ConfigurationDAO() {
         super(Tables.CONFIGURATION);
-    }
-
-    public static ConfigurationDAO getInstance() {
-        if (instance == null) {
-            instance = new ConfigurationDAO();
-        }
-        return instance;
     }
 
     public static void acceptOffloading () {

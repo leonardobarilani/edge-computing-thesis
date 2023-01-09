@@ -4,17 +4,10 @@ import com.openfaas.function.model.SessionToken;
 
 public class SessionsDAO extends RedisDAO {
 
-    private static SessionsDAO instance;
+    private static SessionsDAO instance = new SessionsDAO();
 
     private SessionsDAO() {
         super(Tables.SESSIONS);
-    }
-
-    public static SessionsDAO getInstance() {
-        if (instance == null) {
-            instance = new SessionsDAO();
-        }
-        return instance;
     }
 
     public static SessionToken getSessionToken (String sessionId) {
