@@ -4,6 +4,7 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,6 +59,19 @@ abstract class RedisDAO {
         }
 
         connection.close();
+    }
+
+    List<String> getAllKeys () {
+        StatefulRedisConnection<String, String> connection;
+        connection = redisClient.connect();
+        syncCommands = connection.sync();
+
+        List<String> returnValue = null;
+        System.out.println("(RedisDAO.getAllKeys) Redis keys");
+        returnValue = syncCommands.keys("*");
+
+        connection.close();
+        return returnValue;
     }
 
     void sadd (String key, String value) {
