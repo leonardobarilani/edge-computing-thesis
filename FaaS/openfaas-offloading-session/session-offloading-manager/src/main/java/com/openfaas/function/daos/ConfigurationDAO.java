@@ -1,5 +1,7 @@
 package com.openfaas.function.daos;
 
+import java.util.Set;
+
 public class ConfigurationDAO extends RedisDAO {
 
     private static ConfigurationDAO instance = new ConfigurationDAO();
@@ -18,5 +20,13 @@ public class ConfigurationDAO extends RedisDAO {
 
     public static String getOffloading () {
         return instance.get("offloading");
+    }
+
+    public static void addReceivingFunction (String function) {
+        instance.sadd("receiving_functions", function);
+    }
+
+    public static Set<String> getAllReceivingFunctions () {
+        return instance.smembers("receiving_functions");
     }
 }
