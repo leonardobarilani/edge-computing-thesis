@@ -1,6 +1,6 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.RedisHandler;
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -12,11 +12,9 @@ public class RegisterReceivePropagate implements ICommand {
 
         System.out.println("Request to register function: " + function);
 
-        RedisHandler redis = new RedisHandler(RedisHandler.RECEIVE_PROPAGATE_FUNCTIONS);
-
         System.out.println("Registering function...");
 
-        redis.addReceivingFunction(function);
+        ConfigurationDAO.addReceivingFunction(function);
 
         System.out.println("Function registered!");
 
