@@ -4,6 +4,7 @@ import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.function.model.sessiondata.SessionRecord;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SessionsDataDAO extends RedisDAO {
@@ -43,5 +44,9 @@ public class SessionsDataDAO extends RedisDAO {
 
         System.out.println("(SessionDataDAO.getSessionData) Returning session_data");
         return data;
+    }
+
+    public static List<String> getAllSessionsIds () {
+        return instance.getAllKeys();
     }
 }
