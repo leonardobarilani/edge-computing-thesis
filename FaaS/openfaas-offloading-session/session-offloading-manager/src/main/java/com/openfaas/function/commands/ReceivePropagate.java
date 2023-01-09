@@ -1,8 +1,8 @@
 package com.openfaas.function.commands;
 
 import com.google.gson.Gson;
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.model.PropagateData;
-import com.openfaas.function.daos.RedisHandler;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -22,14 +22,10 @@ public class ReceivePropagate implements ICommand {
 
         System.out.println("Received propagate: " + req.getBody());
 
-        RedisHandler redis = new RedisHandler(RedisHandler.RECEIVE_PROPAGATE_FUNCTIONS);
-
         System.out.println("Forwarding value to all registered functions...");
 
         List<CompletableFuture<HttpResponse<String>>> functions = new LinkedList<>();
-        var receivingFunctions = redis.getAllReceivingFunctions();
-
-        redis.close();
+        var receivingFunctions = ConfigurationDAO.getAllReceivingFunctions();
 
         receivingFunctions
                 .parallelStream()
