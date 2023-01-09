@@ -1,8 +1,8 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.utils.HTTPUtils;
-import com.openfaas.function.daos.RedisHandler;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
@@ -16,28 +16,17 @@ import java.io.IOException;
 public class ForceOffload implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        RedisHandler redis = new RedisHandler(RedisHandler.SESSIONS);
-
-        SessionToken sessionToOffload = null;
         String forcedSessionId = req.getHeader("X-forced-session");
-        String json = null;
+        SessionToken sessionToOffload;
 
         System.out.println("Header X-forced-session: "+forcedSessionId);
 
         if (forcedSessionId != null)
             // get the forced session to offload
-            json = redis.get(forcedSessionId);
+            sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
         else
             // get a random session to offload
-            json = redis.getRandom();
-
-        System.out.println("session Token: "+json);
-
-        if (json != null)
-        {
-            sessionToOffload = new SessionToken();
-            sessionToOffload.initJson(json);
-        }
+            sessionToOffload = SessionsDAO.getRandomSessionToken();
 
         if (sessionToOffload == null)
         {
@@ -47,6 +36,8 @@ public class ForceOffload implements ICommand {
         }
         else
         {
+            System.out.println("Session token about to be offloaded: " + sessionToOffload.getJson());
+
             // call parent node to offload the session
             String url = EdgeInfrastructureUtils.getParentHost() +
                     "/function/session-offloading-manager?command=offload-session";
@@ -62,13 +53,12 @@ public class ForceOffload implements ICommand {
             // set the currentLocation to proprietaryLocation so that the proprietary
             // will properly redirect to the actual currentLocation
             sessionToOffload.currentLocation = sessionToOffload.proprietaryLocation;
-            redis.set(sessionToOffload.session, sessionToOffload.getJson());
-            
+            SessionsDAO.setSessionToken(sessionToOffload);
+
             System.out.println(message);
 
             res.setStatusCode(200);
             res.setBody(message);
         }
-        redis.close();
     }
 }
