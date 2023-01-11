@@ -10,6 +10,8 @@ from connection import Connection
 session = 'marco'
 con = Connection(node_name='k3d-p3', session=session)
 
+input("Press Enter to begin testing...")
+
 con.get('session-offloading-manager?command=set-offload-status&status=accept')
 input("Press Enter to continue...")
 

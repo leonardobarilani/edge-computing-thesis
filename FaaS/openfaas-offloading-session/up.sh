@@ -2,7 +2,7 @@ echo Building
 faas-cli build || exit 1
 
 echo Pushing
-$HOME/thesis-scripts/local-push.sh carrone/session-offloading-manager latest || exit 1
+$HOME/thesis-scripts/local-push.sh carrone/session-offloading-manager latest && sleep 5 || exit 1
 
 echo Deploying
 ./deploy.sh || exit 1
