@@ -17,7 +17,7 @@ kubectl config use-context $1
 
 k3d cluster create $1 \
     --registry-use k3d-docker-io:5000 \
-    --registry-config $HOME/thesis-scripts/registry.yaml
+    --registry-config $SCRIPTS_PATH/registry.yaml
 #    -p "$PORT:80@loadbalancer" \
 
 #it proxies requests to docker hub and redirects them to local-reg
