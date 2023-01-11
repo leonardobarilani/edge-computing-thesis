@@ -6,6 +6,7 @@ Master of Science Thesis in Computer Science and Engineering at Politecnico di M
 
 * Deployer: project folder containing the source of the `edge-deployer` command, used to deploy the OpenFaaS functions
 * FaaS: folder containing edge API functions deployed on the infrastructure - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/FaaS/openfaas-offloading-session/session-offloading-manager)
+* Scripts: folder containing some helper scripts to install the whole framework and locally manage OpenFaaS functions - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/Scripts)
 
 ## Acknowledgements
 
