@@ -1,5 +1,5 @@
-USERNAME=$(cat $HOME/docker-username.txt)
-PASSWORD=$(cat $HOME/docker-password.txt)
+#USERNAME=$(cat $HOME/docker-username.txt)
+#PASSWORD=$(cat $HOME/docker-password.txt)
 
 k3d registry create docker-io \
   --port 5000 \
