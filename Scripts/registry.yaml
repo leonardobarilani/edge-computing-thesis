@@ -1,4 +1,0 @@
-mirrors:
-  "docker.io":
-    endpoint:
-      - http://k3d-docker-io:5000
