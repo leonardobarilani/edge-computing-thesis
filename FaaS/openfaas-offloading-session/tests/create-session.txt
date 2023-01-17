@@ -1,0 +1,2 @@
+select 1
+set marco "{\\"session\\":\\"marco\\",\\"proprietaryLocation\\":\\"p3\\",\\"currentLocation\\":\\"p3\\"}"

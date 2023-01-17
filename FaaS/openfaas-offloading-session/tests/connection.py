@@ -14,7 +14,7 @@ class Connection:
 		print (ip + "  " + openfaas_fn + " response: \n" + str(response.content, "utf-8") + "\n")
 		return str(self.session.content, "utf-8")
 		
-	def get(self, openfaas_fn: str):
-		response = requests.get('http://' + self.ip + ':31112/function/' + openfaas_fn, auth=self.auth, headers={'X-session':self.session,'X-forced-session':self.session})
+	def get(self, openfaas_fn: str, headers: dict):
+		response = requests.get('http://' + self.ip + ':31112/function/' + openfaas_fn, auth=self.auth, headers=headers)
 		print (self.ip + "  " + openfaas_fn + " response: \n" + str(response.content, "utf-8") + "\n")
 		return str(response.content, "utf-8")

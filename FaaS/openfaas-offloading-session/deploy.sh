@@ -1,6 +1,6 @@
 deploy()
 {
-	COMMAND="java -jar $HOME/thesis-scripts/edge-deployer.jar deploy "$@""
+	COMMAND="java -jar $SCRIPTS_PATH/edge-deployer.jar deploy "$@""
 	echo $COMMAND
 	$COMMAND
 }
