@@ -23,6 +23,8 @@ curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 #install helm
 read -p "Press any key to install helm ..."
 curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+helm repo add openfaas https://openfaas.github.io/faas-netes/
+helm repo update
 
 echo \[WARNING\] If you want to install autocompletion scripts in /etc/bash_completion.d folder, press any button, else Ctrl+C to exit the script
 read
