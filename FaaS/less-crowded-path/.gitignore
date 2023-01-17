@@ -1,2 +1,5 @@
 template
 build
+/get-less-crowded-path/.gradle/
+/store-crowdness/.gradle/
+/video-footage-receiver/.gradle/
