@@ -5,10 +5,10 @@ then
     exit 1
 fi
 
-echo \[WARNING\] By continuing all the k3d nodes will be delete. Press any button to continue or Ctrl+C to exit the script
+echo \[WARNING\] By continuing the k3d cluster \"$1\" will be deleted, if it exists. Press any button to continue or Ctrl+C to exit the script
 read
 
-k3d node delete --all
+k3d cluster delete $1
 $SCRIPTS_PATH/install-cluster.sh $1
 $SCRIPTS_PATH/install-openfaas.sh k3d-$1
 $SCRIPTS_PATH/install-redis.sh k3d-$1
