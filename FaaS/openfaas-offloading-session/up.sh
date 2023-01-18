@@ -1,8 +1,5 @@
-echo Building
-faas-cli build || exit 1
-
-echo Pushing
-$SCRIPTS_PATH/local-push.sh carrone/session-offloading-manager latest && sleep 5 || exit 1
+echo building and pushing to local register
+faas-cli up --skip-deploy
 
 echo Deploying
 ./deploy.sh || exit 1
