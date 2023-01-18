@@ -4,7 +4,7 @@ This repository contains some scripts used to conveniently debug and develop the
 
 ## Shell Prerequisites
 
-These scripts assumes that the shell has the following commands installed:
+These scripts assume that the shell has the following commands installed:
 
 * `kubectl`
 * `k3d`
@@ -12,6 +12,8 @@ These scripts assumes that the shell has the following commands installed:
 * `docker`
 * `curl`
 * `tmux` (Only for thesis-dashboard)
+
+You can use first_setup.sh to install them all
 
 Add the following snippet in your `.bashrc` or equivalent to quickly access the scripts and to create the `SCRIPTS_PATH` variable:
 
@@ -27,7 +29,6 @@ alias install-redis='${SCRIPTS_PATH}/install-redis.sh'
 alias edge-deployer='java -jar ${SCRIPTS_PATH}/edge-deployer'
 alias print-events='kubectl get events --all-namespaces  --sort-by='.metadata.creationTimestamp''
 alias registry-list='${SCRIPTS_PATH}/registry-list.sh'
-alias local-push='${SCRIPTS_PATH}/local-push.sh'
 alias reinstall-all='${SCRIPTS_PATH}/reinstall-all.sh'
 ```
 
