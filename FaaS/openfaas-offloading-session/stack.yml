@@ -5,7 +5,7 @@ functions:
   session-offloading-manager:
     lang: java11
     handler: ./session-offloading-manager
-    image: k3d-docker-io.localhost:5000/carrone/session-offloading-manager:latest
+    image: k3d-docker-io.localhost:5000/session-offloading-manager:latest
     environment:
       write_debug: true
       write_timeout: 2m30s
