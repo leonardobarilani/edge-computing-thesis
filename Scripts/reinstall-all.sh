@@ -16,4 +16,4 @@ $SCRIPTS_PATH/install-redis.sh k3d-$1
 echo
 echo Cluster, openfaas, redis redeployed
 echo 
-echo You can now fetch the new IP \(print-info\) and update the infrastructure.json file
+echo You can now fetch the new IP \(print-info k3d-\<node_name\>\) and update the infrastructure.json file
