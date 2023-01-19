@@ -2,15 +2,9 @@
 
 Clone this repository:
 
-<inserire il comando>
+	git clone https://github.com/leonardobarilani/edge-computing-thesis.git
 
-## Local framework scripts
+To install the required third-party tools such as `docker`, `kubectl`, `k3d`, `helm` and the bash scripts, move into the `edge-computing-thesis` and run the following script:
 
-<creare nuovo script che definisce la variabile SCRIPTS_PATH con il percorso corretto e chiama un altro nuovo script che aggiunge gli alias etc.>
-
-## Local third-party tools
-
-To install the required tools:
-
-<inserire il comando>
-
+	chmod +x ./Scripts/first-setup.sh
+	./Scripts/first-setup.sh
