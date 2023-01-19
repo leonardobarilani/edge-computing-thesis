@@ -24,6 +24,7 @@ curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 read -p "Press any key to install helm ...\n"
 curl -sSLf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 helm repo add openfaas https://openfaas.github.io/faas-netes/
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
 #install SCRIPTS_PATH and aliases in .bashrc
