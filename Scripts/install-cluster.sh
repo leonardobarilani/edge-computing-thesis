@@ -9,7 +9,8 @@ kubectl config use-context $1
 
 k3d cluster create $1 \
     --k3s-arg "--disable=traefik@server:0" \
-    --config $SCRIPTS_PATH/SimpleClusterConfig.yaml  #dove viene settata scrits path???
+    --network MyNet \
+    --config $SCRIPTS_PATH/SimpleClusterConfig.yaml
 
 #k3d kubeconfig merge $1 \
 #    --kubeconfig-merge-default \
