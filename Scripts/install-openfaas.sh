@@ -18,9 +18,9 @@ kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/na
 helm upgrade openfaas --install openfaas/openfaas \
   --namespace openfaas \
   --set basic_auth=false \
-  --set faasnetes.imagePullPolicy=IfNotPresent \
   --set functionNamespace=openfaas-fn \
   --wait
+#  --set faasnetes.imagePullPolicy=IfNotPresent \
 #  --set operator.create=true \
 #  --set ingress.enabled=true \
 #  --set ingress.annotations.kubernetes.io/ingress.class=traefik \
