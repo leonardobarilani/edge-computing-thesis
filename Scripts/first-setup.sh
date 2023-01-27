@@ -1,6 +1,17 @@
 #Install Docker to be executed without root:
 read -p "Press any key to install docker ..."
-curl -sS https://get.docker.com | sh
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
@@ -27,6 +38,9 @@ helm repo add openfaas https://openfaas.github.io/faas-netes/
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
+#install faas-cli
+curl -sSL https://cli.openfaas.com | sudo sh
+
 #install SCRIPTS_PATH and aliases in .bashrc
 if [[ -z "${SCRIPTS_PATH}" ]]; then
 	SHELLRC=$HOME/.bashrc
@@ -47,3 +61,4 @@ sudo curl https://raw.githubusercontent.com/docker/cli/master/contrib/completion
 kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null #optional
 k3d completion bash | sudo tee /etc/bash_completion.d/k3d > /dev/null #optional
 helm completion bash | sudo tee /etc/bash_completion.d/helm > /dev/null #optional
+faas-cli completion --shell bash | sudo tee /etc/bash_completion.d/faas-cli > /dev/null #optional
