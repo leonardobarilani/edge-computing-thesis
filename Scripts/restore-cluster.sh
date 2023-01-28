@@ -11,7 +11,11 @@ read
 kubectl config use-context k3d-$1
 kubectl get pod -A | grep -e Error -e Evicted -e ContainerStatusUnknown -e Completed -e Pending | awk '{print $2}' | xargs kubectl delete pod -n openfaas-fn
 kubectl get pod -A | grep -e Error -e Evicted -e ContainerStatusUnknown -e Completed -e Pending | awk '{print $2}' | xargs kubectl delete pod -n openfaas
+echo Wait for all pods to be ready and then press Enter...
+read
 $SCRIPTS_PATH/install-openfaas.sh k3d-$1
+echo Wait for all pods to be ready and then press Enter...
+read
 $SCRIPTS_PATH/install-redis.sh k3d-$1
 
 echo
