@@ -10,11 +10,8 @@ read
 
 k3d cluster delete $1
 $SCRIPTS_PATH/install-cluster.sh $1
-echo Wait for all pods to be ready and then press Enter...
-read
+kubectl wait deployment -n kube-system metrics-server local-path-provisioner coredns --for condition=Available=True --timeout=180s
 $SCRIPTS_PATH/install-openfaas.sh k3d-$1
-echo Wait for all pods to be ready and then press Enter...
-read
 $SCRIPTS_PATH/install-redis.sh k3d-$1
 
 echo
