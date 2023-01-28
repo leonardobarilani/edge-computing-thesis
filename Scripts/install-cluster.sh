@@ -10,7 +10,9 @@ kubectl config use-context $1
 k3d cluster create $1 \
     --k3s-arg "--disable=traefik@server:0" \
     --network MyNet \
-    --config $SCRIPTS_PATH/SimpleClusterConfig.yaml
+    --config $SCRIPTS_PATH/SimpleClusterConfig.yaml \
+    --verbose \
+    --trace
 
 #k3d kubeconfig merge $1 \
 #    --kubeconfig-merge-default \

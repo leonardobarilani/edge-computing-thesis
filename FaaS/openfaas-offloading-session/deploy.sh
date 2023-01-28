@@ -8,15 +8,15 @@ deploy()
 # ROOT
 echo Deploying ROOT functions
 
-#deploy session-offloading-manager infrastructure.json --inEvery country --inAreas p1
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery country --inAreas p1
 
 # MIDDLE NODES
 echo Deploying MIDDLE NODES functions
 
-#deploy session-offloading-manager infrastructure.json --inEvery city --inAreas p2
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery city --inAreas p1
 
 # EDGE
 echo Deploying EDGE functions
 
-deploy session-offloading-manager infrastructure.json --inEvery district --inAreas p3
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery district --inAreas p1
 
