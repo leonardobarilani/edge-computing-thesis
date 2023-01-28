@@ -3,12 +3,16 @@ package com.openfaas.function.api;
 import com.google.gson.Gson;
 import com.openfaas.function.model.PropagateData;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
-import com.openfaas.function.utils.HTTPUtils;
 import com.openfaas.model.IRequest;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +150,7 @@ public class EdgeDB implements IEdgeDB {
                 String uri = EdgeInfrastructureUtils.getGateway(l) + "/function/session-offloading-manager?command=receive-propagate";
                 String json = new Gson().toJson(new PropagateData(value, function));
                 System.out.println("(EdgeDB.propagate) Propagating now: \n\t" + uri + "\n\t" + json);
-                futures.add(HTTPUtils.sendAsyncJsonPOST(
+                futures.add(sendAsyncJsonPOST(
                         uri,
                         json
                 ));
@@ -171,5 +175,18 @@ public class EdgeDB implements IEdgeDB {
 
     private class HList {
         List<String> list = new ArrayList<>();
+    }
+
+    private static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,
+                                                                            String body)
+            throws IOException
+    {
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        return HttpClient.newHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }

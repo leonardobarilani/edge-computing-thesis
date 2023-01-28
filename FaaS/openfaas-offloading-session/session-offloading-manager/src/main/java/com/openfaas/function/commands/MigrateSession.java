@@ -1,10 +1,12 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
+@RequiresQueryAnnotation.RequiresQuery(query="session")
 public class MigrateSession implements ICommand {
 
     @Override

@@ -29,7 +29,7 @@ con3.get('session-offloading-manager?command=test-function&session='+session)
 con2.get('session-offloading-manager?command=test-function&session='+session)
 input("Press Enter to continue...")
 
-con3.get('session-offloading-manager?command=force-offload')
+con3.get('session-offloading-manager?command=force-offload', extra_headers={'X-forced-session':'marco'})
 input("Press Enter to continue...")
 
 con3.get('session-offloading-manager?command=test-function&session='+session)

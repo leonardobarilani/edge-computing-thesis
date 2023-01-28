@@ -1,3 +1,5 @@
-select 1
-del marco
+SELECT 1
+HDEL marco PROPRIETARY_LOCATION CURRENT_LOCATION STATUS
+SELECT 2
+HDEL marco key1 key2
 

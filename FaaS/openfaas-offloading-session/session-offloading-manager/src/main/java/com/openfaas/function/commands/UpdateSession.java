@@ -1,16 +1,17 @@
 package com.openfaas.function.commands;
 
-import com.google.gson.Gson;
+import com.openfaas.function.commands.annotations.RequiresBodyAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
+@RequiresBodyAnnotation.RequiresBody
 public class UpdateSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        SessionToken sessionToken = new Gson().fromJson(req.getBody(), SessionToken.class);
         String sessionJson = req.getBody();
+        SessionToken sessionToken = SessionToken.Builder.buildFromJSON(sessionJson);
 
         if (!sessionToken.proprietaryLocation.equals(System.getenv("LOCATION_ID")))
         {
@@ -41,7 +42,7 @@ public class UpdateSession implements ICommand {
 
             SessionToken oldSession = SessionsDAO.getSessionToken(sessionToken.session);
             
-            SessionsDAO.setSessionToken(new SessionToken().initJson(sessionJson));
+            SessionsDAO.setSessionToken(SessionToken.Builder.buildFromJSON(sessionJson));
 
             String message = "Session updated:\n\t" +
                     oldSession + " -> " + sessionJson;

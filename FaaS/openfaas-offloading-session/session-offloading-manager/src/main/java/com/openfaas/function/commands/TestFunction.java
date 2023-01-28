@@ -1,5 +1,6 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
@@ -7,13 +8,11 @@ import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
+@RequiresQueryAnnotation.RequiresQuery(query="session")
 public class TestFunction implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-
         String sessionRequested = req.getQuery().get("session");
-        if (sessionRequested == null)
-            sessionRequested = "";
 
         System.out.println("About to test: " + sessionRequested);
 
