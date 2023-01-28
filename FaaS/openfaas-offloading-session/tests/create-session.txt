@@ -1,2 +1,5 @@
-select 1
-set marco "{\\"session\\":\\"marco\\",\\"proprietaryLocation\\":\\"p3\\",\\"currentLocation\\":\\"p3\\"}"
+SELECT 1
+HSET marco PROPRIETARY_LOCATION "p3" CURRENT_LOCATION "p3" STATUS "UNLOCKED"
+SELECT 2
+HSET marco key1 value2 key2 value2
+

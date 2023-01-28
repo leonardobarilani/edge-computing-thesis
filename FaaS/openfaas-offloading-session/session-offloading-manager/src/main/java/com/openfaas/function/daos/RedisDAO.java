@@ -1,6 +1,7 @@
 package com.openfaas.function.daos;
 
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
@@ -150,6 +151,21 @@ abstract class RedisDAO {
         connection.close();
     }
 
+    String hget (String key, String field){
+        StatefulRedisConnection<String, String> connection;
+        connection = redisClient.connect();
+        syncCommands = connection.sync();
+
+        String returnValue = null;
+        if (key != null && field != null) {
+            System.out.println("(RedisDAO.hget) Redis hget with key, field: " + key + ", " + field);
+            returnValue = syncCommands.hget(key, field);
+        }
+
+        connection.close();
+        return returnValue;
+    }
+
     Map<String, String> hgetall (String key){
         StatefulRedisConnection<String, String> connection;
         connection = redisClient.connect();
@@ -191,5 +207,16 @@ abstract class RedisDAO {
 
         connection.close();
         return returnValue;
+    }
+
+    Object eval (String script, ScriptOutputType outputType, String accessedKey, String scriptArgument) {
+        StatefulRedisConnection<String, String> connection;
+        connection = redisClient.connect();
+        syncCommands = connection.sync();
+
+        Object returnObject = syncCommands.eval(script, outputType, accessedKey, scriptArgument);
+
+        connection.close();
+        return returnObject;
     }
 }

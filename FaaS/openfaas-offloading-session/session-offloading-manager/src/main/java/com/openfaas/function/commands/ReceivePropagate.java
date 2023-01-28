@@ -1,6 +1,7 @@
 package com.openfaas.function.commands;
 
 import com.google.gson.Gson;
+import com.openfaas.function.commands.annotations.RequiresBodyAnnotation;
 import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.model.PropagateData;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@RequiresBodyAnnotation.RequiresBody
 public class ReceivePropagate implements ICommand {
     @Override
     public void Handle(IRequest req, IResponse res) {

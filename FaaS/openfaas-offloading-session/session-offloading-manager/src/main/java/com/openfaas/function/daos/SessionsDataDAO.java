@@ -12,7 +12,7 @@ public class SessionsDataDAO extends RedisDAO {
     private static SessionsDataDAO instance = new SessionsDataDAO();
 
     private SessionsDataDAO() {
-        super(Tables.SESSIONS);
+        super(Tables.SESSIONS_DATA);
     }
 
     public static void setSessionData (String sessionId, SessionData data) {

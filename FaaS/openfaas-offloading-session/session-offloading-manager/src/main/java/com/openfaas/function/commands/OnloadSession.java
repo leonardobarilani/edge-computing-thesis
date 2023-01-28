@@ -1,5 +1,6 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
@@ -13,18 +14,12 @@ import java.util.List;
  * onload-session API:
  *  Header X-onload-location: location that requested the onload
  */
+@RequiresHeaderAnnotation.RequiresHeader(header="X-onload-location")
 public class OnloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         // X-onload-location header must be present
         String onloadLocation = req.getHeader("X-onload-location");
-        if (onloadLocation == null)
-        {
-            System.out.println("Missing X-onload-location header");
-            res.setStatusCode(400);
-            res.setBody("Missing X-onload-location header");
-            return;
-        }
 
         // FIXME
         // Fix onload-session bug (example: A with children B and C. B offload to A.

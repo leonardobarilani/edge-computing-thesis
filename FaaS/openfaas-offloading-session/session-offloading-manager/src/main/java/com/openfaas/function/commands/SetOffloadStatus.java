@@ -1,9 +1,11 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
+@RequiresQueryAnnotation.RequiresQuery(query="status")
 public class SetOffloadStatus implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
