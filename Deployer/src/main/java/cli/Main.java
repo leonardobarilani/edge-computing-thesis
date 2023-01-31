@@ -59,7 +59,7 @@ help
                 List<String> inAreas = new LinkedList<>();
                 List<String> exceptIn = new LinkedList<>();
                 String pathToFunction = "./stack.yml";
-                String minReplicas = "2";
+                String minReplicas = "5";
                 boolean receivePropagate = false;
 
                 int i = 3;
