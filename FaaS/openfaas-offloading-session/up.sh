@@ -5,6 +5,7 @@ echo Deploying
 ./deploy.sh || exit 1
 
 echo Testing
+read -p "Press enter to start tests"
 ./tests/run-tests.sh || exit 1
 
 echo Fetching logs

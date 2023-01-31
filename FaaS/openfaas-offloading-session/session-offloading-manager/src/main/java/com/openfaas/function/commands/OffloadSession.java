@@ -1,5 +1,6 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.commands.annotations.RequiresBodyAnnotation;
 import com.openfaas.function.commands.wrappers.WrapperOffloadSession;
 import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.model.SessionToken;
@@ -8,6 +9,7 @@ import com.openfaas.function.utils.MigrateUtils;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
 
+@RequiresBodyAnnotation.RequiresBody
 public class OffloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
@@ -27,7 +29,7 @@ public class OffloadSession implements ICommand {
         {
             // offload redirected to parent
             System.out.println("Offloading not accepted");
-            System.out.println("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentHost() + "\n\t" + req.getBody());
+            System.out.println("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentLocationId() + "\n\t" + req.getBody());
 
             // call parent node to offload the session
             SessionToken sessionToOffload = SessionToken.Builder.buildFromJSON(req.getBody());

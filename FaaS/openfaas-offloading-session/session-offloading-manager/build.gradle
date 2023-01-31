@@ -29,6 +29,9 @@ dependencies {
     //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
+
+    // Jedis dependency
+    compile 'redis.clients:jedis:2.9.0'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -36,6 +39,7 @@ repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 
     flatDir {
         dirs '../libs'
