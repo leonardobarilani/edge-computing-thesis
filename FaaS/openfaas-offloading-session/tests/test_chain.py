@@ -16,23 +16,24 @@
 
 
 from connection import Connection
+from data_test import DataChain as Data
+import time
 
 session = 'marco'
 con3 = Connection(node_name='k3d-p3', session=session)
 con2 = Connection(node_name='k3d-p2', session=session)
 con1 = Connection(node_name='k3d-p1', session=session)
 
-input("Press Enter to begin test_chain.py...")
+assert Data.test_function_1 == con3.get('session-offloading-manager?command=test-function&session='+session)
+assert Data.test_function_2 == con2.get('session-offloading-manager?command=test-function&session='+session)
+assert Data.test_function_3 == con1.get('session-offloading-manager?command=test-function&session='+session)
+# input("Press Enter to continue...")
+time.sleep(1)
 
-con3.get('session-offloading-manager?command=test-function&session='+session)
-con2.get('session-offloading-manager?command=test-function&session='+session)
-con1.get('session-offloading-manager?command=test-function&session='+session)
-input("Press Enter to continue...")
+assert Data.force_offload == con3.get('session-offloading-manager?command=force-offload', extra_headers={'X-forced-session':'marco'})
+# input("Press Enter to continue...")
+time.sleep(1)
 
-con3.get('session-offloading-manager?command=force-offload', extra_headers={'X-forced-session':'marco'})
-input("Press Enter to continue...")
-
-con3.get('session-offloading-manager?command=test-function&session='+session)
-con2.get('session-offloading-manager?command=test-function&session='+session)
-con1.get('session-offloading-manager?command=test-function&session='+session)
-input("Press Enter to continue...")
+assert Data.test_function_4 == con3.get('session-offloading-manager?command=test-function&session='+session)
+assert Data.test_function_5 == con2.get('session-offloading-manager?command=test-function&session='+session)
+assert Data.test_function_6 == con1.get('session-offloading-manager?command=test-function&session='+session)

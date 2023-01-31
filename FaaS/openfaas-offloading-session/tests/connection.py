@@ -24,11 +24,11 @@ class Connection:
 	def post(self, openfaas_fn: str, data: str, extra_headers: dict={}):
 		extra_headers['X-session'] = self._session
 		self._session = requests.post('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=extra_headers, data=data)
-		print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+		print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
 		return str(self._session.content, "utf-8")
 		
 	def get(self, openfaas_fn: str, extra_headers: dict={}):
 		extra_headers['X-session'] = self._session
 		response = requests.get('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=extra_headers)
-		print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+		print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
 		return str(response.content, "utf-8")
