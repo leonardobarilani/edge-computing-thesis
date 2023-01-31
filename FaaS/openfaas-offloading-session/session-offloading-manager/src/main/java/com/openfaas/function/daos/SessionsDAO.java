@@ -1,11 +1,10 @@
 package com.openfaas.function.daos;
 
 import com.openfaas.function.model.SessionToken;
-import io.lettuce.core.ScriptOutputType;
 
 import java.util.HashMap;
 
-public class SessionsDAO extends RedisDAO {
+public class SessionsDAO extends JedisDAO {
 
     private static SessionsDAO instance = new SessionsDAO();
 
@@ -64,7 +63,7 @@ public class SessionsDAO extends RedisDAO {
                 "end";
         boolean returnValue = false;
         if (sessionId != null) {
-            returnValue = (boolean) instance.eval(script, ScriptOutputType.BOOLEAN, sessionId, sessionId);
+            returnValue = instance.eval(script, sessionId, sessionId);
             if (returnValue) {
                 System.out.println("(SessionsDAO.lockSession) Acquired lock on session <" + sessionId + ">");
             } else {
@@ -86,7 +85,7 @@ public class SessionsDAO extends RedisDAO {
                 "end";
         boolean returnValue = false;
         if (sessionId != null) {
-            returnValue = (boolean) instance.eval(script, ScriptOutputType.BOOLEAN, sessionId, sessionId);
+            returnValue = instance.eval(script, sessionId, sessionId);
             if (returnValue) {
                 System.out.println("(SessionsDAO.unlockSession) Released lock on session <" + sessionId + ">");
             } else {

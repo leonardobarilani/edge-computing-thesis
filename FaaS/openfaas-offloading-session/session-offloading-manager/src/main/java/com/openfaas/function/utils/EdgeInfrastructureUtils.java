@@ -16,6 +16,7 @@ public class EdgeInfrastructureUtils {
     // getParentHost
     private static String thisLocationName;
     private static String parentLocationHost;
+    private static String parentLocationId;
     private static boolean stopSearch;
 
     private EdgeInfrastructureUtils () { }
@@ -35,6 +36,20 @@ public class EdgeInfrastructureUtils {
         }
         return parentLocationHost;
     }
+    public static String getParentLocationId()
+    {
+        if (infrastructure == null)
+        {
+            String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
+            infrastructure = new Gson().fromJson(json, Infrastructure.class);
+        }
+        if (parentLocationHost == null)
+        {
+            thisLocationName = System.getenv("LOCATION_ID");
+            getParentRecursive(infrastructure.hierarchy[0]);
+        }
+        return parentLocationId;
+    }
     private static void getParentRecursive(Area area)
     {
         if (stopSearch)
@@ -43,6 +58,7 @@ public class EdgeInfrastructureUtils {
             if (a.areaName.equals(thisLocationName))
             {
                 parentLocationHost = area.mainLocation.openfaas_gateway;
+                parentLocationId = area.areaName;
                 stopSearch = true;
                 return;
             }

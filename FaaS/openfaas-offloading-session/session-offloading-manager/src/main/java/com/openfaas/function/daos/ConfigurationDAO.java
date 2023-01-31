@@ -2,7 +2,7 @@ package com.openfaas.function.daos;
 
 import java.util.Set;
 
-public class ConfigurationDAO extends RedisDAO {
+public class ConfigurationDAO extends JedisDAO {
 
     private static ConfigurationDAO instance = new ConfigurationDAO();
 

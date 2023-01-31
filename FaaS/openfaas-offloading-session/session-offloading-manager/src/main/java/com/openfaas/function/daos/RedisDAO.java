@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-abstract class RedisDAO {
+abstract class RedisDAO extends StatefulDAO {
 
     private String url;
+    private StatefulRedisConnection<String, String> connection;
     private RedisClient redisClient;
-    private RedisCommands<String, String> syncCommands;
 
     /**
      * This constructor will use env variables for host, password and port.
@@ -26,18 +26,21 @@ abstract class RedisDAO {
         url = "redis://" + password + "@" + host + ":" + port + "/" + table;
 
         System.out.println("(RedisDAO) (Constructor) Url: " + url);
-
-        redisClient = RedisClient.create(url);
     }
 
-    void close() {
+    private RedisCommands<String, String> openConnection () {
+        redisClient = RedisClient.create(url);
+        connection = redisClient.connect();
+        return connection.sync();
+    }
+
+    private void closeConnection () {
+        connection.close();
         redisClient.shutdown();
     }
 
     String get(String key){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         String returnValue = null;
         if (key != null) {
@@ -45,53 +48,45 @@ abstract class RedisDAO {
             returnValue = syncCommands.get(key);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     void set(String key, String value){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
             System.out.println("(RedisDAO.set) Redis set with key, value: " + key + ", " + value);
             syncCommands.set(key, value);
         }
 
-        connection.close();
+        closeConnection();
     }
 
     List<String> getAllKeys () {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         List<String> returnValue = null;
         System.out.println("(RedisDAO.getAllKeys) Redis keys");
         returnValue = syncCommands.keys("*");
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     void sadd (String key, String value) {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
             System.out.println("(RedisDAO.sadd) Redis sadd with key, value: " + key + ", " + value);
             syncCommands.sadd(key, value);
         }
 
-        connection.close();
+        closeConnection();
     }
 
     Set<String> smembers (String key) {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         Set<String> returnValue = null;
         if (key != null) {
@@ -99,14 +94,12 @@ abstract class RedisDAO {
             returnValue = syncCommands.smembers(key);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     String getRandom () {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.getRandom) Redis randomkey");
         String randomKey = syncCommands.randomkey();
@@ -117,14 +110,12 @@ abstract class RedisDAO {
             returnValue = syncCommands.get(randomKey);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     void deleteAll () {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.getRandom) Redis randomkey");
         String key = syncCommands.randomkey();
@@ -135,26 +126,22 @@ abstract class RedisDAO {
             key = syncCommands.randomkey();
         }
 
-        connection.close();
+        closeConnection();
     }
 
     void hset (String key, Map<String, String> map){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && map != null) {
             System.out.println("(RedisDAO.hset) Redis hset with key, map: " + key + ", " + map);
             syncCommands.hset(key, map);
         }
 
-        connection.close();
+        closeConnection();
     }
 
     String hget (String key, String field){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         String returnValue = null;
         if (key != null && field != null) {
@@ -162,14 +149,12 @@ abstract class RedisDAO {
             returnValue = syncCommands.hget(key, field);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     Map<String, String> hgetall (String key){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         Map<String, String> returnValue = null;
         if (key != null) {
@@ -177,27 +162,23 @@ abstract class RedisDAO {
             returnValue = syncCommands.hgetall(key);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
     void del (String key){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null) {
             System.out.println("(RedisDAO.del) Redis del with key, value: " + key);
             syncCommands.del(key);
         }
 
-        connection.close();
+        closeConnection();
     }
 
     Long hlen (String key){
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+        RedisCommands<String, String> syncCommands = openConnection();
 
         Long returnValue = null;
         if (key != null) {
@@ -205,18 +186,17 @@ abstract class RedisDAO {
             returnValue = syncCommands.hlen(key);
         }
 
-        connection.close();
+        closeConnection();
         return returnValue;
     }
 
-    Object eval (String script, ScriptOutputType outputType, String accessedKey, String scriptArgument) {
-        StatefulRedisConnection<String, String> connection;
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
+    boolean eval (String script, String accessedKey, String scriptArgument) {
+        RedisCommands<String, String> syncCommands = openConnection();
 
-        Object returnObject = syncCommands.eval(script, outputType, accessedKey, scriptArgument);
+        System.out.println("(RedisDAO.eval) Redis eval");
+        boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, accessedKey, scriptArgument);
 
-        connection.close();
+        closeConnection();
         return returnObject;
     }
 }

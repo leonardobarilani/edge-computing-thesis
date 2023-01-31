@@ -16,7 +16,7 @@ public class ForceOnload implements ICommand {
         // while {
 
         // call parent node to receive a session
-        System.out.println("Onloading from:\n\t" + EdgeInfrastructureUtils.getParentHost());
+        System.out.println("Onloading from:\n\t" + EdgeInfrastructureUtils.getParentLocationId());
 
         Response response = new WrapperOnloadSession()
                 .gateway(EdgeInfrastructureUtils.getParentHost())
