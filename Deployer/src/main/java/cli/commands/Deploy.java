@@ -1,11 +1,11 @@
 package cli.commands;
 
-import com.google.gson.Gson;
 import cli.infrastucture.Area;
 import cli.infrastucture.Infrastructure;
 import cli.infrastucture.OpenFaaSRedisConfiguration;
 import cli.utils.InfrastructureParser;
 import cli.utils.LocationsGetter;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,11 +17,9 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.concurrent.ExecutionException;
 
 public class Deploy {
 
-    // infrastructureFileName was infrastructure
     public static void deploy(String functionName,
                               String infrastructureFileName,
                               String inEvery,
@@ -37,6 +35,8 @@ public class Deploy {
         try {
             infrastructureString = Files.readString(Path.of(infrastructureFileName));
             infrastructure = g.fromJson(infrastructureString, Infrastructure.class);
+            infrastructure.autoFill();
+            infrastructureString = g.toJson(infrastructure);
 
             // Check correctness of infrastructure file.
             System.out.println("🔄 Checking if infrastructure is correct.");

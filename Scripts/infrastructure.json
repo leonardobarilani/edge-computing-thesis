@@ -6,33 +6,18 @@
     ],
     "hierarchy":[
         {
-            "areaName":"p1",
+            "areaName":"k3d-p1",
             "mainLocation":{
-                "openfaas_gateway":"http://172.18.0.5:31112",
-                "openfaas_password":"qrO18qNdfOrH",
-                "redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
-                "redis_port":6379,
-                "redis_password":"customRedisPassword"
             },
             "areas":[
 				{
-					"areaName":"p2",
+					"areaName":"k3d-p2",
 					"mainLocation":{
-						"openfaas_gateway":"http://172.18.0.2:31112",
-						"openfaas_password":"password",
-						"redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
-						"redis_port":6379,
-						"redis_password":"customRedisPassword"
 					},
 					"areas":[
 						{
-							"areaName":"p3",
+							"areaName":"k3d-p3",
 							"mainLocation":{
-								"openfaas_gateway":"http://172.18.0.3:31112",
-								"openfaas_password":"password",
-								"redis_host":"my-openfaas-redis-master.openfaas-fn.svc.cluster.local",
-								"redis_port":6379,
-								"redis_password":"customRedisPassword"
 							},
 							"areas":[
 							]
