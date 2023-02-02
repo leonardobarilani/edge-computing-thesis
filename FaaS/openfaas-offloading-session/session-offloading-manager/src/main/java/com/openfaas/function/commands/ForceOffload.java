@@ -3,16 +3,14 @@ package com.openfaas.function.commands;
 import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.commands.wrappers.WrapperOffloadSession;
 import com.openfaas.function.daos.SessionsDAO;
-import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.model.SessionToken;
-import com.openfaas.model.IResponse;
+import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
-
-import java.util.Objects;
+import com.openfaas.model.IResponse;
 
 /**
  * force-offload API:
- *  Header X-forced-session: sessionId of the session to offload. If not present, a random session will be offloaded
+ *  Header X-forced-session: sessionId of the session to offload
  */
 @RequiresHeaderAnnotation.RequiresHeader(header="X-forced-session")
 public class ForceOffload implements ICommand {
@@ -23,12 +21,7 @@ public class ForceOffload implements ICommand {
 
         System.out.println("Header X-forced-session: "+forcedSessionId);
 
-        if (!Objects.equals(forcedSessionId, ""))
-            // get the forced session to offload
-            sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
-        else
-            // get a random session to offload
-            sessionToOffload = SessionsDAO.getRandomSessionToken();
+        sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
 
         if (sessionToOffload == null)
         {
