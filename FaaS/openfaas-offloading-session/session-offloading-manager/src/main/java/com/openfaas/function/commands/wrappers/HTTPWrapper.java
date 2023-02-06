@@ -11,28 +11,26 @@ abstract class HTTPWrapper {
     private final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .build();
-
+    private final Hashtable<String, String> headers = new Hashtable<>();
     private String bodyPOST = null;
     private int statusCode;
     private String body;
     private String gateway;
     private String remoteFunction;
 
-    private Hashtable<String, String> headers = new Hashtable<>();
-
     void setBodyPOSTRequest(String body) {
         this.bodyPOST = body;
     }
 
-    void setGateway (String gateway) {
+    void setGateway(String gateway) {
         this.gateway = gateway;
     }
 
-    void setRemoteFunction (String remoteFunction) {
+    void setRemoteFunction(String remoteFunction) {
         this.remoteFunction = remoteFunction;
     }
 
-    void setHeader (String key, String value) {
+    void setHeader(String key, String value) {
         headers.put(key, value);
     }
 
@@ -46,7 +44,7 @@ abstract class HTTPWrapper {
 
         System.out.println("Sending GET:\n\tURI:" + uri);
         // Add all the additional headers to the request
-        for(var entry : headers.entrySet()) {
+        for (var entry : headers.entrySet()) {
             requestBuilder.setHeader(entry.getKey(), entry.getValue());
             System.out.println("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
         }
@@ -70,7 +68,7 @@ abstract class HTTPWrapper {
 
         System.out.println("Sending POST:\n\tURI:" + uri);
         // Add all the additional headers to the request
-        for(var entry : headers.entrySet()) {
+        for (var entry : headers.entrySet()) {
             requestBuilder.setHeader(entry.getKey(), entry.getValue());
             System.out.println("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
         }
@@ -83,7 +81,7 @@ abstract class HTTPWrapper {
         body = response.body();
     }
 
-    public abstract Response call ();
+    public abstract Response call();
 
     public int getStatusCode() {
         return statusCode;

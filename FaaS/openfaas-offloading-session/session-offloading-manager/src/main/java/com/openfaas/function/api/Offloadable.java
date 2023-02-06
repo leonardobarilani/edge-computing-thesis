@@ -9,7 +9,7 @@ import com.openfaas.model.Response;
 
 public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
-    public IResponse Handle (IRequest req) {
+    public IResponse Handle(IRequest req) {
         IResponse res = null;
         try {
             System.out.println("\n\n\n--------BEGIN OFFLOADABLE--------");
@@ -18,7 +18,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             if (sessionId == null)
                 System.out.println("(Offloadable) [Warning] X-session is null, it shouldn't happen");
 
-            SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);;
+            SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
 
             System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
 
@@ -64,11 +64,11 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             }
 
             System.out.println("--------END OFFLOADABLE--------");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
     }
 
-    public abstract IResponse HandleOffload (IRequest req) ;
+    public abstract IResponse HandleOffload(IRequest req);
 }

@@ -26,9 +26,9 @@ public class EdgeDB implements IEdgeDB {
     private static final String SESSIONS_DATA = "2";
 
     private final String url;
-    private RedisClient redisClient;
-    private StatefulRedisConnection<String, String> connection;
-    private RedisCommands<String, String> syncCommands;
+    private final RedisClient redisClient;
+    private final StatefulRedisConnection<String, String> connection;
+    private final RedisCommands<String, String> syncCommands;
     private final String sessionId;
 
     public EdgeDB(IRequest req) {
@@ -47,6 +47,7 @@ public class EdgeDB implements IEdgeDB {
 
         System.out.println("(EdgeDB.Constructor) Established connection");
     }
+
     public EdgeDB(String session) {
         String host = System.getenv("REDIS_HOST");
         String password = System.getenv("REDIS_PASSWORD");
@@ -65,31 +66,44 @@ public class EdgeDB implements IEdgeDB {
 
     }
 
+    private static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,
+                                                                             String body)
+            throws IOException {
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        return HttpClient.newHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+    }
+
     public void close() {
         connection.close();
         redisClient.shutdown();
     }
 
-    public String get(String key){
-        System.out.println("(EdgeDB.get) (sessionId: "+sessionId+") Redis get with key: " + key);
+    public String get(String key) {
+        System.out.println("(EdgeDB.get) (sessionId: " + sessionId + ") Redis get with key: " + key);
         return syncCommands.hget(sessionId, key);
     }
-    public void set(String key, String value){
-        System.out.println("(EdgeDB.set) (sessionId: "+sessionId+") Redis set with key, value: " + key + ", " + value);
+
+    public void set(String key, String value) {
+        System.out.println("(EdgeDB.set) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + value);
         syncCommands.hset(sessionId, Map.ofEntries(entry(key, value)));
     }
 
-    public List<String> getList(String key){
+    public List<String> getList(String key) {
         /*System.out.println("(EdgeDB.getList) (sessionId: "+sessionId+") Redis hexists with key: " + key);
         if (!syncCommands.hexists(sessionId, key))
             return null;*/
-        System.out.println("(EdgeDB.getList) (sessionId: "+sessionId+") Redis get with key: " + key);
+        System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Redis get with key: " + key);
         String rawList = syncCommands.hget(sessionId, key);
         if (rawList == null) {
-            System.out.println("(EdgeDB.getList) (sessionId: "+sessionId+") null value from Redis get with key: " + key);
+            System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
             return null;
         }
-        System.out.println("(EdgeDB.getList) (sessionId: "+sessionId+") Parsing with Gson");
+        System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Parsing with Gson");
         return new Gson().fromJson(rawList, HList.class).list;
 
         //System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zrangebyscore with key: " + key);
@@ -97,37 +111,38 @@ public class EdgeDB implements IEdgeDB {
         //return syncCommands.zrange(key, Long.MIN_VALUE, Long.MAX_VALUE);
         //return syncCommands.zrangebyscore(key, Range.create(0, Integer.MAX_VALUE));
     }
+
     /**
      * The old API had single elements of the list expire.
      * For the sake of the shopping-cart example we will not implement that.
      * Need further discussion
+     *
      * @param key
      * @param value
      */
-    public void addToList(String key, String value){
-        System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Redis hexists with key: " + key);
-        if (!syncCommands.hexists(sessionId, key))
-        {
+    public void addToList(String key, String value) {
+        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis hexists with key: " + key);
+        if (!syncCommands.hexists(sessionId, key)) {
             HList list = new HList();
             list.list.add(value);
-            System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Parsing with Gson.toJson");
+            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
             String newJsonList = new Gson().toJson(list);
-            System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Redis set with key, value: " + key + ", " + newJsonList);
+            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
             syncCommands.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
             return;
         }
-        System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Redis get with key: " + key);
+        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis get with key: " + key);
         String rawList = syncCommands.hget(sessionId, key);
         if (rawList == null) {
-            System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") null value from Redis get with key: " + key);
+            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
             return;
         }
-        System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Parsing with Gson.fromJson");
+        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.fromJson");
         var list = new Gson().fromJson(rawList, HList.class);
         list.list.add(value);
-        System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Parsing with Gson.toJson");
+        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
         String newJsonList = new Gson().toJson(list);
-        System.out.println("(EdgeDB.addToList) (sessionId: "+sessionId+") Redis set with key, value: " + key + ", " + newJsonList);
+        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
         syncCommands.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
 
         //System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zadd with key, value: " + key + ", " + value);
@@ -135,7 +150,7 @@ public class EdgeDB implements IEdgeDB {
         //syncCommands.zadd(key, Calendar.getInstance().getTimeInMillis(), value);
     }
 
-    public void propagate (String value, String levelToPropagateTo, String function) {
+    public void propagate(String value, String levelToPropagateTo, String function) {
         List<String> locationsToPropagateTo = EdgeInfrastructureUtils.getLocationsFromNodeToLevel(
                 System.getenv("LOCATION_ID"),
                 levelToPropagateTo
@@ -164,8 +179,8 @@ public class EdgeDB implements IEdgeDB {
         System.out.println("(EdgeDB.propagate) All propagation responses received");
     }
 
-    public void setTTL (long seconds) {
-        System.out.println("(EdgeDB.setTTL) (sessionId: "+sessionId+") Setting TTL to: "+seconds+" seconds");
+    public void setTTL(long seconds) {
+        System.out.println("(EdgeDB.setTTL) (sessionId: " + sessionId + ") Setting TTL to: " + seconds + " seconds");
         syncCommands.expire(sessionId, seconds);
     }
 
@@ -175,18 +190,5 @@ public class EdgeDB implements IEdgeDB {
 
     private class HList {
         List<String> list = new ArrayList<>();
-    }
-
-    private static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,
-                                                                            String body)
-            throws IOException
-    {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-
-        return HttpClient.newHttpClient()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }

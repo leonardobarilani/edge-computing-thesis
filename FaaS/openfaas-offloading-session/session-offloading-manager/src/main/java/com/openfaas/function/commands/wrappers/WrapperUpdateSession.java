@@ -10,7 +10,7 @@ public class WrapperUpdateSession extends HTTPWrapper {
         super();
     }
 
-    public WrapperUpdateSession gateway (String gateway) {
+    public WrapperUpdateSession gateway(String gateway) {
         this.setGateway(gateway);
         return this;
     }
@@ -25,7 +25,7 @@ public class WrapperUpdateSession extends HTTPWrapper {
         setRemoteFunction("/function/session-offloading-manager?command=update-session");
         setBodyPOSTRequest(session.getJson());
         try {
-            post ();
+            post();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -12,25 +12,22 @@ import com.openfaas.model.IResponse;
  * force-offload API:
  *  Header X-forced-session: sessionId of the session to offload
  */
-@RequiresHeaderAnnotation.RequiresHeader(header="X-forced-session")
+@RequiresHeaderAnnotation.RequiresHeader(header = "X-forced-session")
 public class ForceOffload implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         String forcedSessionId = req.getHeader("X-forced-session");
         SessionToken sessionToOffload;
 
-        System.out.println("Header X-forced-session: "+forcedSessionId);
+        System.out.println("Header X-forced-session: " + forcedSessionId);
 
         sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
 
-        if (sessionToOffload == null)
-        {
+        if (sessionToOffload == null) {
             System.out.println("Node is empty, can't force an offload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an offload");
-        }
-        else
-        {
+        } else {
             System.out.println("Session token about to be offloaded: " + sessionToOffload.getJson());
 
             // call parent node to offload the session

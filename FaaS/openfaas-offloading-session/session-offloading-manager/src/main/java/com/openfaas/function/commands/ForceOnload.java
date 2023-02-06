@@ -5,8 +5,8 @@ import com.openfaas.function.commands.wrappers.WrapperOnloadSession;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.function.utils.MigrateUtils;
-import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
+import com.openfaas.model.IResponse;
 
 public class ForceOnload implements ICommand {
 
@@ -24,8 +24,7 @@ public class ForceOnload implements ICommand {
 
         // } end while
 
-        if (response.getStatusCode() != 200)
-        {
+        if (response.getStatusCode() != 200) {
             res.setStatusCode(400);
             System.out.println("/onload-session unable to provide a valid session");
             res.setBody("/onload-session unable to provide a valid session");

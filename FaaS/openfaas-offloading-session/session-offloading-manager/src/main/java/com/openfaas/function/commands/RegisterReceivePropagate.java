@@ -5,7 +5,7 @@ import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
-@RequiresQueryAnnotation.RequiresQuery(query="function")
+@RequiresQueryAnnotation.RequiresQuery(query = "function")
 public class RegisterReceivePropagate implements ICommand {
 
     @Override

@@ -5,16 +5,16 @@ import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
-import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
+import com.openfaas.model.IResponse;
 
 import java.util.List;
 
 /**
  * onload-session API:
- *  Header X-onload-location: location that requested the onload
+ * Header X-onload-location: location that requested the onload
  */
-@RequiresHeaderAnnotation.RequiresHeader(header="X-onload-location")
+@RequiresHeaderAnnotation.RequiresHeader(header = "X-onload-location")
 public class OnloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
@@ -31,24 +31,19 @@ public class OnloadSession implements ICommand {
         SessionToken onloadedSession = null;
         List<String> subNodes = EdgeInfrastructureUtils.getLocationsSubTree(onloadLocation);
         List<String> localSessionsIds = SessionsDataDAO.getAllSessionsIds();
-        for (var session : localSessionsIds)
-        {
+        for (var session : localSessionsIds) {
             SessionToken token = SessionsDAO.getSessionToken(session);
-            if (subNodes.contains(token.proprietaryLocation))
-            {
+            if (subNodes.contains(token.proprietaryLocation)) {
                 onloadedSession = token;
                 break;
             }
         }
 
-        if (onloadedSession == null)
-        {
+        if (onloadedSession == null) {
             System.out.println("Node is empty, can't force an unload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an unload");
-        }
-        else
-        {
+        } else {
             String onloadedSessionJson = onloadedSession.getJson();
             System.out.println("Onloading:\n\t" + onloadedSessionJson);
 

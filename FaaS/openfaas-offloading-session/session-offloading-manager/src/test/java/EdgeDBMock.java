@@ -11,6 +11,7 @@ public class EdgeDBMock implements IEdgeDB {
     HashMap<String, List<String>> lists;
 
     String sessionId;
+
     public EdgeDBMock(IRequest req) {
         sessionId = req.getHeader("X-session");
 
@@ -19,6 +20,7 @@ public class EdgeDBMock implements IEdgeDB {
         values = new HashMap<>();
         lists = new HashMap<>();
     }
+
     public EdgeDBMock(String session) {
         sessionId = session;
         System.out.println("(EdgeDB.Constructor) Not-offloadable session: <" + sessionId + ">");
@@ -73,8 +75,7 @@ public class EdgeDBMock implements IEdgeDB {
     public void delete(String key) {
         if (values.containsKey(key)) {
             values.remove(key);
-        }
-        else {
+        } else {
             lists.remove(key);
         }
     }

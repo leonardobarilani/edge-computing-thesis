@@ -33,20 +33,20 @@ public class ReceivePropagate implements ICommand {
                 .parallelStream()
                 .filter(functionName -> functionName.equals(data.function))
                 .forEach(functionName -> {
-                        String uri = EdgeInfrastructureUtils.getGateway(System.getenv("LOCATION_ID")) +
-                                "/function/" + functionName;
+                    String uri = EdgeInfrastructureUtils.getGateway(System.getenv("LOCATION_ID")) +
+                            "/function/" + functionName;
 
-                        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
-                                .POST(HttpRequest.BodyPublishers.ofString(data.value))
-                                .build();
+                    HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
+                            .POST(HttpRequest.BodyPublishers.ofString(data.value))
+                            .build();
 
-                        System.out.println("Forwarding to: " + uri);
+                    System.out.println("Forwarding to: " + uri);
 
-                        functions.add(HttpClient.newBuilder()
+                    functions.add(HttpClient.newBuilder()
                             .followRedirects(HttpClient.Redirect.NORMAL)
                             .build()
                             .sendAsync(request, HttpResponse.BodyHandlers.ofString()));
-        });
+                });
         functions.forEach(CompletableFuture::join);
         System.out.println("Forwarded to all registered functions");
     }
