@@ -2,3 +2,6 @@ template
 build
 .idea
 __pycache__
+/session-offloading-manager/session-offloading-manager.iml
+/session-offloading-manager/session-offloading-manager.ipr
+/session-offloading-manager/session-offloading-manager.iws
