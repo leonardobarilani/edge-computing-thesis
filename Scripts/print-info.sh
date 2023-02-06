@@ -10,4 +10,6 @@ printf "\n"
 
 echo Entry point:
 echo http://"$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")":31112
+# shellcheck disable=SC2155
+export OPENFAAS_URL=http://$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"):31112
 printf "\n"
