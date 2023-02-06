@@ -1,9 +1,9 @@
 package cli.commands;
 
-import com.google.gson.Gson;
 import cli.infrastucture.Area;
 import cli.infrastucture.Infrastructure;
 import cli.utils.InfrastructureParser;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +14,7 @@ public class DisplayInfrastructure {
 
     public static void displayInfrastructure(String fileName) {
         Gson g = new Gson();
-        Infrastructure infrastructure = null;
+        Infrastructure infrastructure;
         try {
             infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
 
@@ -39,12 +39,12 @@ public class DisplayInfrastructure {
     }
 
     private static void depthFirstPrint(Area area, int level) {
-        for (int i = 0;i < level;i++)
+        for (int i = 0; i < level; i++)
             System.out.print("    ");
         System.out.println(area.areaName);
 
         if (area.areas.length > 0)
-            for(Area a : area.areas)
+            for (Area a : area.areas)
                 depthFirstPrint(a, level + 1);
     }
 }

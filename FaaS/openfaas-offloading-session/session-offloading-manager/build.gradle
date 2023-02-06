@@ -4,6 +4,15 @@ plugins {
     id 'distribution'
 }
 
+apply plugin: 'java'
+apply plugin: 'idea'
+
+idea {
+    module {
+        downloadJavadoc = true
+    }
+}
+
 // Since we are using openfaas' template java11, we have to make sure the compiler uses the correct java version
 targetCompatibility = '11'
 sourceCompatibility = '11'
@@ -18,28 +27,29 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
-    compile 'com.openfaas:model:0.1.1'
-    compile 'com.openfaas:entrypoint:0.1.0'
+    implementation 'com.openfaas:model:0.1.1'
+    implementation 'com.openfaas:entrypoint:0.1.0'
 
     // README: apparently using 'implementation' breaks the
     // function that use those libraries, so 'compile' its advised
     // Gson dependency
-    compile 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
-    compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
+    implementation 'io.lettuce:lettuce-core:latest.release'
 
     // Jedis dependency
-    compile 'redis.clients:jedis:2.9.0'
+    implementation 'redis.clients:jedis:2.9.0'
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+
     mavenCentral()
+    jcenter()
 
     flatDir {
         dirs '../libs'
@@ -49,7 +59,7 @@ repositories {
 jar {
     manifest {
         attributes 'Implementation-Title': 'OpenFaaS Function',
-                   'Implementation-Version': '1.0'
+                'Implementation-Version': '1.0'
     }
 }
 
@@ -67,8 +77,8 @@ distributions {
 
 uploadArchives {
     repositories {
-       flatDir {
-           dirs 'repos'
-       }
+        flatDir {
+            dirs 'repos'
+        }
     }
 }

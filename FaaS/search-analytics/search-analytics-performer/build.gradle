@@ -25,7 +25,7 @@ dependencies {
     //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
     compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
-	
+
     // Build: shopping-cart -> Tasks -> distribution -> assembleDist
     // Copy from: build/libs/shopping-cart.jar
     compile files('./libs/session-offloading-manager.jar')
@@ -45,7 +45,7 @@ repositories {
 jar {
     manifest {
         attributes 'Implementation-Title': 'OpenFaaS Function',
-                   'Implementation-Version': '1.0'
+                'Implementation-Version': '1.0'
     }
 }
 
@@ -63,8 +63,8 @@ distributions {
 
 uploadArchives {
     repositories {
-       flatDir {
-           dirs 'repos'
-       }
+        flatDir {
+            dirs 'repos'
+        }
     }
 }

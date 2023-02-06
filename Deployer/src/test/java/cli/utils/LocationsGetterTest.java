@@ -1,8 +1,8 @@
 package cli.utils;
 
-import com.google.gson.Gson;
 import cli.infrastucture.Area;
 import cli.infrastucture.Infrastructure;
+import com.google.gson.Gson;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public class LocationsGetterTest {
 
     @Test
-    public void testGetAllLocations (){
+    public void testGetAllLocations() {
         String fileName = "src/main/resources/new-infrastructure.json";
         Gson g = new Gson();
         Infrastructure infrastructure;
@@ -20,20 +20,20 @@ public class LocationsGetterTest {
             infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
 
             Area[] result = LocationsGetter.getAllLocations(
-                infrastructure,
-                "city",
-                new String[]{"europe"},
-                new String[]{"france"}
+                    infrastructure,
+                    "city",
+                    new String[]{"europe"},
+                    new String[]{"france"}
             );
             assert result.length == 2;
             assert result[0].areaName.equals("milan");
             assert result[1].areaName.equals("turin");
 
             result = LocationsGetter.getAllLocations(
-                infrastructure,
-                "district",
-                new String[]{"france"},
-                new String[]{"paris"}
+                    infrastructure,
+                    "district",
+                    new String[]{"france"},
+                    new String[]{"paris"}
             );
             assert result.length == 2;
             assert result[0].areaName.equals("nice001");

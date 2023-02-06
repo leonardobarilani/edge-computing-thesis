@@ -27,11 +27,10 @@ public class Deploy {
                               String[] exceptIn,
                               String yaml,
                               String minReplicas,
-                              boolean isReceivePropagate)
-    {
+                              boolean isReceivePropagate) {
         Gson g = new Gson();
-        Infrastructure infrastructure = null;
-        String infrastructureString = null;
+        Infrastructure infrastructure;
+        String infrastructureString;
         try {
             infrastructureString = Files.readString(Path.of(infrastructureFileName));
             infrastructure = g.fromJson(infrastructureString, Infrastructure.class);
@@ -80,14 +79,14 @@ public class Deploy {
             OpenFaaSRedisConfiguration conf = location.mainLocation;
             String infrastructureBase64 = Base64.getEncoder().encodeToString(infrastructureString.getBytes());
             String envVariablesString =
-                " --env=LOCATION_ID=" + location.areaName +
-                " --env=EDGE_DEPLOYMENT_IN_EVERY=" + inEvery +
-                " --env=EDGE_INFRASTRUCTURE=" + infrastructureBase64 +
-                " --env=REDIS_HOST=" + conf.redis_host +
-                " --env=REDIS_PORT=" + conf.redis_port +
-                " --env=REDIS_PASSWORD=" + conf.redis_password +
-                " --env=FUNCTION_NAME=" + functionName +
-                " --label com.openfaas.scale.min=" + minReplicas;
+                    " --env=LOCATION_ID=" + location.areaName +
+                            " --env=EDGE_DEPLOYMENT_IN_EVERY=" + inEvery +
+                            " --env=EDGE_INFRASTRUCTURE=" + infrastructureBase64 +
+                            " --env=REDIS_HOST=" + conf.redis_host +
+                            " --env=REDIS_PORT=" + conf.redis_port +
+                            " --env=REDIS_PASSWORD=" + conf.redis_password +
+                            " --env=FUNCTION_NAME=" + functionName +
+                            " --label com.openfaas.scale.min=" + minReplicas;
             System.out.println(
                     "📶 Deploying on location: \"" + location.areaName +
                             "\", gateway: \"" + conf.openfaas_gateway + "\".");
@@ -96,18 +95,18 @@ public class Deploy {
             String command;
             try {
                 command =
-                    " faas-cli login " +
-                    " --username admin " +
-                    " --password " + conf.openfaas_password +
-                    " --gateway " + conf.openfaas_gateway;
+                        " faas-cli login " +
+                                " --username admin " +
+                                " --password " + conf.openfaas_password +
+                                " --gateway " + conf.openfaas_gateway;
                 System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
 
                 command =
-                    " faas-cli deploy --filter " + functionName +
-                    " --yaml " + yaml +
-                    " --gateway " + conf.openfaas_gateway + " " + envVariablesString;
+                        " faas-cli deploy --filter " + functionName +
+                                " --yaml " + yaml +
+                                " --gateway " + conf.openfaas_gateway + " " + envVariablesString;
                 System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
@@ -120,7 +119,7 @@ public class Deploy {
                 String url = conf.openfaas_gateway + "/function/session-offloading-manager?command=register-receive-propagate&function=" + functionName;
                 HttpRequest request = HttpRequest.newBuilder(URI.create(
                         url
-                        )).GET().build();
+                )).GET().build();
 
                 System.out.println("Registering function at: " + url);
 
@@ -145,16 +144,13 @@ public class Deploy {
                 InputStreamReader(proc.getInputStream()));
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(proc.getErrorStream()));
-        String s = null;
-        try
-        {
+        String s;
+        try {
             while ((s = stdInput.readLine()) != null)
                 System.err.println(s);
             while ((s = stdError.readLine()) != null)
                 System.out.println(s);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

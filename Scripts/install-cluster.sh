@@ -8,9 +8,9 @@ fi
 kubectl config use-context $1
 
 k3d cluster create $1 \
-    --k3s-arg "--disable=traefik@server:0" \
     --network MyNet \
     --config $SCRIPTS_PATH/SimpleClusterConfig.yaml \
+    --k3s-arg "--disable=traefik@server:0" \
     --verbose \
     --trace
 

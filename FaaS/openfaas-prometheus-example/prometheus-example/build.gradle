@@ -32,7 +32,7 @@ repositories {
 jar {
     manifest {
         attributes 'Implementation-Title': 'OpenFaaS Function',
-                   'Implementation-Version': '1.0'
+                'Implementation-Version': '1.0'
     }
 }
 
@@ -50,8 +50,8 @@ distributions {
 
 uploadArchives {
     repositories {
-       flatDir {
-           dirs 'repos'
-       }
+        flatDir {
+            dirs 'repos'
+        }
     }
 }

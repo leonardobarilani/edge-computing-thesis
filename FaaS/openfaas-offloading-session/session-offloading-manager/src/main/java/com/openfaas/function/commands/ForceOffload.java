@@ -10,7 +10,7 @@ import com.openfaas.model.IResponse;
 
 /**
  * force-offload API:
- *  Header X-forced-session: sessionId of the session to offload
+ * Header X-forced-session: sessionId of the session to offload
  */
 @RequiresHeaderAnnotation.RequiresHeader(header = "X-forced-session")
 public class ForceOffload implements ICommand {

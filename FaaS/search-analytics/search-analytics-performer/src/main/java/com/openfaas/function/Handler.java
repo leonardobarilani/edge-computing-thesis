@@ -12,8 +12,8 @@ import java.util.Map;
 
 /**
  * search-analytics-performer API:
- *  /search-analytics-performer
- *      Body Response: human-readable list of searches
+ * /search-analytics-performer
+ * Body Response: human-readable list of searches
  */
 public class Handler extends com.openfaas.model.AbstractHandler {
 
@@ -29,11 +29,10 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         Map<String, Integer> searchesCounter = new HashMap<>();
         // Access all the sessions of the last 4 hours
-        for(long t = 0;t < ttl;t++)
-        {
+        for (long t = 0; t < ttl; t++) {
             String currentMinute = Long.toString(currentLocalDatabase - t);
 
-            System.out.println("About to access local database: "+currentMinute);
+            System.out.println("About to access local database: " + currentMinute);
 
             // Count searches
             EdgeDB db = new EdgeDB(currentMinute);
@@ -50,7 +49,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         }
 
         String totalSearches = searchesCounter.entrySet().toString();
-        System.out.println("Total Searches: \n"+totalSearches);
+        System.out.println("Total Searches: \n" + totalSearches);
         res.setBody(totalSearches);
         System.out.println("------------END SEARCH ANALYTICS PERFORMER------------");
         return res;

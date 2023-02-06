@@ -9,8 +9,8 @@ import com.openfaas.model.Response;
 /**
  * video-footage-receiver api:
  * POST /video-footage-receiver
- *  Body: Image (just a float in the demo)
- *  X-session: camera_id
+ * Body: Image (just a float in the demo)
+ * X-session: camera_id
  */
 public class Handler extends com.openfaas.model.AbstractHandler {
 
@@ -21,7 +21,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         float crowdStatus = analyzeCrowdStatus(req.getBody());
         String cameraId = req.getHeader("X-session");
 
-        System.out.println("CrowdStatus: "+crowdStatus+"\nCameraId: "+cameraId);
+        System.out.println("CrowdStatus: " + crowdStatus + "\nCameraId: " + cameraId);
 
         EdgeDB db = new EdgeDB(req);
         db.propagate(
@@ -31,7 +31,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         db.close();
 
         System.out.println("--------END VIDEO FOOTAGE RECEIVER--------");
-	    return res;
+        return res;
     }
 
     private float analyzeCrowdStatus(String videoFootageData) {
@@ -39,9 +39,9 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         float crowdness = Float.parseFloat(videoFootageData);
 
-        if(crowdness > 1.0f)
+        if (crowdness > 1.0f)
             crowdness = 1.0f;
-        else if(crowdness < 0.0f)
+        else if (crowdness < 0.0f)
             crowdness = 0.0f;
 
         return crowdness;

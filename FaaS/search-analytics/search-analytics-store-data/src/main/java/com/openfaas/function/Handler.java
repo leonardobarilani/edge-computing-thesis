@@ -28,6 +28,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         res.setStatusCode(200);
         System.out.println("------------END SEARCH STORE DATA------------");
-	    return res;
+        return res;
     }
 }

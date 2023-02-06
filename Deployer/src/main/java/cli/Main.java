@@ -11,24 +11,23 @@ public class Main {
 
     public static void main(String[] args) {
         String helpString = """
-Available commands:
+                Available commands:
 
-check-infrastructure <path to infrastructure file>
+                check-infrastructure <path to infrastructure file>
 
-display-infrastructure <path to infrastructure file>
+                display-infrastructure <path to infrastructure file>
 
-deploy <function name> <path to infrastructure file>
-    --inEvery <areaTypeIdentifier>: In which area type to deploy the function. If not specified the function is deployed to the lowest level.
-    --inAreas <area>: The name of the areas in which to deploy the function. If not specified the function is deployed everywhere.
-    --exceptIn <area>: The name of the areas in which to NOT deploy the function.
-    -f, --yaml <path>: Path to the YAML file describing the function.
-    --minReplicas <number_of_replicas>: Number of replicas for the function. Default: 2
-    --receivePropagate: Set this function to be a receiver of propagate() calls.
-    
-help
-""";
-        if (args.length == 0)
-        {
+                deploy <function name> <path to infrastructure file>
+                    --inEvery <areaTypeIdentifier>: In which area type to deploy the function. If not specified the function is deployed to the lowest level.
+                    --inAreas <area>: The name of the areas in which to deploy the function. If not specified the function is deployed everywhere.
+                    --exceptIn <area>: The name of the areas in which to NOT deploy the function.
+                    -f, --yaml <path>: Path to the YAML file describing the function.
+                    --minReplicas <number_of_replicas>: Number of replicas for the function. Default: 2
+                    --receivePropagate: Set this function to be a receiver of propagate() calls.
+                    
+                help
+                """;
+        if (args.length == 0) {
             System.err.println("Unrecognized command specified.\n" + helpString);
             return;
         }
@@ -95,7 +94,8 @@ help
                                 i += 1;
                             }
                         }
-                } catch (IndexOutOfBoundsException ignored) { }
+                } catch (IndexOutOfBoundsException ignored) {
+                }
 
                 Deploy.deploy(
                         functionName,

@@ -28,8 +28,8 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         redis.set("string", newString);
         System.out.println("Redis.set executed");
-	    res.setBody(newString);
+        res.setBody(newString);
         System.out.println("---------END STATEFUL APPEND---------");
-	    return res;
+        return res;
     }
 }
