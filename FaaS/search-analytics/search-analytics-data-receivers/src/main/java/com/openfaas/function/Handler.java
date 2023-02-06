@@ -9,8 +9,8 @@ import com.openfaas.model.Response;
 
 /**
  * search-analytics-data-receivers API:
- *  /search-analytics-data-receivers?search=<value>
- *      X-session: <user>
+ * /search-analytics-data-receivers?search=<value>
+ * X-session: <user>
  */
 public class Handler extends Offloadable {
 
@@ -25,6 +25,6 @@ public class Handler extends Offloadable {
 
         res.setStatusCode(200);
         System.out.println("------------END SEARCH DATA RECEIVERS------------");
-	    return res;
+        return res;
     }
 }

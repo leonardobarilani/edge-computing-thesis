@@ -77,6 +77,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         con.disconnect();
 
         res.setBody(response.toString());
-	    return res;
+        return res;
     }
 }

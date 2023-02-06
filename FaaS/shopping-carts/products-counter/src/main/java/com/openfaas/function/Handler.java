@@ -23,10 +23,10 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         System.out.println(
                 "Someone just added <" + propagatedValue + "> to their cart.\n" +
-                "Current number of <" + propagatedValue + "> as counted by node <" + System.getenv("LOCATION_ID") + ">: " + quantity);
+                        "Current number of <" + propagatedValue + "> as counted by node <" + System.getenv("LOCATION_ID") + ">: " + quantity);
 
         res.setStatusCode(200);
         System.out.println("----------END COUNTER----------");
-	    return res;
+        return res;
     }
 }

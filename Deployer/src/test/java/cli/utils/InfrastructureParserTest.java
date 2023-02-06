@@ -1,7 +1,7 @@
 package cli.utils;
 
-import com.google.gson.Gson;
 import cli.infrastucture.Infrastructure;
+import com.google.gson.Gson;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public class InfrastructureParserTest {
 
     @Test
-    public void testGson () {
+    public void testGson() {
         String path = "src/main/resources/new-infrastructure.json";
         Gson g = new Gson();
         Infrastructure infrastructure;
@@ -40,7 +40,7 @@ public class InfrastructureParserTest {
     }
 
     @Test
-    public void testCheckInfrastructure (){
+    public void testCheckInfrastructure() {
         String fileName = "src/main/resources/new-infrastructure.json";
         Gson g = new Gson();
         Infrastructure infrastructure;

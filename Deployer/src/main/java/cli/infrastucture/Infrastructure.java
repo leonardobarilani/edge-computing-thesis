@@ -7,7 +7,7 @@ public class Infrastructure {
     public String[] areaTypesIdentifiers;
     public Area[] hierarchy;
 
-    public void autoFill () {
+    public void autoFill() {
         try {
             autoFill(hierarchy[0]);
         } catch (IOException e) {
@@ -15,7 +15,7 @@ public class Infrastructure {
         }
     }
 
-    private void autoFill (Area area) throws IOException {
+    private void autoFill(Area area) throws IOException {
         area.mainLocation.autoFillMissing(area.areaName);
         for (var a : area.areas)
             autoFill(a);

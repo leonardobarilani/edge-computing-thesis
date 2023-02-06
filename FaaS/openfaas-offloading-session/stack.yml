@@ -11,5 +11,8 @@ functions:
       write_timeout: 2m30s
       read_timeout: 2m
       exec_timeout: 2m
-      handler_wait_duration: 1m30s
       healthcheck_interval: 5s
+    labels:
+      com.openfaas.scale.min: 1
+      com.openfaas.scale.max: 1
+

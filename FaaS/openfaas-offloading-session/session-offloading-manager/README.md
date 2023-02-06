@@ -4,12 +4,13 @@
 
 ### Extends
 
-`Offloadable`: meant to replace `com.openfaas.model.AbstractHandler` to manage the offloading of a function. Instead of implementing `Handle` method, programmers have to implement `HandleOffload` method.
+`Offloadable`: meant to replace `com.openfaas.model.AbstractHandler` to manage the offloading of a function. Instead of
+implementing `Handle` method, programmers have to implement `HandleOffload` method.
 
 ```java
 public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
-    
-    public IResponse HandleOffload (IRequest req) ;
+
+    public IResponse HandleOffload(IRequest req);
 }
 ```
 
@@ -31,34 +32,33 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
 ```JSON
 {
-    "session": "session_id", 
-    "proprietaryLocation": "location_id", 
-    "currentLocation": "location_id"
+  "session": "session_id",
+  "proprietaryLocation": "location_id",
+  "currentLocation": "location_id"
 }
 ```
 
-| Field                     | Description                                                                        | Constant |
-|---------------------------|------------------------------------------------------------------------------------|----------|
-| `session`                 | Id of the session                                                                  | Y        |
-| `proprietaryLocation`     | Location where this session was created                                            | Y        |
-| `currentLocation`         | Location where the session is currently offloaded (where the function is executed) | N        |
+| Field                 | Description                                                                        | Constant |
+|-----------------------|------------------------------------------------------------------------------------|----------|
+| `session`             | Id of the session                                                                  | Y        |
+| `proprietaryLocation` | Location where this session was created                                            | Y        |
+| `currentLocation`     | Location where the session is currently offloaded (where the function is executed) | N        |
 
 * SessionData:
 
 ```JSON
 {
-    "session_data":
-    [
-        {
-        "key": "key1",
-        "data": "data1"
-        },
-        {
-        "key": "key2",
-        "data": "data2"
-        },
-        ...
-    ]
+  "session_data": [
+    {
+      "key": "key1",
+      "data": "data1"
+    },
+    {
+      "key": "key2",
+      "data": "data2"
+    },
+    ...
+  ]
 }
 ```
 
@@ -66,22 +66,23 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
 1. Client calls `http://<edge_node>/function/<function_name>`
 2. If statusCode == 307:
-   1. Redirect to header "Location" (Example: `http://<middle_node>/function/<function_name>`)
-   2. Repeat until no more 307
+    1. Redirect to header "Location" (Example: `http://<middle_node>/function/<function_name>`)
+    2. Repeat until no more 307
 
 > The X-session contains an arbitrary string
-> 
+>
 > We assume the X-session header is always present and it is always valid
-> 
-> When an onload happens, the middle nodes redirect to the edge and permanently save the information (unless the session is offloaded again on the middle node)
+>
+> When an onload happens, the middle nodes redirect to the edge and permanently save the information (unless the session
+> is offloaded again on the middle node)
 
 ### Oracle
 
-| Function             | Parameters               | Return | Deployed on     | Called by       | Description                                                                                                                          |
-|----------------------|--------------------------|--------|-----------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| `set-offload-status` | `status=<accept\reject>` |        | All except root | Metrics oracle  | Arbitrarily set the offloading status of the local node. `reject` means that the node will forward the offloading to the parent node |
-| `force-offload`      |                          |        | All except root | Metrics oracle  | The local node has to offload a random function                                                                                      |
-| `force-onload`       |                          |        | All except root | Metrics oracle  | The local node has to call his parent's `onload-session`                                                                             |
+| Function             | Parameters               | Return | Deployed on     | Called by      | Description                                                                                                                          |
+|----------------------|--------------------------|--------|-----------------|----------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `set-offload-status` | `status=<accept\reject>` |        | All except root | Metrics oracle | Arbitrarily set the offloading status of the local node. `reject` means that the node will forward the offloading to the parent node |
+| `force-offload`      |                          |        | All except root | Metrics oracle | The local node has to offload a random function                                                                                      |
+| `force-onload`       |                          |        | All except root | Metrics oracle | The local node has to call his parent's `onload-session`                                                                             |
 
 ### Offloading
 
@@ -101,6 +102,6 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
 ### Debug
 
-| Function          | Parameters             | Return                            | Deployed on | Called by                           | Description                                                                                                                                                                                                                                                                                                                                   |
-|-------------------|------------------------|-----------------------------------|-------------|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `test-function`   | `session=<session_id>` | `offloaded: yes (location_id)/no` | All         | All excepts root                    | Clients call it on leafs. Children call it on parents                                                                                                                                                                                                                                                                                         |
+| Function        | Parameters             | Return                            | Deployed on | Called by        | Description                                           |
+|-----------------|------------------------|-----------------------------------|-------------|------------------|-------------------------------------------------------|
+| `test-function` | `session=<session_id>` | `offloaded: yes (location_id)/no` | All         | All excepts root | Clients call it on leafs. Children call it on parents |

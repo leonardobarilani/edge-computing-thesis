@@ -9,7 +9,7 @@ import com.openfaas.model.Response;
 /**
  * store-crowdness api:
  * POST store-crowdness (receivePropagate)
- *  Body: <cameraId>:<float [0, 1] to represent the crowdness>
+ * Body: <cameraId>:<float [0, 1] to represent the crowdness>
  */
 public class Handler extends com.openfaas.model.AbstractHandler {
 
@@ -21,14 +21,14 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         String cameraId = req.getBody().substring(0, separator);
         String crowdness = req.getBody().substring(separator + 1);
 
-        System.out.println("CameraId: "+cameraId);
-        System.out.println("Crowdness: "+crowdness);
+        System.out.println("CameraId: " + cameraId);
+        System.out.println("Crowdness: " + crowdness);
 
         EdgeDB db = new EdgeDB("crowdness");
         db.set(cameraId, crowdness);
         db.close();
 
         System.out.println("--------END STORE CROWDNESS--------");
-	    return res;
+        return res;
     }
 }

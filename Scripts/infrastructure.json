@@ -1,30 +1,30 @@
 {
-    "areaTypesIdentifiers":[
-        "country",
-		"city",
-		"district"
-    ],
-    "hierarchy":[
+  "areaTypesIdentifiers": [
+    "country",
+    "city",
+    "district"
+  ],
+  "hierarchy": [
+    {
+      "areaName": "k3d-p1",
+      "mainLocation": {
+      },
+      "areas": [
         {
-            "areaName":"k3d-p1",
-            "mainLocation":{
-            },
-            "areas":[
-				{
-					"areaName":"k3d-p2",
-					"mainLocation":{
-					},
-					"areas":[
-						{
-							"areaName":"k3d-p3",
-							"mainLocation":{
-							},
-							"areas":[
-							]
-						}
-					]
-				}
-			]
+          "areaName": "k3d-p2",
+          "mainLocation": {
+          },
+          "areas": [
+            {
+              "areaName": "k3d-p3",
+              "mainLocation": {
+              },
+              "areas": [
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

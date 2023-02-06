@@ -12,6 +12,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         res.setBody(req.getBody());
 
-	    return res;
+        return res;
     }
 }

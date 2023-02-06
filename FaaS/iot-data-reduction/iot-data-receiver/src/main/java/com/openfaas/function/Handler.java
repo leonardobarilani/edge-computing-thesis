@@ -13,7 +13,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         String device = req.getBody().substring(0, separator);
         String newValue = req.getBody().substring(separator + 1);
 
-        EdgeDB db = new EdgeDB("latest_data:"+device);
+        EdgeDB db = new EdgeDB("latest_data:" + device);
 
         String oldValue = db.get("latest_iot_data");
 
@@ -26,6 +26,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         res.setStatusCode(200);
         System.out.println("----------END IOT DATA RECEIVER----------");
-	    return res;
+        return res;
     }
 }

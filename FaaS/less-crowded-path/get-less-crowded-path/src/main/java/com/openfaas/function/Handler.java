@@ -12,10 +12,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
  * get-less-crowded-path api:
  * GET get-less-crowded-path?startingPoint=<point>&destinationPoint=<point>
- *     Response body: list of arcs of the best path
+ * Response body: list of arcs of the best path
  */
 public class Handler extends com.openfaas.model.AbstractHandler {
 
@@ -26,8 +25,8 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         String startingPoint = req.getQuery().get("startingPoint");
         String destinationPoint = req.getQuery().get("destinationPoint");
 
-        System.out.println("StartingPoint: "+startingPoint);
-        System.out.println("DestinationPoint: "+destinationPoint);
+        System.out.println("StartingPoint: " + startingPoint);
+        System.out.println("DestinationPoint: " + destinationPoint);
 
         // TODO replace this with a get on redis of the camera ids
         var cameraIds = List.of("camera1", "camera2", "camera3");
@@ -35,7 +34,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         // Fetch cameras crowdness
         EdgeDB db = new EdgeDB("crowdness");
         var cameraCrowdness = new LinkedList<Float>();
-        for(var cameraId : cameraIds)
+        for (var cameraId : cameraIds)
             cameraCrowdness.add(Float.parseFloat(db.get(cameraId)));
         db.close();
 
@@ -49,7 +48,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         res.setStatusCode(200);
 
         System.out.println("--------END GET LESS CROWDED PATH--------");
-	    return res;
+        return res;
     }
 
     private List<String> bestPath(List<Float> cameraCrowdness) {

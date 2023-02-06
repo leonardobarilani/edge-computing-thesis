@@ -8,24 +8,24 @@ import java.util.*;
 public class LocationsGetter {
 
     /*
-    * inEvery: specify the level of the hierarchy that will be affected.
-    * inAreas: selects some subtrees. All the nodes in the subtrees of the specified
-    *           kind will be affected unless exceptIn says otherwise.
-    * exceptIn: selects some subtrees. All those nodes won't be affected
-    * 
-    * Example:  --inEvery district --inAreas C --exceptIn F
-    *   A       continent
-    *  / \
-    * B   C     city
-    * |\  |\
-    * D E F G   district
-    *
-    * Execution:
-    * 1. inEvery "district": D E F G
-    * 2. inAreas "C": F G
-    * 3. exceptIn "F": G
-    * 4. Result: G
-    * */
+     * inEvery: specify the level of the hierarchy that will be affected.
+     * inAreas: selects some subtrees. All the nodes in the subtrees of the specified
+     *           kind will be affected unless exceptIn says otherwise.
+     * exceptIn: selects some subtrees. All those nodes won't be affected
+     *
+     * Example:  --inEvery district --inAreas C --exceptIn F
+     *   A       continent
+     *  / \
+     * B   C     city
+     * |\  |\
+     * D E F G   district
+     *
+     * Execution:
+     * 1. inEvery "district": D E F G
+     * 2. inAreas "C": F G
+     * 3. exceptIn "F": G
+     * 4. Result: G
+     * */
 
     private static int targetLevel;
     private static Set<String> inAreasSet;
@@ -33,10 +33,11 @@ public class LocationsGetter {
 
     /**
      * Returns the locations of the infrastructure included in the deployment input.
+     *
      * @param infrastructure the Infrastructure object.
-     * @param inEvery string of the --inEvery parameter.
-     * @param inAreas array of strings of the --inAreas parameter.
-     * @param exceptIn array of strings of the --exceptIn parameter.
+     * @param inEvery        string of the --inEvery parameter.
+     * @param inAreas        array of strings of the --inAreas parameter.
+     * @param exceptIn       array of strings of the --exceptIn parameter.
      * @return an array of Area objects. Every location object has the fields: location_id, openfaas_gateway, openfaas_password, redis_host, redis_port, redis_password.
      */
     public static Area[] getAllLocations(
@@ -48,14 +49,14 @@ public class LocationsGetter {
 
         // if inAreas is not specified, we target all locations
         if (inAreas.length == 0)
-			// TODO this is wrong, we have to get the root of the tree (example: p1)
+            // TODO this is wrong, we have to get the root of the tree (example: p1)
             inAreas = new String[]{infrastructure.areaTypesIdentifiers[0]};
 
         // if inEvery is not specified, we target the lowest level
         targetLevel = areaTypesIdentifiers.length - 1;
 
         // targetLevel = areaTypesIdentifiers.indexOf(inEvery)
-        for(int i = 0;i < areaTypesIdentifiers.length;i++)
+        for (int i = 0; i < areaTypesIdentifiers.length; i++)
             if (areaTypesIdentifiers[i].equals(inEvery))
                 targetLevel = i;
 
@@ -71,10 +72,9 @@ public class LocationsGetter {
     private static List<Area> getAllLocations(
             Area current,       // current node
             boolean validArea,  // true when we are in a valid subtree
-                                // (specified with the inArea parameter)
+            // (specified with the inArea parameter)
             int currentLevel    // depth in the hierarchy
-    )
-    {
+    ) {
         // if we find a node of the expectIn set, we stop the recursive search
         if (exceptInSet.contains(current.areaName))
             return new LinkedList<>();
@@ -90,11 +90,11 @@ public class LocationsGetter {
 
         // recursively call on children
         List<Area> result = new LinkedList<>();
-        for(Area a : current.areas)
+        for (Area a : current.areas)
             result.addAll(getAllLocations(a,
                     validArea,
                     currentLevel + 1
-                    ));
+            ));
         return result;
     }
 }

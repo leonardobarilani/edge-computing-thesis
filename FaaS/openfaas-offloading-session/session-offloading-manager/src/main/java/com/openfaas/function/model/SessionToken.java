@@ -4,31 +4,13 @@ import com.google.gson.Gson;
 
 public class SessionToken {
 
-    public enum Fields {
-        PROPRIETARY_LOCATION("PROPRIETARY_LOCATION"),
-        CURRENT_LOCATION("CURRENT_LOCATION"),
-        STATUS("STATUS");
-        final String field;
-        Fields(String field) {
-            this.field = field;
-        }
-    }
-
-    public enum Status {
-        LOCKED("LOCKED"),
-        UNLOCKED("UNLOCKED");
-        final String status;
-        Status(String status) {
-            this.status = status;
-        }
-    }
-
-	public String session;
+    public String session;
     public String proprietaryLocation;
     public String currentLocation;
     public Status status;
 
-    public SessionToken () { }
+    public SessionToken() {
+    }
 
     public SessionToken init(String sessionName) {
         session = sessionName;
@@ -42,13 +24,34 @@ public class SessionToken {
         return new Gson().toJson(this);
     }
 
+    public enum Fields {
+        PROPRIETARY_LOCATION("PROPRIETARY_LOCATION"),
+        CURRENT_LOCATION("CURRENT_LOCATION"),
+        STATUS("STATUS");
+        final String field;
+
+        Fields(String field) {
+            this.field = field;
+        }
+    }
+
+    public enum Status {
+        LOCKED("LOCKED"),
+        UNLOCKED("UNLOCKED");
+        final String status;
+
+        Status(String status) {
+            this.status = status;
+        }
+    }
+
     public static class Builder {
 
-        public static SessionToken buildFromJSON (String json) {
+        public static SessionToken buildFromJSON(String json) {
             return new Gson().fromJson(json, SessionToken.class);
         }
 
-        public static SessionToken buildFromSessionToken (SessionToken sessionToken) {
+        public static SessionToken buildFromSessionToken(SessionToken sessionToken) {
             SessionToken copySessionToken = new SessionToken();
             copySessionToken.session = sessionToken.session;
             copySessionToken.currentLocation = sessionToken.currentLocation;

@@ -15,7 +15,8 @@ These scripts assume that the shell has the following commands installed:
 
 You can use first_setup.sh to install them all
 
-Add the following snippet in your `.bashrc` or equivalent to quickly access the scripts and to create the `SCRIPTS_PATH` variable:
+Add the following snippet in your `.bashrc` or equivalent to quickly access the scripts and to create the `SCRIPTS_PATH`
+variable:
 
 ```sh
 export SCRIPTS_PATH='/home/leo/edge-computing-thesis/Scripts' # Change this to the folder where you saved the scripts
@@ -38,13 +39,15 @@ To install the local registry: `install-registry`.
 
 To push an image to the local registry: `local-push new_image_name new_version`.
 
-> `new_image_name` should be in the format `user_name/image_name`. The `user_name` is not tied to any kind of login mechanisms.
+> `new_image_name` should be in the format `user_name/image_name`. The `user_name` is not tied to any kind of login
+> mechanisms.
 
 ## Cluster install
 
 To install a new cluster: `install-cluster new_cluster_name`.
 
-> After the installation is successful, refer to the new cluster with `k3d-new_cluster_name` when using `kubectl` and all the other scripts.
+> After the installation is successful, refer to the new cluster with `k3d-new_cluster_name` when using `kubectl` and
+> all the other scripts.
 
 After cluster installation, you can install OpenFaaS and Redis:
 

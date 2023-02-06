@@ -13,6 +13,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         res.setStatusCode(307);
         res.setHeader("Location", "http://172.27.30.130:31112/function/echo");
 
-	    return res;
+        return res;
     }
 }
