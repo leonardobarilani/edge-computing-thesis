@@ -11,12 +11,13 @@ import java.util.Set;
 
 abstract class RedisDAO extends StatefulDAO {
 
-    private String url;
+    private final String url;
     private StatefulRedisConnection<String, String> connection;
     private RedisClient redisClient;
 
     /**
      * This constructor will use env variables for host, password and port.
+     *
      * @param table has to be 0 (OFFLOAD), 1 (SESSIONS), 2 (SESSIONS_DATA), 3 (RECEIVE_PROPAGATE_FUNCTIONS)
      */
     RedisDAO(String table) {
@@ -28,18 +29,18 @@ abstract class RedisDAO extends StatefulDAO {
         System.out.println("(RedisDAO) (Constructor) Url: " + url);
     }
 
-    private RedisCommands<String, String> openConnection () {
+    private RedisCommands<String, String> openConnection() {
         redisClient = RedisClient.create(url);
         connection = redisClient.connect();
         return connection.sync();
     }
 
-    private void closeConnection () {
+    private void closeConnection() {
         connection.close();
         redisClient.shutdown();
     }
 
-    String get(String key){
+    String get(String key) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         String returnValue = null;
@@ -52,7 +53,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void set(String key, String value){
+    void set(String key, String value) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
@@ -63,10 +64,10 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    List<String> getAllKeys () {
+    List<String> getAllKeys() {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        List<String> returnValue = null;
+        List<String> returnValue;
         System.out.println("(RedisDAO.getAllKeys) Redis keys");
         returnValue = syncCommands.keys("*");
 
@@ -74,7 +75,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void sadd (String key, String value) {
+    void sadd(String key, String value) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
@@ -85,7 +86,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    Set<String> smembers (String key) {
+    Set<String> smembers(String key) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         Set<String> returnValue = null;
@@ -98,7 +99,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    String getRandom () {
+    String getRandom() {
         RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.getRandom) Redis randomkey");
@@ -114,7 +115,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void deleteAll () {
+    void deleteAll() {
         RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.getRandom) Redis randomkey");
@@ -129,7 +130,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    void hset (String key, Map<String, String> map){
+    void hset(String key, Map<String, String> map) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && map != null) {
@@ -140,7 +141,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    String hget (String key, String field){
+    String hget(String key, String field) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         String returnValue = null;
@@ -153,7 +154,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    Map<String, String> hgetall (String key){
+    Map<String, String> hgetall(String key) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         Map<String, String> returnValue = null;
@@ -166,7 +167,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void del (String key){
+    void del(String key) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null) {
@@ -177,7 +178,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    Long hlen (String key){
+    Long hlen(String key) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         Long returnValue = null;
@@ -190,7 +191,7 @@ abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    boolean eval (String script, String accessedKey, String scriptArgument) {
+    boolean eval(String script, String accessedKey, String scriptArgument) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.eval) Redis eval");

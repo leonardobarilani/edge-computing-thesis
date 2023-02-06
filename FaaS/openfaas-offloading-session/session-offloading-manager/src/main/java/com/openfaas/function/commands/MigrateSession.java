@@ -6,7 +6,7 @@ import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
-@RequiresQueryAnnotation.RequiresQuery(query="session")
+@RequiresQueryAnnotation.RequiresQuery(query = "session")
 public class MigrateSession implements ICommand {
 
     @Override

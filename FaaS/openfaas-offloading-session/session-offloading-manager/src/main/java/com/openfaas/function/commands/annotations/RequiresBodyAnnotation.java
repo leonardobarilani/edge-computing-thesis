@@ -10,16 +10,16 @@ import java.lang.annotation.Target;
 
 public class RequiresBodyAnnotation {
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public @interface RequiresBody {
-    }
-
-    public static void verify (Object object, IRequest req) throws BodyRequiredException {
+    public static void verify(Object object, IRequest req) throws BodyRequiredException {
         Class<?> clazz = object.getClass();
         if (clazz.isAnnotationPresent(RequiresBody.class)) {
             if (req.getBody() == null)
                 throw new BodyRequiredException("Missing body in request");
         }
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface RequiresBody {
     }
 }

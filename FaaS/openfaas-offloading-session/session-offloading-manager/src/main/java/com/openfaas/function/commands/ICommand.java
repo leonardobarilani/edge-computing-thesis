@@ -5,5 +5,5 @@ import com.openfaas.model.IResponse;
 
 public interface ICommand {
 
-    void Handle(IRequest req, IResponse res) ;
+    void Handle(IRequest req, IResponse res);
 }

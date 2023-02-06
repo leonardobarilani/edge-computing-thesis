@@ -13,10 +13,11 @@ public class MigrateUtils {
 
     /**
      * Migrate the given session from the currentLocation of the session to this node
+     *
      * @param sessionJson session token json of the session
      * @return the new session token json
      */
-    public static SessionToken migrateSessionFromRemoteToLocal (String sessionJson) {
+    public static SessionToken migrateSessionFromRemoteToLocal(String sessionJson) {
         // update session token with the local
         SessionToken sessionToken = SessionToken.Builder.buildFromJSON(sessionJson);
         String migrateFrom = sessionToken.currentLocation;

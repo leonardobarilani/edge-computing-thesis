@@ -95,7 +95,7 @@ help
                                 i += 1;
                             }
                         }
-                } catch (IndexOutOfBoundsException e) { }
+                } catch (IndexOutOfBoundsException ignored) { }
 
                 Deploy.deploy(
                         functionName,

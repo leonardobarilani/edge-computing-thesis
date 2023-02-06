@@ -9,11 +9,12 @@ import java.util.Set;
 
 abstract class JedisDAO extends StatefulDAO {
 
-    private String url;
-    private Jedis jedis;
+    private final String url;
+    private final Jedis jedis;
 
     /**
      * This constructor will use env variables for host, password and port.
+     *
      * @param table has to be 0 (OFFLOAD), 1 (SESSIONS), 2 (SESSIONS_DATA), 3 (RECEIVE_PROPAGATE_FUNCTIONS)
      */
     JedisDAO(String table) {
@@ -32,7 +33,7 @@ abstract class JedisDAO extends StatefulDAO {
         jedis.select(Integer.parseInt(table));
     }
 
-    String get(String key){
+    String get(String key) {
         String returnValue = null;
         if (key != null) {
             System.out.println("(JedisDAO.get) Redis get with key: " + key);
@@ -41,28 +42,28 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void set(String key, String value){
+    void set(String key, String value) {
         if (key != null && value != null) {
             System.out.println("(JedisDAO.set) Redis set with key, value: " + key + ", " + value);
             jedis.set(key, value);
         }
     }
 
-    List<String> getAllKeys () {
-        List<String> returnValue = null;
+    List<String> getAllKeys() {
+        List<String> returnValue;
         System.out.println("(JedisDAO.getAllKeys) Redis keys");
         returnValue = new ArrayList<>(jedis.keys("*"));
         return returnValue;
     }
 
-    void sadd (String key, String value) {
+    void sadd(String key, String value) {
         if (key != null && value != null) {
             System.out.println("(JedisDAO.sadd) Redis sadd with key, value: " + key + ", " + value);
             jedis.sadd(key, value);
         }
     }
 
-    Set<String> smembers (String key) {
+    Set<String> smembers(String key) {
         Set<String> returnValue = null;
         if (key != null) {
             System.out.println("(JedisDAO.smembers) Redis smembers with key: " + key);
@@ -71,7 +72,7 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    String getRandom () {
+    String getRandom() {
         System.out.println("(JedisDAO.getRandom) Redis randomKey");
         String randomKey = jedis.randomKey();
 
@@ -83,7 +84,7 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void deleteAll () {
+    void deleteAll() {
         System.out.println("(JedisDAO.getRandom) Redis randomKey");
         String key = jedis.randomKey();
         while (key != null) {
@@ -94,7 +95,7 @@ abstract class JedisDAO extends StatefulDAO {
         }
     }
 
-    void hset (String key, Map<String, String> map){
+    void hset(String key, Map<String, String> map) {
         if (key != null && map != null) {
             System.out.println("(JedisDAO.hset) Redis hset with key, map: " + key + ", " + map);
 
@@ -104,7 +105,7 @@ abstract class JedisDAO extends StatefulDAO {
         }
     }
 
-    String hget (String key, String field){
+    String hget(String key, String field) {
         String returnValue = null;
         if (key != null && field != null) {
             System.out.println("(JedisDAO.hget) Redis hget with key, field: " + key + ", " + field);
@@ -113,7 +114,7 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    Map<String, String> hgetall (String key){
+    Map<String, String> hgetall(String key) {
         Map<String, String> returnValue = null;
         if (key != null) {
             System.out.println("(JedisDAO.hgetall) Redis hgetall with key: " + key);
@@ -122,14 +123,14 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void del (String key){
+    void del(String key) {
         if (key != null) {
             System.out.println("(JedisDAO.del) Redis del with key, value: " + key);
             jedis.del(key);
         }
     }
 
-    Long hlen (String key){
+    Long hlen(String key) {
         Long returnValue = null;
         if (key != null) {
             System.out.println("(JedisDAO.hlen) Redis hlen with key: " + key);
@@ -138,9 +139,8 @@ abstract class JedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    boolean eval (String script, String accessedKey, String scriptArgument) {
+    boolean eval(String script, String accessedKey, String scriptArgument) {
         System.out.println("(JedisDAO.eval) Redis eval");
-        Boolean returnObject = (Boolean) jedis.eval(script, List.of(accessedKey), List.of(scriptArgument));
-        return returnObject;
+        return (Boolean) jedis.eval(script, List.of(accessedKey), List.of(scriptArgument));
     }
 }

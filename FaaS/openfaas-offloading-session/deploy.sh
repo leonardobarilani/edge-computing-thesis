@@ -1,5 +1,7 @@
 deploy()
 {
+	# shellcheck disable=SC2124
+	# shellcheck disable=SC2027
 	COMMAND="java -jar $SCRIPTS_PATH/edge-deployer.jar deploy "$@""
 	echo $COMMAND
 	$COMMAND

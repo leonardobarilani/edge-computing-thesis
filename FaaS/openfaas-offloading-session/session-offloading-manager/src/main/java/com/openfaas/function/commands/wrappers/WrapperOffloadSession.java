@@ -10,12 +10,12 @@ public class WrapperOffloadSession extends HTTPWrapper {
         super();
     }
 
-    public WrapperOffloadSession gateway (String gateway) {
+    public WrapperOffloadSession gateway(String gateway) {
         this.setGateway(gateway);
         return this;
     }
 
-    public WrapperOffloadSession sessionToOffload (SessionToken session) {
+    public WrapperOffloadSession sessionToOffload(SessionToken session) {
         this.session = session;
         return this;
     }
@@ -25,7 +25,7 @@ public class WrapperOffloadSession extends HTTPWrapper {
         setRemoteFunction("/function/session-offloading-manager?command=offload-session");
         setBodyPOSTRequest(session.getJson());
         try {
-            post ();
+            post();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

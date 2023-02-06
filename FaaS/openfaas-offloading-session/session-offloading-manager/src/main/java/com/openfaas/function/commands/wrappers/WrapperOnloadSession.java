@@ -5,7 +5,7 @@ public class WrapperOnloadSession extends HTTPWrapper {
         super();
     }
 
-    public WrapperOnloadSession gateway (String gateway) {
+    public WrapperOnloadSession gateway(String gateway) {
         this.setGateway(gateway);
         return this;
     }
@@ -15,7 +15,7 @@ public class WrapperOnloadSession extends HTTPWrapper {
         setRemoteFunction("/function/session-offloading-manager?command=onload-session");
         setHeader("X-onload-location", System.getenv("LOCATION_ID"));
         try {
-            get ();
+            get();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -6,13 +6,13 @@ import java.util.HashMap;
 
 public class SessionsDAO extends JedisDAO {
 
-    private static SessionsDAO instance = new SessionsDAO();
+    private static final SessionsDAO instance = new SessionsDAO();
 
     private SessionsDAO() {
         super(Tables.SESSIONS);
     }
 
-    public static SessionToken getSessionToken (String sessionId) {
+    public static SessionToken getSessionToken(String sessionId) {
         SessionToken sessionToken = new SessionToken();
 
         if (sessionId != null) {
@@ -31,7 +31,7 @@ public class SessionsDAO extends JedisDAO {
         return sessionToken;
     }
 
-    public static SessionToken getRandomSessionToken () {
+    public static SessionToken getRandomSessionToken() {
         throw new UnsupportedOperationException();
         /*
         String json = instance.getRandom();
@@ -44,7 +44,7 @@ public class SessionsDAO extends JedisDAO {
         return null;*/
     }
 
-    public static void setSessionToken (SessionToken sessionToken) {
+    public static void setSessionToken(SessionToken sessionToken) {
         HashMap<String, String> map = new HashMap<>();
         map.put(String.valueOf(SessionToken.Fields.PROPRIETARY_LOCATION), sessionToken.proprietaryLocation);
         map.put(String.valueOf(SessionToken.Fields.CURRENT_LOCATION), sessionToken.currentLocation);
@@ -53,14 +53,14 @@ public class SessionsDAO extends JedisDAO {
         System.out.println("(SessionsDAO.setSessionToken) Session saved to local storage: " + sessionToken.getJson());
     }
 
-    public static boolean lockSession (String sessionId) {
+    public static boolean lockSession(String sessionId) {
         String script =
                 "if redis.call('hget', ARGV[1], '" + SessionToken.Fields.STATUS + "') == '" + SessionToken.Status.UNLOCKED + "' then " +
                         "redis.call('hset', ARGV[1], '" + SessionToken.Fields.STATUS + "', '" + SessionToken.Status.LOCKED + "') ; " +
                         "return true " +
-                "else " +
+                        "else " +
                         "return false " +
-                "end";
+                        "end";
         boolean returnValue = false;
         if (sessionId != null) {
             returnValue = instance.eval(script, sessionId, sessionId);
@@ -75,14 +75,14 @@ public class SessionsDAO extends JedisDAO {
         return returnValue;
     }
 
-    public static boolean unlockSession (String sessionId) {
+    public static boolean unlockSession(String sessionId) {
         String script =
                 "if redis.call('hget', ARGV[1], '" + SessionToken.Fields.STATUS + "') == '" + SessionToken.Status.LOCKED + "' then " +
                         "redis.call('hset', ARGV[1], '" + SessionToken.Fields.STATUS + "', '" + SessionToken.Status.UNLOCKED + "') ; " +
                         "return true " +
-                "else " +
+                        "else " +
                         "return false " +
-                "end";
+                        "end";
         boolean returnValue = false;
         if (sessionId != null) {
             returnValue = instance.eval(script, sessionId, sessionId);
@@ -97,11 +97,11 @@ public class SessionsDAO extends JedisDAO {
         return returnValue;
     }
 
-    public static void deleteAllSessionTokens () {
+    public static void deleteAllSessionTokens() {
         instance.deleteAll();
     }
 
-    public static void deleteSessionToken (String sessionId) {
+    public static void deleteSessionToken(String sessionId) {
         instance.del(sessionId);
     }
 }
