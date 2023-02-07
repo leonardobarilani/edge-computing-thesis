@@ -6,12 +6,6 @@ functions:
     lang: java11
     handler: ./session-offloading-manager
     image: k3d-docker-io.localhost:5000/session-offloading-manager:latest
-    environment:
-      write_debug: true
-      write_timeout: 2m30s
-      read_timeout: 2m
-      exec_timeout: 2m
-      healthcheck_interval: 5s
     labels:
       com.openfaas.scale.min: 1
       com.openfaas.scale.max: 1
