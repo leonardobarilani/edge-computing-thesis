@@ -23,18 +23,12 @@ class Connection:
         self._ip = os.popen(self._ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
         self._auth = auth
 
-    def post(self, openfaas_fn: str, data: str, extra_headers: dict = {}):
-        extra_headers['X-session'] = self._session
-        self._session = requests.post('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth,
-                                      headers=extra_headers, data=data)
-        print(bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(
-            response.content, "utf-8") + bcolors.ENDC + "\n")
-        return str(self._session.content, "utf-8")
-
-    def get(self, openfaas_fn: str, extra_headers: dict = {}):
-        extra_headers['X-session'] = self._session
-        response = requests.get('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth,
-                                headers=extra_headers)
-        print(bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(
-            response.content, "utf-8") + bcolors.ENDC + "\n")
+    def post(self, openfaas_fn: str, data: str, headers: dict={}):
+        response = requests.post('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=headers, data=data)
+        print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+        return str(response.content, "utf-8")
+        
+    def get(self, openfaas_fn: str, headers: dict={}):
+        response = requests.get('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=headers)
+        print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
         return str(response.content, "utf-8")
