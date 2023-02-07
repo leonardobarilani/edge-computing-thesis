@@ -36,30 +36,35 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         commands.put("register-receive-propagate", new RegisterReceivePropagate());
     }
 
-    @Override
     public IResponse Handle(IRequest req) {
         IResponse res = new Response();
         System.out.println("\n\n----------BEGIN NEW COMMAND----------");
         System.out.println("Query raw: " + req.getQueryRaw());
+        try {
+            for (var v : req.getQuery().keySet())
+                System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
+            System.out.println("Headers: " + req.getHeaders());
 
-        for (var v : req.getQuery().keySet())
-            System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
-        System.out.println("Headers: " + req.getHeaders());
+            ICommand command = getCommand(req, res);
+            if (command != null) {
 
-        ICommand command = getCommand(req, res);
-        if (command != null) {
+                boolean annotationsAreValid = processAnnotations(req, res, command);
+                if (annotationsAreValid) {
 
-            boolean annotationsAreValid = processAnnotations(req, res, command);
-            if (annotationsAreValid) {
-
-                System.out.println("\n----------BEGIN COMMAND <" + req.getQuery().get("command") + "> HANDLE----------");
-                command.Handle(req, res);
-                System.out.println("----------END COMMAND HANDLE----------\n");
+                    System.out.println("\n----------BEGIN COMMAND <" + req.getQuery().get("command") + "> HANDLE----------");
+                    command.Handle(req, res);
+                    System.out.println("----------END COMMAND HANDLE----------\n");
+                }
             }
+        } catch (Exception e) {
+            String message = "500 Internal server error\n";
+            res.setBody(message);
+            res.setStatusCode(500);
+            System.out.println(message);
+            e.printStackTrace();
         }
-
         System.out.println("----------END NEW COMMAND----------\n\n");
-        return res;
+	    return res;
     }
 
     private ICommand getCommand(IRequest req, IResponse res) {

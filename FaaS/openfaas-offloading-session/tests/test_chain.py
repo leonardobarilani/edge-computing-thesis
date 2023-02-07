@@ -21,9 +21,9 @@ from connection import Connection
 from data_test import DataChain as Data
 
 session = 'marco'
-con3 = Connection(node_name='k3d-p3', session=session)
-con2 = Connection(node_name='k3d-p2', session=session)
-con1 = Connection(node_name='k3d-p1', session=session)
+con3 = Connection(node_name='k3d-p3')
+con2 = Connection(node_name='k3d-p2')
+con1 = Connection(node_name='k3d-p1')
 
 assert Data.test_function_1 == con3.get('session-offloading-manager?command=test-function&session=' + session)
 assert Data.test_function_2 == con2.get('session-offloading-manager?command=test-function&session=' + session)
@@ -31,8 +31,8 @@ assert Data.test_function_3 == con1.get('session-offloading-manager?command=test
 # input("Press Enter to continue...")
 time.sleep(1)
 
-assert Data.force_offload == con3.get('session-offloading-manager?command=force-offload',
-                                      extra_headers={'X-forced-session': 'marco'})
+assert Data.force_offload == con3.get('session-offloading-manager?command=force-offload', 
+                                      headers={'X-forced-session':'marco'})
 # input("Press Enter to continue...")
 time.sleep(1)
 

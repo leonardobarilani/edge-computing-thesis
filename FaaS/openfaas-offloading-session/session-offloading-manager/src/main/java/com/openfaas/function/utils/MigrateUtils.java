@@ -26,13 +26,6 @@ public class MigrateUtils {
         // save new json object in redis
         SessionsDAO.setSessionToken(sessionToken);
 
-        // send new json object to proprietaryLocation
-        System.out.println("Updating proprietary:\n\t" + sessionToken.proprietaryLocation + "\n\t" + sessionToken.getJson());
-        new WrapperUpdateSession()
-                .gateway(EdgeInfrastructureUtils.getGateway(sessionToken.proprietaryLocation))
-                .sessionToUpdate(sessionToken)
-                .call();
-
         // TODO maybe replace this code with https://redis.io/commands/migrate/
         // migrate data from the location that has the session data, to this node
         String fromLocation = EdgeInfrastructureUtils.getGateway(migrateFrom);
@@ -46,6 +39,16 @@ public class MigrateUtils {
 
         SessionData data = new Gson().fromJson(response.getBody(), SessionData.class);
         SessionsDataDAO.setSessionData(sessionToMigrate, data);
+
+        // send new json object to proprietaryLocation
+        System.out.println("Updating proprietary:\n\t" + sessionToken.proprietaryLocation + "\n\t" + sessionToken.getJson());
+        new WrapperUpdateSession()
+                .gateway(EdgeInfrastructureUtils.getGateway(sessionToken.proprietaryLocation))
+                .sessionToUpdate(sessionToken)
+                .call();
+
+        // release the lock now that the session is completely migrated and updated
+        SessionsDAO.unlockSession(sessionToken.session);
 
         return sessionToken;
     }

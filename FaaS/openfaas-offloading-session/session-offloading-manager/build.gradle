@@ -4,15 +4,6 @@ plugins {
     id 'distribution'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-idea {
-    module {
-        downloadJavadoc = true
-    }
-}
-
 // Since we are using openfaas' template java11, we have to make sure the compiler uses the correct java version
 targetCompatibility = '11'
 sourceCompatibility = '11'
@@ -27,20 +18,22 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.openfaas:model:0.1.1'
-    implementation 'com.openfaas:entrypoint:0.1.0'
+    compile 'com.openfaas:model:0.1.1'
+    compile 'com.openfaas:entrypoint:0.1.0'
 
     // README: apparently using 'implementation' breaks the
     // function that use those libraries, so 'compile' its advised
     // Gson dependency
-    implementation 'com.google.code.gson:gson:2.9.0'
+    compile 'com.google.code.gson:gson:2.9.0'
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
-    implementation 'io.lettuce:lettuce-core:latest.release'
+    compile 'io.lettuce:lettuce-core:latest.release'
 
     // Jedis dependency
-    implementation 'redis.clients:jedis:2.9.0'
+    compile 'redis.clients:jedis:2.9.0'
+    // OkHttp dependency
+    compile("com.squareup.okhttp3:okhttp:4.10.0")
 }
 
 // In this section you declare where to find the dependencies of your project

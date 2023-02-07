@@ -19,6 +19,7 @@ function create_generator_script ()
 		echo -n $line\\n>> $TMP_FILEPATH
 	done < $1
 	echo \' \| redis-cli >> $TMP_FILEPATH
+	echo "echo Finished setting up Redis" >> $TMP_FILEPATH
 }
 function execute_redis_commands ()
 {
@@ -32,7 +33,6 @@ function execute_redis_commands ()
 		sh -c "rm /tmp/$TMP_FILENAME 2> /dev/null ; echo $(base64 -w 0 $TMP_FILEPATH) | base64 --decode > /tmp/$TMP_FILENAME ; chmod +x /tmp/$TMP_FILENAME ; sh -c /tmp/$TMP_FILENAME ; rm /tmp/$TMP_FILENAME" \
 		|| { echo;echo execute_redis_commands: Failed running remote commands to setup redis;exit 1; }
 	rm $TMP_FILEPATH || { echo;echo execute_redis_commands: Failed cleaning the generator script locally;exit 1; }
-	echo "echo Finished setting up Redis" >> $TMP_FILEPATH
 }
 function with_context ()
 {

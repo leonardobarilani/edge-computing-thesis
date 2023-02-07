@@ -4,7 +4,7 @@ import com.openfaas.function.model.SessionToken;
 
 import java.util.HashMap;
 
-public class SessionsDAO extends JedisDAO {
+public class SessionsDAO extends RedisDAO {
 
     private static final SessionsDAO instance = new SessionsDAO();
 
@@ -53,6 +53,11 @@ public class SessionsDAO extends JedisDAO {
         System.out.println("(SessionsDAO.setSessionToken) Session saved to local storage: " + sessionToken.getJson());
     }
 
+    /**
+     * Returns true if the lock has been successfully acquired. False otherwise
+     * @param sessionId
+     * @return
+     */
     public static boolean lockSession(String sessionId) {
         String script =
                 "if redis.call('hget', ARGV[1], '" + SessionToken.Fields.STATUS + "') == '" + SessionToken.Status.UNLOCKED + "' then " +
@@ -75,6 +80,11 @@ public class SessionsDAO extends JedisDAO {
         return returnValue;
     }
 
+    /**
+     * Returns true if the lock has been successfully released. False otherwise
+     * @param sessionId
+     * @return
+     */
     public static boolean unlockSession(String sessionId) {
         String script =
                 "if redis.call('hget', ARGV[1], '" + SessionToken.Fields.STATUS + "') == '" + SessionToken.Status.LOCKED + "' then " +

@@ -194,8 +194,11 @@ abstract class RedisDAO extends StatefulDAO {
     boolean eval(String script, String accessedKey, String scriptArgument) {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        System.out.println("(RedisDAO.eval) Redis eval");
-        boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, accessedKey, scriptArgument);
+        System.out.println("(RedisDAO.eval) Redis eval:");
+        System.out.println("(RedisDAO.eval) Script: " + script);
+        System.out.println("(RedisDAO.eval) AccessedKey: " + accessedKey);
+        System.out.println("(RedisDAO.eval) ScriptArgument: " + scriptArgument);
+        boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, new String[]{ accessedKey }, scriptArgument);
 
         closeConnection();
         return returnObject;

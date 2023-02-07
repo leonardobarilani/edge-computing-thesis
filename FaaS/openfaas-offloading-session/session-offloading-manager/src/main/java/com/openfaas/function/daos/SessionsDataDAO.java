@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SessionsDataDAO extends JedisDAO {
+public class SessionsDataDAO extends RedisDAO {
 
     private static final SessionsDataDAO instance = new SessionsDataDAO();
 
