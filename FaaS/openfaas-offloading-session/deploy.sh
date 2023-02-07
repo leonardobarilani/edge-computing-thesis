@@ -10,15 +10,15 @@ deploy()
 # ROOT
 echo Deploying ROOT functions
 
-deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery country --inAreas k3d-p1
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery country --inAreas k3d-p1 --minReplicas 1
 
 # MIDDLE NODES
 echo Deploying MIDDLE NODES functions
 
-deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery city --inAreas k3d-p1
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery city --inAreas k3d-p1 --minReplicas 1
 
 # EDGE
 echo Deploying EDGE functions
 
-deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery district --inAreas k3d-p1
+deploy session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery district --inAreas k3d-p1 --minReplicas 1
 
