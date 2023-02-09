@@ -20,7 +20,7 @@ public class WrapperMigrateSession extends HTTPWrapper {
 
     @Override
     public Response call() {
-        setRemoteFunction("/function/session-offloading-manager?command=migrate-session&session=" + sessionToMigrate);
+        setRemoteFunction("/function/session-offloading-manager-migrate-session?command=migrate-session&session=" + sessionToMigrate);
 
         try {
             get();

@@ -1,16 +1,18 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.commands.annotations.RequiresBodyAnnotation;
+import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
-@RequiresBodyAnnotation.RequiresBody
+import java.util.Base64;
+
+@RequiresHeaderAnnotation.RequiresHeader(header = "X-session-token")
 public class UpdateSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
-        String sessionJson = req.getBody();
+        String sessionJson = new String(Base64.getDecoder().decode(req.getHeader("X-session-token")));
         SessionToken sessionToken = SessionToken.Builder.buildFromJSON(sessionJson);
 
         if (!sessionToken.proprietaryLocation.equals(System.getenv("LOCATION_ID"))) {

@@ -22,19 +22,12 @@ public class ForceOffload implements ICommand {
         System.out.println("Header X-forced-session: " + forcedSessionId);
 
         /* --------- Checks before using the session --------- */
-        sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
-        if (!sessionExists(res, sessionToOffload))
+        if (!sessionExists(res, forcedSessionId))
             return;
         if (!acquireLock(res, forcedSessionId))
             return;
+        sessionToOffload = SessionsDAO.getSessionToken(forcedSessionId);
 
-        if (sessionToOffload == null) {
-            System.out.println("Node is empty, can't force an offload");
-            res.setStatusCode(400);
-            res.setBody("Node is empty, can't force an offload");
-        } else {
-            System.out.println("Session token about to be offloaded: " + sessionToOffload.getJson());
-        }
         /* --------- Offload --------- */
         offloadSession(res, sessionToOffload);
 
@@ -46,7 +39,7 @@ public class ForceOffload implements ICommand {
         System.out.println("Session token about to be offloaded: " + sessionToOffload.getJson());
 
         // call parent node to offload the session
-        String message = "Offloading:\n\t" + EdgeInfrastructureUtils.getParentLocationId() + "\n\t" + sessionToOffload.getJson();
+        String message = "Offloading:\n" + EdgeInfrastructureUtils.getParentLocationId() + "\n" + sessionToOffload.getJson();
         new WrapperOffloadSession()
                 .gateway(EdgeInfrastructureUtils.getParentHost())
                 .sessionToOffload(sessionToOffload)
@@ -87,8 +80,9 @@ public class ForceOffload implements ICommand {
         return true;
     }
 
-    private boolean sessionExists (IResponse res, SessionToken session) {
-        if (session == null)
+    private boolean sessionExists (IResponse res, String session) {
+        SessionToken sessionToken = SessionsDAO.getSessionToken(session);
+        if (sessionToken == null)
         {
             System.out.println("Node is empty, can't force an offload");
             res.setStatusCode(400);
