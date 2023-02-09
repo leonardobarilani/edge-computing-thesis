@@ -4,6 +4,7 @@ import cli.commands.CheckInfrastructure;
 import cli.commands.Deploy;
 import cli.commands.DisplayInfrastructure;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,12 +19,15 @@ public class Main {
                 display-infrastructure <path to infrastructure file>
 
                 deploy <function name> <path to infrastructure file>
-                    --inEvery <areaTypeIdentifier>: In which area type to deploy the function. If not specified the function is deployed to the lowest level.
-                    --inAreas <area>: The name of the areas in which to deploy the function. If not specified the function is deployed everywhere.
+                    --inEvery <areaTypeIdentifier>: In which area type to deploy the function.
+                        If not specified the function is deployed to the lowest level.
+                    --inAreas <area>: The name of the areas in which to deploy the function.
+                        If not specified the function is deployed everywhere.
                     --exceptIn <area>: The name of the areas in which to NOT deploy the function.
-                    -f, --yaml <path>: Path to the YAML file describing the function.
-                    --minReplicas <number_of_replicas>: Number of replicas for the function. Default: 2
                     --receivePropagate: Set this function to be a receiver of propagate() calls.
+                    --faas-cli <faas-cli deploy compatible parameter>: The argument of this parameter will be directly passed to faas-cli deploy.
+                        See https://github.com/openfaas/faas-cli for more info.
+                        You can specify this parameter multiple times.
                     
                 help
                 """;
@@ -57,9 +61,8 @@ public class Main {
                 String inEvery = "";
                 List<String> inAreas = new LinkedList<>();
                 List<String> exceptIn = new LinkedList<>();
-                String pathToFunction = "./stack.yml";
-                String minReplicas = "5";
                 boolean receivePropagate = false;
+                List<String> faasCliArguments = new ArrayList<>();
 
                 int i = 3;
                 try {
@@ -77,12 +80,8 @@ public class Main {
                                 exceptIn.add(args[i + 1]);
                                 i += 2;
                             }
-                            case "-f", "--yaml" -> {
-                                pathToFunction = args[i + 1];
-                                i += 2;
-                            }
-                            case "--minReplicas" -> {
-                                minReplicas = args[i + 1];
+                            case "--faas-cli" -> {
+                                faasCliArguments.add(args[i + 1]);
                                 i += 2;
                             }
                             case "--receivePropagate" -> {
@@ -94,8 +93,7 @@ public class Main {
                                 i += 1;
                             }
                         }
-                } catch (IndexOutOfBoundsException ignored) {
-                }
+                } catch (IndexOutOfBoundsException e) { System.out.println("Error parsing command line arguments"); e.printStackTrace(); }
 
                 Deploy.deploy(
                         functionName,
@@ -103,9 +101,8 @@ public class Main {
                         inEvery,
                         inAreas.toArray(new String[0]),
                         exceptIn.toArray(new String[0]),
-                        pathToFunction,
-                        minReplicas,
-                        receivePropagate
+                        receivePropagate,
+                        faasCliArguments
                 );
             }
             case "help" -> System.out.println(helpString);

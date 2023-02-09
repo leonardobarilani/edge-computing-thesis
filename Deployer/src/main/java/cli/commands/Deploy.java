@@ -17,6 +17,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.List;
 
 public class Deploy {
 
@@ -25,9 +26,8 @@ public class Deploy {
                               String inEvery,
                               String[] inAreas,
                               String[] exceptIn,
-                              String yaml,
-                              String minReplicas,
-                              boolean isReceivePropagate) {
+                              boolean isReceivePropagate,
+                              List<String> faasCliArguments) {
         Gson g = new Gson();
         Infrastructure infrastructure;
         String infrastructureString;
@@ -85,8 +85,7 @@ public class Deploy {
                             " --env=REDIS_HOST=" + conf.redis_host +
                             " --env=REDIS_PORT=" + conf.redis_port +
                             " --env=REDIS_PASSWORD=" + conf.redis_password +
-                            " --env=FUNCTION_NAME=" + functionName +
-                            " --label com.openfaas.scale.min=" + minReplicas;
+                            " --env=FUNCTION_NAME=" + functionName;
             System.out.println(
                     "📶 Deploying on location: \"" + location.areaName +
                             "\", gateway: \"" + conf.openfaas_gateway + "\".");
@@ -105,8 +104,9 @@ public class Deploy {
 
                 command =
                         " faas-cli deploy --filter " + functionName +
-                                " --yaml " + yaml +
-                                " --gateway " + conf.openfaas_gateway + " " + envVariablesString;
+                                " --gateway " + conf.openfaas_gateway +
+                                " " + envVariablesString +
+                                " " + String.join(" ", faasCliArguments);
                 System.out.println("Executing: " + shellPreamble + command);
                 proc = Runtime.getRuntime().exec(shellPreamble + command);
                 printOutput(proc);
