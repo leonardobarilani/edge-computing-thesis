@@ -35,6 +35,6 @@ public class ForceOnload implements ICommand {
         SessionToken newSession = MigrateUtils.migrateSessionFromRemoteToLocal(sessionJson);
 
         res.setStatusCode(200);
-        res.setBody("Unloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + newSession.getJson());
+        res.setBody("Unloaded:\nOld session: " + sessionJson + "\nNew session: " + newSession.getJson());
     }
 }

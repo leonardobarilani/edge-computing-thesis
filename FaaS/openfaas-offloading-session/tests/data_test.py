@@ -15,8 +15,9 @@ Session data: {"session_data":[{"key":"key1","data":"value1"},{"key":"key2","dat
 Offloading status: accept"""
 
     force_offload = """Offloading:
-    k3d-p2
-    {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}"""
+k3d-p2
+{"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+
 
     test_function_3 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
 Offloading status: null
@@ -35,8 +36,8 @@ Session data: {"session_data":[{"key":"key1","data":"value1"},{"key":"key2","dat
 Offloading status: accept"""
 
     force_offload = """Offloading:
-    k3d-p2
-    {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}"""
+k3d-p2
+{"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
 
     test_function_3 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
 Offloading status: null
@@ -46,8 +47,8 @@ Offloading status: accept
 Session data: {"session_data":[{"key":"key1","data":"value1"},{"key":"key2","data":"value2"}]}"""
 
     force_onload = """Unloaded:
-    Old session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"LOCKED"}
-    New session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+Old session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"LOCKED"}
+New session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
 
     test_function_5 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}
 Offloading status: null
@@ -66,8 +67,8 @@ Offloading status: reject"""
     test_function_3 = """Session <marco> doesn't exist
 Offloading status: accept"""
     force_offload = """Offloading:
-    k3d-p2
-    {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}"""
+k3d-p2
+{"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
     test_function_4 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p1","status":"UNLOCKED"}
 Offloading status: null
 Session data: <data_not_on_this_node>"""

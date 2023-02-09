@@ -55,6 +55,10 @@ abstract class HTTPWrapper {
 
         statusCode = response.statusCode();
         body = response.body();
+
+        System.out.println("(HTTPWrapper.get) Response: ");
+        System.out.println("(HTTPWrapper.get) \tStatusCode: " + statusCode);
+        System.out.println("(HTTPWrapper.get) \tBody: " + body);
     }
 
     void post() throws Exception {
@@ -79,6 +83,10 @@ abstract class HTTPWrapper {
 
         statusCode = response.statusCode();
         body = response.body();
+
+        System.out.println("(HTTPWrapper.post) Response: ");
+        System.out.println("(HTTPWrapper.post) \tStatusCode: " + statusCode);
+        System.out.println("(HTTPWrapper.post) \tBody: " + body);
     }
 
     public abstract Response call();

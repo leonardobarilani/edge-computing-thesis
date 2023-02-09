@@ -2,6 +2,8 @@ package com.openfaas.function.commands.wrappers;
 
 import com.openfaas.function.model.SessionToken;
 
+import java.util.Base64;
+
 public class WrapperOffloadSession extends HTTPWrapper {
 
     private SessionToken session = null;
@@ -23,9 +25,9 @@ public class WrapperOffloadSession extends HTTPWrapper {
     @Override
     public Response call() {
         setRemoteFunction("/function/session-offloading-manager?command=offload-session");
-        setBodyPOSTRequest(session.getJson());
+        setHeader("X-session-token", Base64.getEncoder().encodeToString(session.getJson().getBytes()));
         try {
-            post();
+            get();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
