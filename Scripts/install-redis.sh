@@ -8,10 +8,11 @@ fi
 kubectl config use-context $1
 printf "\n"
 
-helm upgrade bitnami/redis --install my-openfaas-redis \
+helm upgrade --install my-openfaas-redis \
 --namespace openfaas-fn \
 --set auth.enabled=false \
 --set architecture=standalone \
 --set persistence.enabled=false \
 --set master.disableCommands=null \
---wait
+--wait \
+bitnami/redis 
