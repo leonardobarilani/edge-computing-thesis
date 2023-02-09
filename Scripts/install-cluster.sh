@@ -13,8 +13,5 @@ k3d cluster create $1 \
     --k3s-arg "--disable=traefik@server:0" \
     --verbose \
     --trace
-
-#k3d kubeconfig merge $1 \
-#    --kubeconfig-merge-default \
-#    --kubeconfig-switch-context
-# export OPENFAAS_URL=http://$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"):31112
+# For extra options, visit:
+# https://k3d.io/v5.4.4/usage/commands/k3d_cluster_create/
