@@ -1,14 +1,19 @@
 
 if [ $# -eq 0 ]
 then
-	echo One argument needed: profilename
-	exit 1
+	echo No arguments given: printing all the context:
+	for context in $(kubectl config get-contexts | awk '{print $2}' | tail -n +2);
+	do
+		echo
+		echo Entry point for $context:
+		echo http://"$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}" --context $context)":31112
+		echo
+	done
+else
+	echo
+	echo Entry point for $1:
+	echo http://"$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}" --context $1)":31112
+	echo
 fi
 
-kubectl config use-context $1
-printf "\n"
 
-echo Entry point:
-echo http://"$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")":31112
-
-printf "\n"
