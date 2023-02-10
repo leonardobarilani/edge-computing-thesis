@@ -2,6 +2,9 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'distribution'
+
+    // Allows the creation of a uber-jar (Tasks -> shadow -> shadowJar) to ship all the dependencies
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 // Since we are using openfaas' template java11, we have to make sure the compiler uses the correct java version
@@ -25,15 +28,8 @@ dependencies {
     // function that use those libraries, so 'compile' its advised
     // Gson dependency
     compile 'com.google.code.gson:gson:2.9.0'
-    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-    //compile 'com.googlecode.json-simple:json-simple:1.1.1'
     // Lettuce dependency
     compile 'io.lettuce:lettuce-core:latest.release'
-
-    // Jedis dependency
-    compile 'redis.clients:jedis:2.9.0'
-    // OkHttp dependency
-    compile("com.squareup.okhttp3:okhttp:4.10.0")
 }
 
 // In this section you declare where to find the dependencies of your project

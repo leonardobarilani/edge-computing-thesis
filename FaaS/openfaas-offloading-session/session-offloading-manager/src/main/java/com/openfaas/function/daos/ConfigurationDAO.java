@@ -7,7 +7,7 @@ public class ConfigurationDAO extends RedisDAO {
     private static final ConfigurationDAO instance = new ConfigurationDAO();
 
     private ConfigurationDAO() {
-        super(Tables.CONFIGURATION);
+        super(CONFIGURATION);
     }
 
     public static void acceptOffloading() {

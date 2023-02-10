@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-abstract class RedisDAO extends StatefulDAO {
+public abstract class RedisDAO extends StatefulDAO {
+
+    protected static final String CONFIGURATION = "0";
+    protected static final String SESSIONS = "1";
+    protected static final String SESSIONS_DATA = "2";
 
     private final String url;
     private StatefulRedisConnection<String, String> connection;
@@ -20,7 +24,7 @@ abstract class RedisDAO extends StatefulDAO {
      *
      * @param table has to be 0 (OFFLOAD), 1 (SESSIONS), 2 (SESSIONS_DATA), 3 (RECEIVE_PROPAGATE_FUNCTIONS)
      */
-    RedisDAO(String table) {
+    protected RedisDAO(String table) {
         String host = System.getenv("REDIS_HOST");
         String password = System.getenv("REDIS_PASSWORD");
         String port = System.getenv("REDIS_PORT");
@@ -130,7 +134,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    void hset(String key, Map<String, String> map) {
+    protected void hset(String key, Map<String, String> map) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && map != null) {
@@ -141,7 +145,7 @@ abstract class RedisDAO extends StatefulDAO {
         closeConnection();
     }
 
-    String hget(String key, String field) {
+    protected String hget(String key, String field) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         String returnValue = null;
@@ -185,6 +189,47 @@ abstract class RedisDAO extends StatefulDAO {
         if (key != null) {
             System.out.println("(RedisDAO.hlen) Redis hlen with key: " + key);
             returnValue = syncCommands.hlen(key);
+        }
+
+        closeConnection();
+        return returnValue;
+    }
+
+    protected Boolean hexists(String key, String field) {
+        RedisCommands<String, String> syncCommands = openConnection();
+
+        Boolean returnValue = null;
+        if (key != null && field != null) {
+            System.out.println("(RedisDAO.hexists) Redis hexists with key: " + key);
+            returnValue = syncCommands.hexists(key, field);
+        }
+
+        closeConnection();
+        return returnValue;
+    }
+
+    protected Long exists(String key) {
+        System.out.println("Pre open connection");
+        RedisCommands<String, String> syncCommands = openConnection();
+        System.out.println("Post open connection");
+
+        Long returnValue = null;
+        if (key != null) {
+            System.out.println("(RedisDAO.exists) Redis exists with key: " + key);
+            returnValue = syncCommands.exists(key);
+        }
+
+        closeConnection();
+        return returnValue;
+    }
+
+    protected Long hdel(String key, String field) {
+        RedisCommands<String, String> syncCommands = openConnection();
+
+        Long returnValue = null;
+        if (key != null && field != null) {
+            System.out.println("(RedisDAO.hdel) Redis hdel with key: " + key);
+            returnValue = syncCommands.hdel(key, field);
         }
 
         closeConnection();
