@@ -22,10 +22,12 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         // Offloading API
         commands.put("force-offload", new ForceOffload());
         commands.put("force-onload", new ForceOnload());
+        commands.put("set-offload-status", new SetOffloadStatus());
+
+        // Offloading Internals
         commands.put("offload-session", new OffloadSession());
         commands.put("onload-session", new OnloadSession());
         commands.put("update-session", new UpdateSession());
-        commands.put("set-offload-status", new SetOffloadStatus());
         commands.put("migrate-session", new MigrateSession());
 
         // Debug API

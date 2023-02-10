@@ -9,13 +9,15 @@ public class SessionsDAO extends RedisDAO {
     private static final SessionsDAO instance = new SessionsDAO();
 
     private SessionsDAO() {
-        super(Tables.SESSIONS);
+        super(SESSIONS);
     }
 
     public static SessionToken getSessionToken(String sessionId) {
-        SessionToken sessionToken = new SessionToken();
+        SessionToken sessionToken = null;
 
-        if (sessionId != null) {
+        System.out.println("(SessionsDAO.getSessionToken) Trying to fetch session: " + sessionId);
+        if (sessionId != null && instance.exists(sessionId) > 0) {
+            sessionToken = new SessionToken();
             sessionToken.session = sessionId;
             sessionToken.proprietaryLocation = instance.hget(sessionId,
                     String.valueOf(SessionToken.Fields.PROPRIETARY_LOCATION));
@@ -25,9 +27,8 @@ public class SessionsDAO extends RedisDAO {
                     String.valueOf(SessionToken.Fields.CURRENT_LOCATION));
             sessionToken.status = SessionToken.Status.valueOf(instance.hget(sessionId,
                     String.valueOf(SessionToken.Fields.STATUS)));
+            System.out.println("(SessionsDAO.getSessionToken) Session fetched from local storage: " + sessionToken.getJson());
         }
-        System.out.println("(SessionsDAO.getSessionToken) Session fetched from local storage: " + sessionToken.getJson());
-
         return sessionToken;
     }
 

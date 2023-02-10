@@ -1,115 +1,42 @@
 package com.openfaas.function.api;
 
 import com.google.gson.Gson;
-import com.openfaas.function.model.PropagateData;
-import com.openfaas.function.utils.EdgeInfrastructureUtils;
-import com.openfaas.model.IRequest;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
+import com.openfaas.function.daos.RedisDAO;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.Map.entry;
 
-public class EdgeDB implements IEdgeDB {
+public class EdgeDB extends RedisDAO {
 
-    private static final String SESSIONS_DATA = "2";
+    private static String sessionId;
+    private static final EdgeDB instance = new EdgeDB();
 
-    private final String url;
-    private final RedisClient redisClient;
-    private final StatefulRedisConnection<String, String> connection;
-    private final RedisCommands<String, String> syncCommands;
-    private final String sessionId;
-
-    public EdgeDB(IRequest req) {
-        String host = System.getenv("REDIS_HOST");
-        String password = System.getenv("REDIS_PASSWORD");
-        String port = System.getenv("REDIS_PORT");
-        url = "redis://" + password + "@" + host + ":" + port + "/" + SESSIONS_DATA;
-        sessionId = req.getHeader("X-session");
-
-        System.out.println("(EdgeDB.Constructor) X-session: <" + sessionId + "> Url: " + url);
-
-        redisClient = RedisClient.create(url);
-        redisClient.setDefaultTimeout(20, TimeUnit.SECONDS);
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
-
-        System.out.println("(EdgeDB.Constructor) Established connection");
+    private EdgeDB() {
+        super(SESSIONS_DATA);
     }
 
-    public EdgeDB(String session) {
-        String host = System.getenv("REDIS_HOST");
-        String password = System.getenv("REDIS_PASSWORD");
-        String port = System.getenv("REDIS_PORT");
-        url = "redis://" + password + "@" + host + ":" + port + "/" + SESSIONS_DATA;
-        sessionId = session;
-
-        System.out.println("(EdgeDB.Constructor) Not-offloadable session: <" + sessionId + "> Url: " + url);
-
-        redisClient = RedisClient.create(url);
-        redisClient.setDefaultTimeout(20, TimeUnit.SECONDS);
-        connection = redisClient.connect();
-        syncCommands = connection.sync();
-
-        System.out.println("(EdgeDB.Constructor) Established connection");
-
+    public static String get(String key) {
+        System.out.println("(EdgeDB.get) (sessionId: " + sessionId + ") get with key: " + key);
+        return instance.hget(sessionId, key);
     }
 
-    private static CompletableFuture<HttpResponse<String>> sendAsyncJsonPOST(String uri,
-                                                                             String body)
-            throws IOException {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-
-        return HttpClient.newHttpClient()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+    public static void set(String key, String value) {
+        System.out.println("(EdgeDB.set) (sessionId: " + sessionId + ") set with key, value: " + key + ", " + value);
+        instance.hset(sessionId, Map.ofEntries(entry(key, value)));
     }
 
-    public void close() {
-        connection.close();
-        redisClient.shutdown();
-    }
-
-    public String get(String key) {
-        System.out.println("(EdgeDB.get) (sessionId: " + sessionId + ") Redis get with key: " + key);
-        return syncCommands.hget(sessionId, key);
-    }
-
-    public void set(String key, String value) {
-        System.out.println("(EdgeDB.set) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + value);
-        syncCommands.hset(sessionId, Map.ofEntries(entry(key, value)));
-    }
-
-    public List<String> getList(String key) {
-        /*System.out.println("(EdgeDB.getList) (sessionId: "+sessionId+") Redis hexists with key: " + key);
-        if (!syncCommands.hexists(sessionId, key))
-            return null;*/
+    public static List<String> getList(String key) {
         System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Redis get with key: " + key);
-        String rawList = syncCommands.hget(sessionId, key);
+        String rawList = instance.hget(sessionId, key);
         if (rawList == null) {
             System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
             return null;
         }
         System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Parsing with Gson");
         return new Gson().fromJson(rawList, HList.class).list;
-
-        //System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zrangebyscore with key: " + key);
-        //System.out.println("(EdgeDB) [WARNING] Lists still don't use the session");
-        //return syncCommands.zrange(key, Long.MIN_VALUE, Long.MAX_VALUE);
-        //return syncCommands.zrangebyscore(key, Range.create(0, Integer.MAX_VALUE));
     }
 
     /**
@@ -120,19 +47,19 @@ public class EdgeDB implements IEdgeDB {
      * @param key
      * @param value
      */
-    public void addToList(String key, String value) {
+    public static void addToList(String key, String value) {
         System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis hexists with key: " + key);
-        if (!syncCommands.hexists(sessionId, key)) {
+        if (!instance.hexists(sessionId, key)) {
             HList list = new HList();
             list.list.add(value);
             System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
             String newJsonList = new Gson().toJson(list);
             System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
-            syncCommands.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
+            instance.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
             return;
         }
         System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis get with key: " + key);
-        String rawList = syncCommands.hget(sessionId, key);
+        String rawList = instance.hget(sessionId, key);
         if (rawList == null) {
             System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
             return;
@@ -143,52 +70,19 @@ public class EdgeDB implements IEdgeDB {
         System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
         String newJsonList = new Gson().toJson(list);
         System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
-        syncCommands.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
-
-        //System.out.println("(EdgeDB) (sessionId: "+sessionId+") Redis zadd with key, value: " + key + ", " + value);
-        //System.out.println("(EdgeDB) [WARNING] Lists still don't use the session");
-        //syncCommands.zadd(key, Calendar.getInstance().getTimeInMillis(), value);
+        instance.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
     }
 
-    public void propagate(String value, String levelToPropagateTo, String function) {
-        List<String> locationsToPropagateTo = EdgeInfrastructureUtils.getLocationsFromNodeToLevel(
-                System.getenv("LOCATION_ID"),
-                levelToPropagateTo
-        );
-        System.out.println("(EdgeDB.propagate) Propagating to locations " + locationsToPropagateTo + " with value: " + value);
-
-        // calling all locations on location/session-offloading-manager?command=receive-propagate
-        // Set Body: <value>
-        List<CompletableFuture> futures = new ArrayList<>(locationsToPropagateTo.size());
-        for (var l : locationsToPropagateTo)
-            try {
-                String uri = EdgeInfrastructureUtils.getGateway(l) + "/function/session-offloading-manager?command=receive-propagate";
-                String json = new Gson().toJson(new PropagateData(value, function));
-                System.out.println("(EdgeDB.propagate) Propagating now: \n\t" + uri + "\n\t" + json);
-                futures.add(sendAsyncJsonPOST(
-                        uri,
-                        json
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        System.out.println("(EdgeDB.propagate) Waiting propagation responses");
-        // wait for all the responses before continuing the execution
-        futures.forEach(CompletableFuture::join);
-        System.out.println("(EdgeDB.propagate) All propagation responses received");
+    public static void delete(String key) {
+        instance.hdel(sessionId, key);
     }
 
-    public void setTTL(long seconds) {
-        System.out.println("(EdgeDB.setTTL) (sessionId: " + sessionId + ") Setting TTL to: " + seconds + " seconds");
-        syncCommands.expire(sessionId, seconds);
+    protected static void setCurrentSession (String sessionId) {
+        System.out.println("(EdgeDB.setCurrentSession) Current session id: " + sessionId);
+        instance.sessionId = sessionId;
     }
 
-    public void delete(String key) {
-        syncCommands.hdel(sessionId, key);
-    }
-
-    private class HList {
+    private static class HList {
         List<String> list = new ArrayList<>();
     }
 }
