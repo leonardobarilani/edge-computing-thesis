@@ -1,5 +1,6 @@
 package com.openfaas.function.api;
 
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
@@ -54,17 +55,35 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
     
     private IResponse handleNewSession (IRequest req, String sessionId) {
         System.out.println("(Offloadable) The session doesn't exists. About to create a new session, sessionId: " + sessionId);
+        ConfigurationDAO.lockCreatingSession();
+        if (SessionsDAO.getSessionToken(sessionId) != null) {
+            // Someone was able to create a session with this session id before us
+            // The simplest solution is to just send a retry to the client
+
+            ConfigurationDAO.unlockCreatingSession();
+            System.out.println("(Offloadable) Session <" + sessionId + "> not available. Can't acquire the session's lock");
+            IResponse res = new Response();
+            res.setStatusCode(503);
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+            res.setHeader("Retry-After", "5");
+            res.setBody("503 Session <" + sessionId + "> not available");
+            return res;
+        }
         SessionToken sessionToken = new SessionToken();
         sessionToken.init(sessionId);
+
         System.out.println("(Offloadable) New session created: \n\t" + sessionToken.getJson());
 
         SessionsDAO.setSessionToken(sessionToken);
+        ConfigurationDAO.unlockCreatingSession();
 
         System.out.println("(Offloadable) Session saved in Redis");
 
         EdgeDB.setCurrentSession(sessionId);
+        IResponse res = HandleOffload(req);
+        SessionsDAO.unlockSession(sessionId);
 
-        return HandleOffload(req);
+        return res;
     }
     
     private IResponse handleRemoteSession (IRequest req, SessionToken sessionToken) {
@@ -96,6 +115,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             System.out.println("(Offloadable) Session <" + sessionId + "> not available. Can't acquire the session's lock");
             res = new Response();
             res.setStatusCode(503);
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
             res.setHeader("Retry-After", "5");
             res.setBody("503 Session <" + sessionId + "> not available");
         }

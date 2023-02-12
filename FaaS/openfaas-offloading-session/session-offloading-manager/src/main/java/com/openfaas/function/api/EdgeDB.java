@@ -77,7 +77,7 @@ public class EdgeDB extends RedisDAO {
         instance.hdel(sessionId, key);
     }
 
-    protected static void setCurrentSession (String sessionId) {
+    static void setCurrentSession (String sessionId) {
         System.out.println("(EdgeDB.setCurrentSession) Current session id: " + sessionId);
         instance.sessionId = sessionId;
     }
