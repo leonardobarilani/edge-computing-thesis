@@ -4,6 +4,10 @@ plugins {
     id 'distribution'
 }
 
+// Since we are using openfaas' template java11, we have to make sure the compiler uses the correct java version
+targetCompatibility = '11'
+sourceCompatibility = '11'
+
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
@@ -17,12 +21,8 @@ dependencies {
     compile 'com.openfaas:model:0.1.1'
     compile 'com.openfaas:entrypoint:0.1.0'
 
-    // Lettuce dependency
-    compile 'io.lettuce:lettuce-core:6.1.8.RELEASE'
     // Gson dependency
     compile 'com.google.code.gson:gson:2.9.0'
-    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-    // compile 'com.googlecode.json-simple:json-simple:1.1.1'
 
     // Build: shopping-cart -> Tasks -> distribution -> assembleDist
     // Copy from: build/libs/session-offloading-manager.jar

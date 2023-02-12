@@ -1,11 +1,8 @@
 package com.openfaas.function;
 
-import com.openfaas.function.api.EdgeDB;
 import com.openfaas.function.api.Offloadable;
-import com.openfaas.model.IHandler;
-import com.openfaas.model.IResponse;
 import com.openfaas.model.IRequest;
-import com.openfaas.model.Response;
+import com.openfaas.model.IResponse;
 
 /*
  * shopping-cart API:
@@ -18,23 +15,10 @@ import com.openfaas.model.Response;
 public class Handler extends Offloadable {
 
     public IResponse HandleOffload(IRequest req) {
-        IResponse res = new Response();
-        System.out.println("\n\n\n--------BEGIN CART--------");
-        EdgeDB db = new EdgeDB(req);
 
-        String newProduct = req.getQuery().get("product");
-        if (newProduct != null) {
-            System.out.println("Adding product to the cart: " + newProduct);
-            db.addToList("products", newProduct);
-            System.out.println("Propagating: " + newProduct);
-            db.propagate(newProduct, "city", "products-counter");
-        }
-        String currentCart = db.getList("products").toString();
-        res.setBody(currentCart);
-        System.out.println("Current cart: " + currentCart);
-
-        System.out.println("--------END CART--------");
-        db.close();
-        return res;
+        if ("counter".equals(System.getenv("TYPE")))
+            return new HandlerCounter().Handle(req);
+        else
+            return new HandlerCart().Handle(req);
     }
 }

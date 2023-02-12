@@ -1,28 +1,18 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://127.0.0.1:8080
 functions:
   products-counter:
     lang: java11
-    handler: ./products-counter
-    image: carrone/products-counter:latest
-    environment:
-      write_debug: true
-      write_timeout: 2m30s
-      read_timeout: 2m
-      exec_timeout: 2m
-      handler_wait_duration: 1m30s
-      healthcheck_interval: 5s
+    handler: ./shopping-cart
+    image: k3d-docker-io.localhost:5000/shopping-cart:latest
+    labels:
+      com.openfaas.scale.min: 1
+      com.openfaas.scale.max: 1
   shopping-cart:
     lang: java11
     handler: ./shopping-cart
-    image: carrone/shopping-cart:latest
-    environment:
-      write_debug: true
-      write_timeout: 2m30s
-      read_timeout: 2m
-      exec_timeout: 2m
-      handler_wait_duration: 1m30s
-      healthcheck_interval: 5s
-
+    image: k3d-docker-io.localhost:5000/shopping-cart:latest
+    labels:
+      com.openfaas.scale.min: 1
+      com.openfaas.scale.max: 1
