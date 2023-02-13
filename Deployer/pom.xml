@@ -28,14 +28,6 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- BEGIN LIBRARY DEPENDENCIES-->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.1.1</version>
-        </dependency>
-        <!-- END LIBRARY DEPENDENCIES-->
     </dependencies>
 
     <!-- https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven -->
