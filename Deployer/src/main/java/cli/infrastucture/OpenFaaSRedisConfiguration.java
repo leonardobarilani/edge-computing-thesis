@@ -20,9 +20,14 @@ public class OpenFaaSRedisConfiguration {
                 "kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}' --context=" + areaName;
 
         if (openfaas_gateway == null) {
-            openfaas_gateway = printOutput(Runtime.getRuntime().exec(scriptGateway));
-            openfaas_gateway = "http://" + openfaas_gateway.substring(1, openfaas_gateway.length() - 1) + ":31112";
-            // System.out.println("Autofilled openfass_gateway with: " + openfaas_gateway);
+            String gateway_ip = printOutput(Runtime.getRuntime().exec(scriptGateway));
+            if (gateway_ip == null) {
+                System.out.println("(OpenFaaSRedisConfiguration.autoFillMissing) Cannot autofill openfaas_gateway for area <" + areaName + ">: failed execution of: " + scriptGateway);
+                System.out.println("(OpenFaaSRedisConfiguration.autoFillMissing) Auto-filling field openfaas_gateway with: autofilled-gateway");
+                openfaas_gateway = "autofilled-gateway";
+            } else {
+                openfaas_gateway = "http://" + gateway_ip.substring(1, gateway_ip.length() - 1) + ":31112";
+            }
         }
         if (openfaas_password == null)
             openfaas_password = "autofilled-password";
