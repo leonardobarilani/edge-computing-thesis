@@ -15,6 +15,15 @@ helm upgrade openfaas --install openfaas/openfaas \
   --namespace openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
+  --set operator.create=true \
+  --set operator.image=ghcr.io/openfaas/faas-netes:0.15.4 \
   --wait
-# For extra options, visit: 
-# https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/README.md#configuration 
+# For extra options, visit:
+# https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/README.md#configuration
+# now can do things like:
+# kubectl -n openfaas-fn get functions
+#Scale PODs up/down:
+ #```bash
+ #curl -d '{"serviceName":"KEK", "replicas": 1}' -X POST http://NODEIP:31112/system/scale-function/KEK
+ #```
+ #kubectl edit deployment/KEK -n openfaas-fn
