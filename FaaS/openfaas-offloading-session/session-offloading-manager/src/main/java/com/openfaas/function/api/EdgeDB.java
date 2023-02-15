@@ -1,18 +1,20 @@
 package com.openfaas.function.api;
 
 import com.google.gson.Gson;
-import com.openfaas.function.daos.RedisDAO;
+import com.openfaas.function.daos.RedisProxyDAO;
+import com.openfaas.function.daos.SessionsDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.openfaas.function.daos.RedisDAO.SESSIONS_DATA;
 import static java.util.Map.entry;
 
-public class EdgeDB extends RedisDAO {
+public class EdgeDB extends RedisProxyDAO {
 
     private static String sessionId;
-    private static final EdgeDB instance = new EdgeDB();
+    private static EdgeDB instance = new EdgeDB();
 
     private EdgeDB() {
         super(SESSIONS_DATA);
@@ -74,15 +76,25 @@ public class EdgeDB extends RedisDAO {
     }
 
     public static void delete(String key) {
+        System.out.println("(EdgeDB.delete) (sessionId: " + sessionId + ") Deleting with key: " + key);
         instance.hdel(sessionId, key);
     }
 
     static void setCurrentSession (String sessionId) {
+        instance = new EdgeDB();
         System.out.println("(EdgeDB.setCurrentSession) Current session id: " + sessionId);
         instance.sessionId = sessionId;
     }
 
+    static void sync() {
+        instance.syncRedis(instance.sessionId);
+    }
+
     private static class HList {
         List<String> list = new ArrayList<>();
+    }
+
+    public static String getCurrentVirtualLocation() {
+        return SessionsDAO.getSessionToken(instance.sessionId).proprietaryLocation;
     }
 }

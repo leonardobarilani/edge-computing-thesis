@@ -11,9 +11,9 @@ import java.util.Set;
 
 public abstract class RedisDAO extends StatefulDAO {
 
-    protected static final String CONFIGURATION = "0";
-    protected static final String SESSIONS = "1";
-    protected static final String SESSIONS_DATA = "2";
+    public static final String CONFIGURATION = "0";
+    public static final String SESSIONS = "1";
+    public static final String SESSIONS_DATA = "2";
 
     private final String url;
     private StatefulRedisConnection<String, String> connection;

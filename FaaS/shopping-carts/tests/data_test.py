@@ -7,7 +7,7 @@ class DataTest:
 	cart5 = "[kiwi, apple]"
 	cart6 = "[kiwi, apple, banana]"
 
-	test_function_1 = """Session <counter>: {"session":"counter","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"UNLOCKED"}
+	test_function_1 = """Session <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"UNLOCKED"}
 Offloading status: null
 Session data: {"session_data":[{"key":"kiwi","data":"2"},{"key":"apple","data":"2"},{"key":"banana","data":"2"}]}"""
 
@@ -15,6 +15,86 @@ Session data: {"session_data":[{"key":"kiwi","data":"2"},{"key":"apple","data":"
 	cart8 = "[kiwi, apple, banana, kiwi, apple]"
 	cart9 = "[kiwi, apple, banana, kiwi, apple, banana]"
 	
-	test_function_2 = """Session <counter>: {"session":"counter","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"UNLOCKED"}
+	test_function_2 = """Session <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"UNLOCKED"}
 Offloading status: null
 Session data: {"session_data":[{"key":"kiwi","data":"3"},{"key":"apple","data":"3"},{"key":"banana","data":"3"}]}"""
+
+class DataOffloadCart:
+	cart1 = "[kiwi]"
+
+	offload = """Offloading:
+k3d-p2
+{"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+
+	test1 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\"]}"}]}"""
+
+	cart2 = "[kiwi, banana]"
+
+	cart3 = "[kiwi, banana, apple]"
+
+	test2 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\",\\"banana\\",\\"apple\\"]}"}]}"""
+
+	onload = """Unloaded:
+Old session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"LOCKED"}
+New session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+
+	test3 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}
+Offloading status: accept
+Session data: <data_not_on_this_node>"""
+
+	cart4 = "[kiwi, banana, apple, orange]"
+
+	cart5 = "[kiwi, banana, apple, orange, pear]"
+
+class DataOffloadBoth:
+	cart1 = "[kiwi]"
+
+	offload1 = """Offloading:
+k3d-p2
+{"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+
+	offload2 = """Offloading:
+k3d-p1
+{"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"LOCKED"}"""
+
+	test1 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\"]}"}]}"""
+
+	test2 = """Session <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p1","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"kiwi","data":"1"}]}"""
+
+	cart2 = "[kiwi, banana]"
+
+	test3 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\",\\"banana\\"]}"}]}"""
+
+	test4 = """Session <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p1","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"kiwi","data":"1"},{"key":"banana","data":"1"}]}"""
+
+	onload1 = """Unloaded:
+Old session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2","status":"LOCKED"}
+New session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"LOCKED"}"""
+
+	onload2 = """Unloaded:
+Old session: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p1","status":"LOCKED"}
+New session: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"LOCKED"}"""
+
+	cart3 = "[kiwi, banana, orange]"
+
+	cart4 = "[kiwi, banana, orange, pear]"
+
+	test5 = """Session <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3","status":"UNLOCKED"}
+Offloading status: null
+Session data: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\",\\"banana\\",\\"orange\\",\\"pear\\"]}"}]}"""
+
+	test6 = """Session <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2","status":"UNLOCKED"}
+Offloading status: accept
+Session data: {"session_data":[{"key":"banana","data":"1"},{"key":"kiwi","data":"1"},{"key":"orange","data":"1"},{"key":"pear","data":"1"}]}"""

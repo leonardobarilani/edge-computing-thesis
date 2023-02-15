@@ -23,27 +23,25 @@ public class EdgeInfrastructureUtils {
     }
 
     // TODO this should be done once in the deployer by setting a PARENT_HOST env variable
-    public static String getParentHost() {
+    public static String getParentHost(String locationChild) {
         if (infrastructure == null) {
             String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
             infrastructure = new Gson().fromJson(json, Infrastructure.class);
         }
-        if (parentLocationHost == null) {
-            thisLocationName = System.getenv("LOCATION_ID");
-            getParentRecursive(infrastructure.hierarchy[0]);
-        }
+        thisLocationName = locationChild;
+        stopSearch = false;
+        getParentRecursive(infrastructure.hierarchy[0]);
         return parentLocationHost;
     }
 
-    public static String getParentLocationId() {
+    public static String getParentLocationId(String locationChild) {
         if (infrastructure == null) {
             String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
             infrastructure = new Gson().fromJson(json, Infrastructure.class);
         }
-        if (parentLocationHost == null) {
-            thisLocationName = System.getenv("LOCATION_ID");
-            getParentRecursive(infrastructure.hierarchy[0]);
-        }
+        thisLocationName = locationChild;
+        stopSearch = false;
+        getParentRecursive(infrastructure.hierarchy[0]);
         return parentLocationId;
     }
 

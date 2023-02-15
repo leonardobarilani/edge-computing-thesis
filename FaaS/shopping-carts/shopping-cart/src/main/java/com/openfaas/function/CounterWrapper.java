@@ -1,5 +1,6 @@
 package com.openfaas.function;
 
+import com.openfaas.function.api.EdgeDB;
 import com.openfaas.function.commands.wrappers.HTTPWrapper;
 import com.openfaas.function.commands.wrappers.Response;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
@@ -15,8 +16,12 @@ public class CounterWrapper extends HTTPWrapper {
 
     @Override
     public Response call() {
-        setGateway(EdgeInfrastructureUtils.getParentHost());
-        setHeader("X-session", "counter");
+        setGateway(EdgeInfrastructureUtils.getParentHost(
+                EdgeDB.getCurrentVirtualLocation()
+        ));
+        setHeader("X-session", "counter-" + EdgeInfrastructureUtils.getParentLocationId(
+                EdgeDB.getCurrentVirtualLocation()
+        ));
         setRemoteFunction("/function/products-counter?product=" + product);
 
         try {
