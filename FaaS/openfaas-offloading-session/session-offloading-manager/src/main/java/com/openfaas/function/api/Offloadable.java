@@ -81,6 +81,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
         EdgeDB.setCurrentSession(sessionId);
         IResponse res = HandleOffload(req);
+        EdgeDB.sync();
         SessionsDAO.unlockSession(sessionId);
 
         return res;
@@ -110,6 +111,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         if (SessionsDAO.lockSession(sessionId)) {
             EdgeDB.setCurrentSession(sessionId);
             res = HandleOffload(req);
+            EdgeDB.sync();
             SessionsDAO.unlockSession(sessionId);
         } else {
             System.out.println("(Offloadable) Session <" + sessionId + "> not available. Can't acquire the session's lock");

@@ -6,10 +6,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Hashtable;
 
-abstract class HTTPWrapper {
+public abstract class HTTPWrapper {
 
     private final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
+            .followRedirects(HttpClient.Redirect.NORMAL)
             .build();
     private final Hashtable<String, String> headers = new Hashtable<>();
     private String bodyPOST = null;
@@ -18,23 +19,23 @@ abstract class HTTPWrapper {
     private String gateway;
     private String remoteFunction;
 
-    void setBodyPOSTRequest(String body) {
+    protected void setBodyPOSTRequest(String body) {
         this.bodyPOST = body;
     }
 
-    void setGateway(String gateway) {
+    protected void setGateway(String gateway) {
         this.gateway = gateway;
     }
 
-    void setRemoteFunction(String remoteFunction) {
+    protected void setRemoteFunction(String remoteFunction) {
         this.remoteFunction = remoteFunction;
     }
 
-    void setHeader(String key, String value) {
+    protected void setHeader(String key, String value) {
         headers.put(key, value);
     }
 
-    void get() throws Exception {
+    protected void get() throws Exception {
         String uri = gateway + remoteFunction;
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
@@ -61,7 +62,7 @@ abstract class HTTPWrapper {
         System.out.println("(HTTPWrapper.get) \tBody: " + body);
     }
 
-    void post() throws Exception {
+    protected void post() throws Exception {
         String uri = gateway + remoteFunction;
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()

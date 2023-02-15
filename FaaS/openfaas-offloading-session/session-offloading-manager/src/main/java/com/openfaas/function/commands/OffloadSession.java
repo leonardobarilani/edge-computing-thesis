@@ -28,13 +28,13 @@ public class OffloadSession implements ICommand {
         } else {
             // offload redirected to parent
             System.out.println("Offloading not accepted");
-            System.out.println("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentLocationId() + "\n\t" + sessionJson);
+            System.out.println("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")) + "\n\t" + sessionJson);
 
             // call parent node to offload the session
             SessionToken sessionToOffload = SessionToken.Builder.buildFromJSON(sessionJson);
 
             new WrapperOffloadSession()
-                    .gateway(EdgeInfrastructureUtils.getParentHost())
+                    .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
                     .sessionToOffload(sessionToOffload)
                     .call();
         }

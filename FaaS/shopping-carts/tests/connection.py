@@ -23,16 +23,31 @@ class Connection:
         self.__ip = os.popen(self.__ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
 
     def __retry_if_connection_error(exception):
+        print ("Connection error: " + str(ConnectionError))
         return isinstance(exception, ConnectionError)
 
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
     def post(self, openfaas_fn: str, data: str, headers: dict={}):
         response = requests.post('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers, data=data)
-        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC)
+        if response.history:
+            print(bcolors.WARNING + "Request was redirected")
+            for resp in response.history:
+                print(resp.status_code, resp.url)
+            print("Final destination:")
+            print(response.status_code, response.url, bcolors.ENDC)
+        print()
         return str(response.content, "utf-8")
         
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
     def get(self, openfaas_fn: str, headers: dict={}):
         response = requests.get('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers)
-        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC)
+        if response.history:
+            print(bcolors.WARNING + "Request was redirected")
+            for resp in response.history:
+                print(resp.status_code, resp.url)
+            print("Final destination:")
+            print(response.status_code, response.url, bcolors.ENDC)
+        print()
         return str(response.content, "utf-8")
