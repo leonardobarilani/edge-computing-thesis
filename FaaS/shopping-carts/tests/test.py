@@ -15,10 +15,10 @@ assert Data.cart4 == con3.get('shopping-cart?product=kiwi', headers={'X-session'
 assert Data.cart5 == con3.get('shopping-cart?product=apple', headers={'X-session':session2})
 assert Data.cart6 == con3.get('shopping-cart?product=banana', headers={'X-session':session2})
 
-assert Data.test_function_1 == con2.get('session-offloading-manager?command=test-function&session='+session3)
+assert Data.test_function_1 == con2.get('session-offloading-manager?command=test-function&type=session&value='+session3)
 
 assert Data.cart7 == con3.get('shopping-cart?product=kiwi', headers={'X-session':session2})
 assert Data.cart8 == con3.get('shopping-cart?product=apple', headers={'X-session':session2})
 assert Data.cart9 == con3.get('shopping-cart?product=banana', headers={'X-session':session2})
 
-assert Data.test_function_2 == con2.get('session-offloading-manager?command=test-function&session='+session3)
+assert Data.test_function_2 == con2.get('session-offloading-manager?command=test-function&type=session&value='+session3)
