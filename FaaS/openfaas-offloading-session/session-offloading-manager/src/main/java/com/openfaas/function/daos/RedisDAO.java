@@ -209,9 +209,7 @@ public abstract class RedisDAO extends StatefulDAO {
     }
 
     protected Long exists(String key) {
-        System.out.println("Pre open connection");
         RedisCommands<String, String> syncCommands = openConnection();
-        System.out.println("Post open connection");
 
         Long returnValue = null;
         if (key != null) {
