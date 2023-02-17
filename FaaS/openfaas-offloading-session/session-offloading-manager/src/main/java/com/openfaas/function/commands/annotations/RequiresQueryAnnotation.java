@@ -3,25 +3,31 @@ package com.openfaas.function.commands.annotations;
 import com.openfaas.function.commands.annotations.exceptions.QueryRequiredException;
 import com.openfaas.model.IRequest;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 public class RequiresQueryAnnotation {
 
     public static void verify(Object object, IRequest req) throws QueryRequiredException {
         Class<?> clazz = object.getClass();
-        if (clazz.isAnnotationPresent(RequiresQuery.class)) {
-            String requiredQuery = clazz.getAnnotation(RequiresQuery.class).query();
-            if (req.getQuery().get(requiredQuery) == null)
-                throw new QueryRequiredException("Missing query <" + requiredQuery + "> in request");
+        RequiresQuery[] requiresQueries = clazz.getAnnotationsByType(RequiresQuery.class);
+        for (RequiresQuery requiredQuery : requiresQueries) {
+            String query = requiredQuery.query();
+            if (req.getQuery().get(query) == null) {
+                throw new QueryRequiredException("Missing query <" + query + "> in request");
+            }
         }
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
+    @Repeatable(RequiresQueries.class)
     public @interface RequiresQuery {
         String query();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface RequiresQueries {
+        RequiresQuery[] value();
     }
 }

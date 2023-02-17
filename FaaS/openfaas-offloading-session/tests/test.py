@@ -18,4 +18,4 @@ assert Data.set_offload_status == con.get('session-offloading-manager?command=se
 
 time.sleep(1)
 
-assert Data.test_function == con.get('session-offloading-manager?command=test-function&session=' + session)
+assert Data.test_function == con.get('session-offloading-manager?command=test-function&type=session&value=' + session)
