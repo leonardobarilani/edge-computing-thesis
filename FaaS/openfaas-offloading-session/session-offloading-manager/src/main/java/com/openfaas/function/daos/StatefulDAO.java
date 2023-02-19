@@ -28,5 +28,5 @@ public abstract class StatefulDAO {
 
     abstract Long hlen(String key);
 
-    abstract boolean eval(String script, String accessedKey, String scriptArgument);
+    abstract boolean eval(String script, String[] accessedKey, String ... scriptArgument);
 }

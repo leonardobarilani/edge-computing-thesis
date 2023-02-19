@@ -3,6 +3,7 @@ package com.openfaas.function.commands;
 import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
+import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
@@ -57,14 +58,14 @@ public class OnloadSession implements ICommand {
         List<String> subNodes = EdgeInfrastructureUtils.getLocationsSubTree(location);
         List<String> localSessionsIds = SessionsDataDAO.getAllSessionsIds();
         for (var session : localSessionsIds) {
-            if (!SessionsDAO.lockSession(session))
+            if (!SessionsLocksDAO.lockSession(session))
                 continue;
             SessionToken token = SessionsDAO.getSessionToken(session);
             if (subNodes.contains(token.proprietaryLocation)) {
                 onloadedSession = token;
                 break;
             }
-            SessionsDAO.unlockSession(session);
+            SessionsLocksDAO.unlockSession(session);
         }
 
         if (onloadedSession == null) {
@@ -83,7 +84,7 @@ public class OnloadSession implements ICommand {
 
 
     private boolean releaseLock (IResponse res, String session) {
-        if (!SessionsDAO.unlockSession(session))
+        if (!SessionsLocksDAO.unlockSession(session))
         {
             System.out.println("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);

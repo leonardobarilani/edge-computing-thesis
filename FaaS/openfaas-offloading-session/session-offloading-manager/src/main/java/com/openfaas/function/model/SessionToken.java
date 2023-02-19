@@ -7,7 +7,6 @@ public class SessionToken {
     public String session;
     public String proprietaryLocation;
     public String currentLocation;
-    public Status status;
 
     public SessionToken() {
     }
@@ -16,7 +15,6 @@ public class SessionToken {
         session = sessionName;
         proprietaryLocation = System.getenv("LOCATION_ID");
         currentLocation = System.getenv("LOCATION_ID");
-        status = Status.LOCKED;
         return this;
     }
 
@@ -26,22 +24,11 @@ public class SessionToken {
 
     public enum Fields {
         PROPRIETARY_LOCATION("PROPRIETARY_LOCATION"),
-        CURRENT_LOCATION("CURRENT_LOCATION"),
-        STATUS("STATUS");
+        CURRENT_LOCATION("CURRENT_LOCATION");
         final String field;
 
         Fields(String field) {
             this.field = field;
-        }
-    }
-
-    public enum Status {
-        LOCKED("LOCKED"),
-        UNLOCKED("UNLOCKED");
-        final String status;
-
-        Status(String status) {
-            this.status = status;
         }
     }
 
@@ -56,7 +43,6 @@ public class SessionToken {
             copySessionToken.session = sessionToken.session;
             copySessionToken.currentLocation = sessionToken.currentLocation;
             copySessionToken.proprietaryLocation = sessionToken.proprietaryLocation;
-            copySessionToken.status = sessionToken.status;
             return copySessionToken;
         }
     }
