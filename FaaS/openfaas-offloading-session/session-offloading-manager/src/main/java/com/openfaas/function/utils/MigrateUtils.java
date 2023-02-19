@@ -47,9 +47,6 @@ public class MigrateUtils {
                 .sessionToUpdate(sessionToken)
                 .call();
 
-        // release the lock now that the session is completely migrated and updated
-        SessionsDAO.unlockSession(sessionToken.session);
-
         return sessionToken;
     }
 }

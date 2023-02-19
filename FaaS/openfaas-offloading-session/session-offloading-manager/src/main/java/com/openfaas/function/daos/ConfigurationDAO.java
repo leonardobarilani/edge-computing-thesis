@@ -10,10 +10,8 @@ public class ConfigurationDAO extends RedisDAO {
         static String REJECT = "reject";
     }
 
-    private static class CreatingSessionLock {
-        static String CREATING_SESSION_LOCK = "creating_session_lock";
-        static String LOCKED = "locked";
-        static String UNLOCKED = "unlocked";
+    private static class ExpirationTime {
+        static String SESSIONS_EXPIRATION_TIME = "sessions_expiration_time";
     }
 
     private static final ConfigurationDAO instance = new ConfigurationDAO();
@@ -34,40 +32,12 @@ public class ConfigurationDAO extends RedisDAO {
         return instance.get(OffloadingPolicy.OFFLOADING);
     }
 
-    public static boolean lockCreatingSession(){
-        String script =
-                "if redis.call('get', '" + CreatingSessionLock.CREATING_SESSION_LOCK + "') == '" + CreatingSessionLock.UNLOCKED + "' then " +
-                        "redis.call('set', '" + CreatingSessionLock.CREATING_SESSION_LOCK + "', '" + CreatingSessionLock.LOCKED + "') ; " +
-                        "return true " +
-                "else " +
-                        "return false " +
-                "end";
-        boolean returnValue = false;
-        returnValue = instance.eval(script, CreatingSessionLock.CREATING_SESSION_LOCK, null);
-        if (returnValue) {
-            System.out.println("(ConfigurationDAO.lockCreatingSession) Acquired lock to create a session");
-        } else {
-            System.out.println("(ConfigurationDAO.lockCreatingSession) Was not able to acquire lock to create a session");
-        }
-        return returnValue;
+    public static void setSessionsExpirationTime(long time) {
+        instance.set(ExpirationTime.SESSIONS_EXPIRATION_TIME, Long.toString(time));
     }
 
-    public static boolean unlockCreatingSession(){
-        String script =
-                "if redis.call('get', '" + CreatingSessionLock.CREATING_SESSION_LOCK + "') == '" + CreatingSessionLock.LOCKED + "' then " +
-                        "redis.call('set', '" + CreatingSessionLock.CREATING_SESSION_LOCK + "', '" + CreatingSessionLock.UNLOCKED + "') ; " +
-                        "return true " +
-                "else " +
-                        "return false " +
-                "end";
-        boolean returnValue = false;
-        returnValue = instance.eval(script, CreatingSessionLock.CREATING_SESSION_LOCK, null);
-        if (returnValue) {
-            System.out.println("(ConfigurationDAO.unlockCreatingSession) Released lock to create a session");
-        } else {
-            System.out.println("(ConfigurationDAO.unlockCreatingSession) Was not able to release");
-        }
-        return returnValue;
+    public static long getSessionsExpirationTime() {
+        return Long.parseLong(instance.get(ExpirationTime.SESSIONS_EXPIRATION_TIME));
     }
 
     public static void addReceivingFunction(String function) {

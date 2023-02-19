@@ -86,8 +86,8 @@ public class EdgeDB extends RedisProxyDAO {
         instance.sessionId = sessionId;
     }
 
-    static void sync() {
-        instance.syncRedis(instance.sessionId);
+    static Map<String, String> getCache() {
+        return instance.getLocalCache();
     }
 
     private static class HList {

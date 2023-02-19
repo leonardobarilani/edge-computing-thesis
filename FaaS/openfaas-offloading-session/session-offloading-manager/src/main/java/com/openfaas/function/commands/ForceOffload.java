@@ -3,6 +3,7 @@ package com.openfaas.function.commands;
 import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.commands.wrappers.WrapperOffloadSession;
 import com.openfaas.function.daos.SessionsDAO;
+import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
 import com.openfaas.model.IRequest;
@@ -59,7 +60,7 @@ public class ForceOffload implements ICommand {
     }
 
     private boolean acquireLock (IResponse res, String session) {
-        if (!SessionsDAO.lockSession(session))
+        if (!SessionsLocksDAO.lockSession(session))
         {
             System.out.println("Cannot acquire lock on session <" + session + ">");
             res.setStatusCode(400);
@@ -70,7 +71,7 @@ public class ForceOffload implements ICommand {
     }
 
     private boolean releaseLock (IResponse res, String session) {
-        if (!SessionsDAO.unlockSession(session))
+        if (!SessionsLocksDAO.unlockSession(session))
         {
             System.out.println("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);

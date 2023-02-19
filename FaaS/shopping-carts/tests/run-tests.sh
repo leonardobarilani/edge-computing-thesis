@@ -4,6 +4,7 @@ COMPLETE_CLEAN=$SCRIPT_PATH/complete-clean.txt
 OFFLOADING_REJECT=$SCRIPT_PATH/offloading-reject.txt
 OFFLOADING_NULL=$SCRIPT_PATH/offloading-null.txt
 OFFLOADING_ACCEPT=$SCRIPT_PATH/offloading-accept.txt
+DEFAULT_CONFIG=$SCRIPT_PATH/default-config.txt
 SIMPLE_TEST=$SCRIPT_PATH/test.py
 OFFLOAD_CART=$SCRIPT_PATH/test_offload_cart.py
 OFFLOAD_BOTH=$SCRIPT_PATH/test_offload_both.py
@@ -13,8 +14,10 @@ OFFLOAD_BOTH=$SCRIPT_PATH/test_offload_both.py
 countdown "Loading data for SIMPLE_TEST (Requires 2 nodes)"
 with_context k3d-p3
 execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
 with_context k3d-p2
 execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
 
 # Execute test
 countdown "Executing SIMPLE_TEST (Requires 2 nodes)"
@@ -28,9 +31,10 @@ echo End Simple Test
 countdown "Loading data for OFFLOAD_CART (Requires 2 nodes)"
 with_context k3d-p3
 execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
 with_context k3d-p2
 execute_redis_commands $COMPLETE_CLEAN
-execute_redis_commands $OFFLOADING_ACCEPT
+execute_redis_commands $DEFAULT_CONFIG
 
 # Execute test
 countdown "Executing OFFLOAD_CART (Requires 2 nodes)"
@@ -44,12 +48,13 @@ echo End Offload Cart Test
 countdown "Loading data for OFFLOAD_BOTH (Requires 3 nodes)"
 with_context k3d-p3
 execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
 with_context k3d-p2
 execute_redis_commands $COMPLETE_CLEAN
-execute_redis_commands $OFFLOADING_ACCEPT
+execute_redis_commands $DEFAULT_CONFIG
 with_context k3d-p1
 execute_redis_commands $COMPLETE_CLEAN
-execute_redis_commands $OFFLOADING_ACCEPT
+execute_redis_commands $DEFAULT_CONFIG
 
 # Execute test
 countdown "Executing OFFLOAD_BOTH (Requires 3 nodes)"

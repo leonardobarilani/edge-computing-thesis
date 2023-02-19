@@ -2,9 +2,11 @@ package com.openfaas.function.daos;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.ScriptOutputType;
+import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +16,7 @@ public abstract class RedisDAO extends StatefulDAO {
     public static final String CONFIGURATION = "0";
     public static final String SESSIONS = "1";
     public static final String SESSIONS_DATA = "2";
+    public static final String SESSIONS_LOCKS = "3";
 
     private final String url;
     private StatefulRedisConnection<String, String> connection;
@@ -234,16 +237,28 @@ public abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    boolean eval(String script, String accessedKey, String scriptArgument) {
+    boolean eval(String script, String[] accessedKey, String ... scriptArgument) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         System.out.println("(RedisDAO.eval) Redis eval:");
         System.out.println("(RedisDAO.eval) Script: " + script);
-        System.out.println("(RedisDAO.eval) AccessedKey: " + accessedKey);
-        System.out.println("(RedisDAO.eval) ScriptArgument: " + scriptArgument);
-        boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, new String[]{ accessedKey }, scriptArgument);
+        System.out.println("(RedisDAO.eval) AccessedKeys: " + Arrays.toString(accessedKey));
+        System.out.println("(RedisDAO.eval) ScriptArguments: " + Arrays.toString(scriptArgument));
+        boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, accessedKey, scriptArgument);
 
         closeConnection();
         return returnObject;
+    }
+
+    void setIfNotExists(String key, String value, long timeout) {
+        RedisCommands<String, String> syncCommands = openConnection();
+
+        SetArgs args = new SetArgs();
+        args.nx();
+        args.ex(timeout);
+        System.out.println("(RedisDAO.setIfNotExists) Redis set: " + key + ", " + value + ", " + timeout);
+        syncCommands.set(key, value, args);
+
+        closeConnection();
     }
 }
