@@ -20,3 +20,6 @@ $DEPLOY session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery d
 $DEPLOY session-offloading-manager-migrate-session $SCRIPTS_PATH/infrastructure.json --inEvery district --inAreas k3d-p1 --faas-cli "--label com.openfaas.scale.min=1"
 $DEPLOY session-offloading-manager-update-session $SCRIPTS_PATH/infrastructure.json --inEvery district --inAreas k3d-p1 --faas-cli "--label com.openfaas.scale.min=1"
 
+kubectl --context k3d-p1 wait deployment session-offloading-manager session-offloading-manager-migrate-session -n openfaas-fn --for condition=Available=True --timeout=180s
+kubectl --context k3d-p3 wait deployment session-offloading-manager session-offloading-manager-update-session session-offloading-manager-migrate-session -n openfaas-fn --for condition=Available=True --timeout=180s
+kubectl --context k3d-p2 wait deployment session-offloading-manager session-offloading-manager-update-session session-offloading-manager-migrate-session -n openfaas-fn --for condition=Available=True --timeout=180s
