@@ -3,14 +3,14 @@ provider:
   name: openfaas
 functions:
   products-counter:
-    lang: java11
+    lang: java17
     handler: ./shopping-cart
     image: k3d-docker-io.localhost:5000/shopping-cart:latest
     labels:
       com.openfaas.scale.min: 1
       com.openfaas.scale.max: 1
   shopping-cart:
-    lang: java11
+    lang: java17
     handler: ./shopping-cart
     image: k3d-docker-io.localhost:5000/shopping-cart:latest
     labels:
