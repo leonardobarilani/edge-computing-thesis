@@ -8,29 +8,20 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-// Since we are using openfaas' template java11, we have to make sure the compiler uses the correct java version
-targetCompatibility = '11'
-sourceCompatibility = '11'
+// Since we are using openfaas' template java17, we have to make sure the compiler uses the correct java version
+targetCompatibility = '17'
+sourceCompatibility = '17'
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:23.0'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
-
-    compile 'com.openfaas:model:0.1.1'
-    compile 'com.openfaas:entrypoint:0.1.0'
-
-    // README: apparently using 'implementation' breaks the
-    // function that use those libraries, so 'compile' its advised
-    // Gson dependency
-    compile 'com.google.code.gson:gson:2.9.0'
+    api 'com.openfaas:model:0.1.1'
+    api 'com.openfaas:entrypoint:0.1.0'
+    api 'com.google.code.gson:gson:2.9.0'
     // Lettuce dependency
-    compile 'io.lettuce:lettuce-core:latest.release'
+    api 'io.lettuce:lettuce-core:latest.release'
+    testImplementation 'junit:junit:4.12'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -49,7 +40,7 @@ repositories {
 jar {
     manifest {
         attributes 'Implementation-Title': 'OpenFaaS Function',
-                'Implementation-Version': '1.0'
+                   'Implementation-Version': '1.0'
     }
 }
 
@@ -59,16 +50,17 @@ distributions {
         contents {
             from jar
             into('lib') {
-                from(project.configurations.runtime)
+                from(project.configurations.runtimeClasspath)
             }
         }
     }
 }
-
-uploadArchives {
+publishing {
     repositories {
-        flatDir {
-            dirs 'repos'
-        }
+       flatDir {
+           dirs 'repos'
+       }
     }
 }
+
+
