@@ -5,7 +5,7 @@ plugins {
     id 'distribution'
 
     // Allows the creation of a uber-jar (Tasks -> shadow -> shadowJar) to ship all the dependencies
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 // Since we are using openfaas' template java17, we have to make sure the compiler uses the correct java version
