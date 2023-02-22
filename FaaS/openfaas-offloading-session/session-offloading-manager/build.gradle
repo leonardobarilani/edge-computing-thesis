@@ -1,6 +1,7 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'maven-publish'
     id 'distribution'
 
     // Allows the creation of a uber-jar (Tasks -> shadow -> shadowJar) to ship all the dependencies
