@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Handler extends com.openfaas.model.AbstractHandler {
-    static Map<String, ICommand> commands;
+    private static Map<String, ICommand> commands;
 
     public Handler() {
         commands = new HashMap<>();
@@ -76,7 +76,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             return commands.get(command);
         } else {
             String message = "Unrecognized command: " + command + "\nAvailable commands: " + commands.keySet();
-            System.out.println(message);
+            System.err.println(message);
             res.setBody(message);
             res.setStatusCode(404);
             return null;
