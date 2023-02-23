@@ -89,6 +89,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
         Response res = new Response();
         res.setStatusCode(307);
+        res.setBody("307 Session is remote. Location: " + redirectUrl);
         res.setHeader("Location", redirectUrl);
         return res;
     }
