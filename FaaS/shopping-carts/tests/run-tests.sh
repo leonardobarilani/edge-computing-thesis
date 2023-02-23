@@ -8,6 +8,8 @@ DEFAULT_CONFIG=$SCRIPT_PATH/default-config.txt
 SIMPLE_TEST=$SCRIPT_PATH/test.py
 OFFLOAD_CART=$SCRIPT_PATH/test_offload_cart.py
 OFFLOAD_BOTH=$SCRIPT_PATH/test_offload_both.py
+STRESS=$SCRIPT_PATH/test_stress.py
+OFFLOAD_STRESS=$SCRIPT_PATH/test_stress_offloading.py
 
 # ----------- BEGIN SIMPLE TEST -----------
 # Load data
@@ -62,4 +64,35 @@ python3 $OFFLOAD_BOTH || exit 1
 
 echo End Offload Both Test
 # ----------- END OFFLOAD BOTH TEST -----------
+
+# ----------- BEGIN STRESS TEST -----------
+# Load data
+countdown "Loading data for STRESS (Requires 1 node)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+
+# Execute test
+countdown "Executing STRESS (Requires 1 node)"
+python3 $STRESS || exit 1
+
+echo End Stress Test
+# ----------- END STRESS TEST -----------
+
+# ----------- BEGIN OFFLOAD STRESS TEST -----------
+# Load data
+countdown "Loading data for OFFLOAD STRESS (Requires 2 nodes)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+with_context k3d-p2
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+
+# Execute test
+countdown "Executing OFFLOAD STRESS (Requires 2 nodes)"
+python3 $OFFLOAD_STRESS || exit 1
+
+echo End Offload Stress Test
+# ----------- END OFFLOAD STRESS TEST -----------
 
