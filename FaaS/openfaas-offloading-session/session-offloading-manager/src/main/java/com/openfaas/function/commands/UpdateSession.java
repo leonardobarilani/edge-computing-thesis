@@ -42,7 +42,7 @@ public class UpdateSession implements ICommand {
             SessionsDAO.setSessionToken(SessionToken.Builder.buildFromJSON(sessionJson));
 
             String message = "Session updated:\n\t" +
-                    oldSession + " -> " + sessionJson;
+                    oldSession.getJson() + " -> " + sessionJson;
 
             System.out.println(message);
             res.setBody(message);
