@@ -1,7 +1,8 @@
 package com.openfaas.function.daos;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SessionsLocksDAO extends RedisDAO {
 
@@ -20,7 +21,13 @@ public class SessionsLocksDAO extends RedisDAO {
     public static boolean lockSession(String sessionId) {
         boolean returnValue = false;
         if (sessionId != null) {
-            String randomValue = Long.toString(ThreadLocalRandom.current().nextLong());
+            String randomValue = null;
+            try {
+                randomValue = String.valueOf(SecureRandom.getInstanceStrong().nextLong());
+            } catch (NoSuchAlgorithmException e) {
+                System.out.println("(SessionsLocksDAO.lockSession) Cannot create a random value");
+                throw new RuntimeException(e);
+            }
             instance.randomValue = randomValue;
             instance.setIfNotExists(sessionId, randomValue, ConfigurationDAO.getSessionsExpirationTime());
 
