@@ -11,6 +11,8 @@ import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.Response;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,11 +61,13 @@ public class Handler extends com.openfaas.model.AbstractHandler {
                 }
             }
         } catch (Exception e) {
-            String message = "500 Internal server error\n";
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTrace = sw.toString();
+            String message = "500 Internal server error\n Stack trace: " + stackTrace;
+            System.out.println(message);
             res.setBody(message);
             res.setStatusCode(500);
-            System.out.println(message);
-            e.printStackTrace();
         }
         System.out.println("----------END NEW COMMAND----------\n\n");
 	    return res;
