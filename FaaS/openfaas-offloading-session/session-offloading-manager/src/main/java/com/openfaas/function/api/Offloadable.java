@@ -16,22 +16,24 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         try {
             String sessionId = checkSessionHeader(req, res);
             if (sessionId != null) {
-                System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
-                SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
-                if (sessionToken == null) {
-                    System.out.println("(Offloadable) Session does not exists. Creating new session with sessionId <" + sessionId + ">");
-                    // We are in the proprietary location, we create the session
-                    res = handleNewSession(req, sessionId);
-                } else {
-                    System.out.println("(Offloadable) Session exists. Detecting if locally or offloaded...");
-                    if (!sessionToken.currentLocation.equals(System.getenv("LOCATION_ID"))) {
-                        // CurrentLocation doesn't match with this location, we have to perform a redirect
-                        System.out.println("(Offloadable) Session exists but it is offloaded. About to redirect the request...");
-                        res = handleRemoteSession(req, sessionToken);
+                if (acquireLock(sessionId, res)) {
+                    System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
+                    SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
+                    if (sessionToken == null) {
+                        System.out.println("(Offloadable) Session does not exists. Creating new session with sessionId <" + sessionId + ">");
+                        // We are in the proprietary location, we create the session
+                        res = handleNewSession(req, sessionId);
                     } else {
-                        // Session exist and it is in this location
-                        System.out.println("(Offloadable) Session exists and it is local. About to handle the request...");
-                        res = handleLocalSession(req, sessionId);
+                        System.out.println("(Offloadable) Session exists. Detecting if locally or offloaded...");
+                        if (!sessionToken.currentLocation.equals(System.getenv("LOCATION_ID"))) {
+                            // CurrentLocation doesn't match with this location, we have to perform a redirect
+                            System.out.println("(Offloadable) Session exists but it is offloaded. About to redirect the request...");
+                            res = handleRemoteSession(req, sessionToken);
+                        } else {
+                            // Session exist and it is in this location
+                            System.out.println("(Offloadable) Session exists and it is local. About to handle the request...");
+                            res = handleLocalSession(req, sessionId);
+                        }
                     }
                 }
             }
@@ -54,31 +56,38 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         }
         return sessionId;
     }
-    
-    private IResponse handleNewSession (IRequest req, String sessionId) {
-        IResponse res;
-        if (SessionsLocksDAO.lockSession(sessionId)) {
-            SessionToken sessionToken = new SessionToken();
-            sessionToken.init(sessionId);
 
-            System.out.println("(Offloadable) New session created: \n\t" + sessionToken.getJson());
-
-            SessionsDAO.setSessionToken(sessionToken);
-
-            System.out.println("(Offloadable) Session saved in Redis");
-            res = handle(req, sessionId);
-        } else {
+    private boolean acquireLock(String sessionId, IResponse res) {
+        if (!SessionsLocksDAO.lockSession(sessionId)) {
             System.out.println("(Offloadable) Session <" + sessionId + "> not available. Can't acquire the session's lock");
-            res = new Response();
             res.setStatusCode(503);
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
             res.setHeader("Retry-After", "5");
             res.setBody("503 Session <" + sessionId + "> not available");
+            return false;
         }
+        return true;
+    }
+
+    private IResponse handleNewSession (IRequest req, String sessionId) {
+        IResponse res;
+
+        SessionToken sessionToken = new SessionToken();
+        sessionToken.init(sessionId);
+
+        System.out.println("(Offloadable) New session created: \n\t" + sessionToken.getJson());
+
+        SessionsDAO.setSessionToken(sessionToken);
+
+        System.out.println("(Offloadable) Session saved in Redis");
+        res = handle(req, sessionId);
+
         return res;
     }
     
     private IResponse handleRemoteSession (IRequest req, SessionToken sessionToken) {
+        SessionsLocksDAO.unlockSession(sessionToken.session);
+
         String redirectUrl =
                 EdgeInfrastructureUtils.getGateway(sessionToken.currentLocation) +
                         "/function/" +
@@ -96,16 +105,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
     
     private IResponse handleLocalSession (IRequest req, String sessionId) {
         IResponse res;
-        if (SessionsLocksDAO.lockSession(sessionId)) {
-            res = handle(req, sessionId);
-        } else {
-            System.out.println("(Offloadable) Session <" + sessionId + "> not available. Can't acquire the session's lock");
-            res = new Response();
-            res.setStatusCode(503);
-            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
-            res.setHeader("Retry-After", "5");
-            res.setBody("503 Session <" + sessionId + "> not available");
-        }
+        res = handle(req, sessionId);
         return res;
     }
 
