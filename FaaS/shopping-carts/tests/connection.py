@@ -40,7 +40,7 @@ class Connection:
         return str(response.content, "utf-8")
         
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
-    def get(self, openfaas_fn: str, headers: dict={}):
+    def get(self, openfaas_fn: str, headers: dict={}) -> (str, int):
         response = requests.get('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers)
         print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC)
         if response.history:
@@ -50,4 +50,4 @@ class Connection:
             print("Final destination:")
             print(response.status_code, response.url, bcolors.ENDC)
         print()
-        return str(response.content, "utf-8")
+        return str(response.content, "utf-8"), response.status_code

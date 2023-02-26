@@ -50,8 +50,10 @@ public class ForceOnload implements ICommand {
 
         releaseLock(res, sessionId);
 
+        String oldSession = SessionToken.Builder.buildFromJSON(sessionJson).getJsonLocationsOnly();
+
         res.setStatusCode(200);
-        res.setBody("Unloaded:\nOld session: " + sessionJson + "\nNew session: " + newSession.getJson());
+        res.setBody("Unloaded:\nOld session: " + oldSession + "\nNew session: " + newSession.getJsonLocationsOnly());
     }
 
     private boolean acquireLock (IResponse res, String session) {

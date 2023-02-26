@@ -26,6 +26,9 @@ public class TestFunction implements ICommand {
             case "sessionMetadata":
                 testSessionMetadata(valueRequested, res);
                 break;
+            case "sessionMetadataLocations":
+                testSessionMetadataLocations(valueRequested, res);
+                break;
             case "sessionData":
                 testSessionData(valueRequested, res);
                 break;
@@ -33,7 +36,7 @@ public class TestFunction implements ICommand {
                 testSession(valueRequested, res);
                 break;
             default:
-                testDefault(typeRequested, res);
+                error(typeRequested, res);
         }
     }
 
@@ -55,6 +58,15 @@ public class TestFunction implements ICommand {
         res.setStatusCode(200);
     }
 
+    private void testSessionMetadataLocations(String sessionId, IResponse res) {
+        String message =
+                "Session metadata <" + sessionId + ">: " + getSessionTokenLocations(sessionId) + "\n";
+
+        System.out.println(message);
+        res.setBody(message);
+        res.setStatusCode(200);
+    }
+
     private void testSessionData(String sessionId, IResponse res) {
         String message =
                 "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
@@ -66,7 +78,7 @@ public class TestFunction implements ICommand {
 
     private void testSession(String sessionId, IResponse res) {
         String message =
-                "Session metadata <" + sessionId + ">: " + getSessionToken(sessionId) + "\n" +
+                "Session metadata <" + sessionId + ">: " + getSessionTokenLocations(sessionId) + "\n" +
                 "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
 
         System.out.println(message);
@@ -74,7 +86,7 @@ public class TestFunction implements ICommand {
         res.setStatusCode(200);
     }
 
-    private void testDefault(String type, IResponse res) {
+    private void error(String type, IResponse res) {
         String message = "Type <" + type + "> is not valid.\n";
         System.out.println(message);
         res.setBody(message);
@@ -83,11 +95,19 @@ public class TestFunction implements ICommand {
 
     private String getSessionToken(String sessionId) {
         SessionToken token = SessionsDAO.getSessionToken(sessionId);
-        String data;
         if (token == null) {
             return "<session_not_present_in_this_node>";
         } else {
             return token.getJson();
+        }
+    }
+
+    private String getSessionTokenLocations(String sessionId) {
+        SessionToken token = SessionsDAO.getSessionToken(sessionId);
+        if (token == null) {
+            return "<session_not_present_in_this_node>";
+        } else {
+            return token.getJsonLocationsOnly();
         }
     }
 }

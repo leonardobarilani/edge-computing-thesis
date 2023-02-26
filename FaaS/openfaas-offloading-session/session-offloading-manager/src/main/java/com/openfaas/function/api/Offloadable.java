@@ -113,6 +113,8 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         IResponse res;
         EdgeDB.setCurrentSession(sessionId);
         res = HandleOffload(req);
+        // The access time is updated regardless of a successful update of the data
+        SessionsDAO.updateAccessTimestampToNow(sessionId);
         SessionsLocksDAO.unlockSessionAndUpdateData(sessionId, EdgeDB.getCache());
         return res;
     }
