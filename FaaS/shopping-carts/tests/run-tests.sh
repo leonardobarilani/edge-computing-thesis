@@ -10,6 +10,7 @@ OFFLOAD_CART=$SCRIPT_PATH/test_offload_cart.py
 OFFLOAD_BOTH=$SCRIPT_PATH/test_offload_both.py
 STRESS=$SCRIPT_PATH/test_stress.py
 OFFLOAD_STRESS=$SCRIPT_PATH/test_stress_offloading.py
+UPDATE_ACCESS_TIMESTAMP_TEST=$SCRIPT_PATH/test_update_access_timestamp.py
 
 # ----------- BEGIN SIMPLE TEST -----------
 # Load data
@@ -27,6 +28,20 @@ python3 $SIMPLE_TEST || exit 1
 
 echo End Simple Test
 # ----------- END SIMPLE TEST -----------
+
+# ----------- BEGIN UPDATE ACCESS TIMESTAMP TEST -----------
+# Load data
+countdown "Loading data for UPDATE_ACCESS_TIMESTAMP_TEST (Requires 1 node)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+
+# Execute test
+countdown "Executing UPDATE_ACCESS_TIMESTAMP_TEST (Requires 1 node)"
+python3 $UPDATE_ACCESS_TIMESTAMP_TEST || exit 1
+
+echo End Update Access Timestamp Test
+# ----------- END UPDATE ACCESS TIMESTAMP TEST -----------
 
 # ----------- BEGIN OFFLOAD CART TEST -----------
 # Load data

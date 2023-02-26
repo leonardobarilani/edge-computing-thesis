@@ -16,7 +16,7 @@ for product in range(0, products_count):
 
 # ------------- 2/3 - Send requests to populate sessions -------------
 def request(req: dict) -> str:
-    return con3.get('shopping-cart?product=' + req["product"], headers={'X-session': req["session"]})
+    return con3.get('shopping-cart?product=' + req["product"], headers={'X-session': req["session"]})[0]
 
 with ThreadPoolExecutor(max_workers=threads) as executor:
     future_to_url = {executor.submit(request, req) for req in requests}
@@ -29,6 +29,6 @@ with ThreadPoolExecutor(max_workers=threads) as executor:
 
 # ------------- 3/3 - Assert correctness of sessions -------------
 for session in range(0, sessions_count):
-    cart = con3.get('session-offloading-manager?command=test-function&type=sessionData&value=session-' + str(session))
+    cart = con3.get('session-offloading-manager?command=test-function&type=sessionData&value=session-' + str(session))[0]
     for product in range(0, products_count):
-        assert 'product-' + str(session) + '-' + str(product) in cart
+        assert '\\"product-' + str(session) + '-' + str(product) + '\\"' in cart

@@ -40,7 +40,9 @@ public class ForceOffload implements ICommand {
         System.out.println("Session token about to be offloaded: " + sessionToOffload.getJson());
 
         // call parent node to offload the session
-        String message = "Offloading:\n" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")) + "\n" + sessionToOffload.getJson();
+        String message = "Offloading:\n" +
+                EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")) + "\n" +
+                sessionToOffload.getJsonLocationsOnly();
         new WrapperOffloadSession()
                 .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
                 .sessionToOffload(sessionToOffload)

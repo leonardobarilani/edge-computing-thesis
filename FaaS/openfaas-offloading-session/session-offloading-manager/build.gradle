@@ -18,10 +18,11 @@ dependencies {
 
     api 'com.openfaas:model:0.1.1'
     api 'com.openfaas:entrypoint:0.1.0'
-    api 'com.google.code.gson:gson:2.9.0'
-    // Lettuce dependency
-    api 'io.lettuce:lettuce-core:latest.release'
     testImplementation 'junit:junit:4.12'
+
+    api 'com.google.code.gson:gson:2.9.0'
+    api 'io.lettuce:lettuce-core:latest.release'
+    implementation 'joda-time:joda-time:2.10.13'
 }
 
 // In this section you declare where to find the dependencies of your project
