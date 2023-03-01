@@ -9,6 +9,14 @@ functions:
     labels:
       com.openfaas.scale.min: 1
       com.openfaas.scale.max: 1
+    environment:
+      # 1073741824 bytes = 1 GB
+      OFFLOAD_TOP_THRESHOLD: 1073741824
+      # 943718400 bytes = 900 MB
+      OFFLOAD_BOTTOM_THRESHOLD: 943718400
+      # 524288000 bytes = 500 MB
+      ONLOAD_THRESHOLD: 524288000 
+
   session-offloading-manager-update-session:
     lang: java17
     handler: ./session-offloading-manager
