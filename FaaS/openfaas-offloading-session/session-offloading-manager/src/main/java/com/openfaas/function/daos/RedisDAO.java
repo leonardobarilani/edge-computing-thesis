@@ -261,4 +261,14 @@ public abstract class RedisDAO extends StatefulDAO {
 
         closeConnection();
     }
+
+    long memoryUsage(String sessionId) {
+        RedisCommands<String, String> syncCommands = openConnection();
+
+        long returnValue = syncCommands.memoryUsage(sessionId);
+
+        closeConnection();
+
+        return returnValue;
+    }
 }

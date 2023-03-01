@@ -48,4 +48,8 @@ public class SessionsDataDAO extends RedisDAO {
     public static List<String> getAllSessionsIds() {
         return instance.getAllKeys();
     }
+
+    public static long getMemoryUsage(String sessionId) {
+        return instance.memoryUsage(sessionId);
+    }
 }
