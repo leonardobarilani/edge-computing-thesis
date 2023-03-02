@@ -13,6 +13,7 @@ else
 	echo
 	echo Entry point for $1:
 	echo http://"$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}" --context $1)":31112
+	export OPENFAAS_URL=http://$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"):31112
 	echo
 fi
 
