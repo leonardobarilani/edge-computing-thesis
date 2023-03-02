@@ -1,0 +1,53 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+    id 'maven-publish'
+    id 'distribution'
+}
+
+dependencies {
+    api 'com.openfaas:model:0.1.1'
+    api 'com.openfaas:entrypoint:0.1.0'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testCompileOnly 'junit:junit:4.12'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.2'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+
+    flatDir {
+        dirs '../libs'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'OpenFaaS Function',
+                   'Implementation-Version': '1.0'
+    }
+}
+
+
+distributions {
+    main {
+        contents {
+            from jar
+            into('lib') {
+                from(project.configurations.runtimeClasspath)
+            }
+        }
+    }
+}
+
+publishing {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+

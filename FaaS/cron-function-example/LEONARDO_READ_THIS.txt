@@ -1,0 +1,4 @@
+Basta aggiungere quelle due righe allo stack.yaml per rendere le funzioni cron.
+Devi rideployare openfaas su tutti i nodi, ho aggiunto il componente cron-connector all' helm install
+ALSO, aggiorna il mio template java17 dove lo usi (visto che l hai messo nel gitignore e non posso aggiornarlo io per te)
+eseguendo il mio script template-java17.sh che avevo messo nella cartella openfaas-offloading-session
