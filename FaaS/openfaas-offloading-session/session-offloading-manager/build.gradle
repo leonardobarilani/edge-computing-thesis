@@ -49,7 +49,7 @@ distributions {
     main {
         contents {
             from jar
-            into('lib') {
+            into('libs') {
                 from(project.configurations.runtimeClasspath)
             }
         }
