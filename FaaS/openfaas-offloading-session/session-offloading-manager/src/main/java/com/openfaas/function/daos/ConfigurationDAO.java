@@ -14,6 +14,12 @@ public class ConfigurationDAO extends RedisDAO {
         static String SESSIONS_EXPIRATION_TIME = "sessions_expiration_time";
     }
 
+    private static class OffloadingThreshold {
+        static String OFFLOAD_TOP_THRESHOLD = "offload_top_threshold";
+        static String OFFLOAD_BOTTOM_THRESHOLD = "offload_bottom_threshold";
+        static String ONLOAD_THRESHOLD = "onload_threshold";
+    }
+
     private static final ConfigurationDAO instance = new ConfigurationDAO();
 
     private ConfigurationDAO() {
@@ -38,6 +44,30 @@ public class ConfigurationDAO extends RedisDAO {
 
     public static long getSessionsExpirationTime() {
         return Long.parseLong(instance.get(ExpirationTime.SESSIONS_EXPIRATION_TIME));
+    }
+
+    public static void setOffloadTopThreshold(long bytes) {
+        instance.set(OffloadingThreshold.OFFLOAD_TOP_THRESHOLD, Long.toString(bytes));
+    }
+
+    public static void setOffloadBottomThreshold(long bytes) {
+        instance.set(OffloadingThreshold.OFFLOAD_BOTTOM_THRESHOLD, Long.toString(bytes));
+    }
+
+    public static void setOnloadThreshold(long bytes) {
+        instance.set(OffloadingThreshold.ONLOAD_THRESHOLD, Long.toString(bytes));
+    }
+
+    public static long getOffloadTopThreshold() {
+        return Long.parseLong(instance.get(OffloadingThreshold.OFFLOAD_TOP_THRESHOLD));
+    }
+
+    public static long getOffloadBottomThreshold() {
+        return Long.parseLong(instance.get(OffloadingThreshold.OFFLOAD_BOTTOM_THRESHOLD));
+    }
+
+    public static long getOnloadThreshold() {
+        return Long.parseLong(instance.get(OffloadingThreshold.ONLOAD_THRESHOLD));
     }
 
     public static void addReceivingFunction(String function) {

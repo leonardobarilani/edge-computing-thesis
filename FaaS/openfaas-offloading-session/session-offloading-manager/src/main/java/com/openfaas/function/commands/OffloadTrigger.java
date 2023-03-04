@@ -1,5 +1,6 @@
 package com.openfaas.function.commands;
 
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
@@ -8,12 +9,9 @@ import com.openfaas.model.IResponse;
 import com.openfaas.model.Request;
 import com.openfaas.model.Response;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class OffloadManager implements ICommand {
+public class OffloadTrigger implements ICommand {
 
     /*
      * sessionsPerMemory and sessionsPerAccessTimestamp should
@@ -21,30 +19,33 @@ public class OffloadManager implements ICommand {
      * dumping the whole metadata db
      */
 
-    HashMap<String, SessionToken> sessions = new HashMap<>();
+    HashMap<String, SessionToken> sessions;
     // TODO implement as a maxheap
-    HashMap<Long, List<String>> sessionsPerMemory = new HashMap<>();
+    HashMap<Long, List<String>> sessionsPerMemory;
     // TODO implement as a minheap
-    HashMap<String, List<String>> sessionsPerAccessTimestamp = new HashMap<>();
+    HashMap<String, List<String>> sessionsPerAccessTimestamp;
     long usedMemory;
-
 
     /*
      * Top threshold triggers the offload process.
      * When the bottom threshold is reached,
      * the offload process can stop.
      */
-    // TODO move these env variables in the ConfigDAO (aka move them in redis)
-    long offloadTopThreshold = Long.parseLong(System.getenv("OFFLOAD_TOP_THRESHOLD"));
-    long offloadBottomThreshold = Long.parseLong(System.getenv("OFFLOAD_BOTTOM_THRESHOLD"));
+    long offloadTopThreshold;
+    long offloadBottomThreshold;
     /*
      * Onload threshold triggers the onload process.
      * We just onload 1 session per triggered onload process
      * (aka every time the cron job execute this function)
      */
-    long onloadThreshold = Long.parseLong(System.getenv("ONLOAD_THRESHOLD"));
+    long onloadThreshold;
 
     public void Handle(IRequest req, IResponse res) {
+        // returnValue == 0: nothing happened
+        // returnValue == -1: a session has been onloaded
+        // returnValue > 0: number of offloaded bytes
+        long returnValue = 0;
+
         populateData();
 
         System.out.println("Current status: \n" +
@@ -54,19 +55,28 @@ public class OffloadManager implements ICommand {
                 "OnloadThreshold: " + onloadThreshold);
         if (usedMemory >= offloadTopThreshold) {
             System.out.println("Triggered offload");
-            manageOffload();
+            returnValue = manageOffload();
         } else if (usedMemory <= onloadThreshold) {
             System.out.println("Triggered onload");
             manageOnload();
+            returnValue = -1;
         } else {
             System.out.println("Node is healthy, nothing is triggered");
         }
+        res.setBody(Long.toString(returnValue));
+        res.setStatusCode(200);
     }
     
     private void populateData() {
-        List<String> sessionsKeys = SessionsDataDAO.getAllSessionsIds();
-
+        sessions = new HashMap<>();
+        sessionsPerMemory = new HashMap<>();
+        sessionsPerAccessTimestamp = new HashMap<>();
         usedMemory = 0;
+        offloadTopThreshold = ConfigurationDAO.getOffloadTopThreshold();
+        offloadBottomThreshold = ConfigurationDAO.getOffloadBottomThreshold();
+        onloadThreshold = ConfigurationDAO.getOnloadThreshold();
+
+        List<String> sessionsKeys = SessionsDataDAO.getAllSessionsIds();
 
         for(var sessionId : sessionsKeys) {
             SessionToken session = SessionsDAO.getSessionToken(sessionId);
@@ -78,7 +88,9 @@ public class OffloadManager implements ICommand {
                 var list = sessionsPerMemory.get(memoryUsage);
                 list.add(sessionId);
             } else {
-                sessionsPerMemory.put(memoryUsage, List.of(sessionId));
+                List list = new ArrayList();
+                list.add(sessionId);
+                sessionsPerMemory.put(memoryUsage, list);
             }
 
             // add to total memory counter
@@ -90,18 +102,20 @@ public class OffloadManager implements ICommand {
                 var list = sessionsPerAccessTimestamp.get(accessTimestamp);
                 list.add(sessionId);
             } else {
-                sessionsPerAccessTimestamp.put(accessTimestamp, List.of(sessionId));
+                List list = new ArrayList();
+                list.add(sessionId);
+                sessionsPerAccessTimestamp.put(accessTimestamp, list);
             }
         }
     }
 
-    private void manageOffload () {
+    private long manageOffload() {
         long freedMemory = 0;
         long memoryCurrentSession = 0;
         List<String> sessionsToBeOffloaded = new ArrayList<>();
 
         // offload sessions until we have freed enough space
-        while(usedMemory - freedMemory <= offloadBottomThreshold) {
+        while(usedMemory - freedMemory >= offloadBottomThreshold) {
 
             // find the sessions with the highest memory consumption
             if (sessionsToBeOffloaded.isEmpty()) {
@@ -113,11 +127,12 @@ public class OffloadManager implements ICommand {
             // offload just the first session in the list
             // (we check the condition of the loop for every single offloaded session)
             String sessionToOffload = sessionsToBeOffloaded.get(0);
+            sessionsToBeOffloaded.remove(0);
             freedMemory += memoryCurrentSession;
             // TODO spawn a process to handle the offload instead of blocking this function
             // TODO this is very ugly. force-onload and force-offload
             //  should be decoupled from the http logic
-            //  (eg: ForceOffloadHandler, ForceOffloadService)
+            //  (eg: ForceOffloadHttpHandler, ForceOffloadService)
             new ForceOffload()
                     .Handle(
                             new Request(
@@ -126,13 +141,30 @@ public class OffloadManager implements ICommand {
                             ),
                             new Response()
                     );
+
+            // clean the offloaded session from the local metadata
+            sessionsPerMemory
+                    .get(memoryCurrentSession)
+                    .remove(sessionToOffload);
+            if(sessionsPerMemory.get(memoryCurrentSession).isEmpty())
+                sessionsPerMemory.remove(memoryCurrentSession);
+
+            String sessionLastAccess = sessions.get(sessionToOffload).timestampLastAccess;
+            sessionsPerAccessTimestamp
+                    .get(sessionLastAccess)
+                    .remove(sessionToOffload);
+            if(sessionsPerAccessTimestamp.get(sessionLastAccess).isEmpty())
+                sessionsPerAccessTimestamp.remove(sessionLastAccess);
+
+            sessions.remove(sessionToOffload);
         }
+        return freedMemory;
     }
 
-    private void manageOnload () {
+    private void manageOnload() {
         // TODO this is very ugly. force-onload and force-offload
         //  should be decoupled from the http logic
-        //  (eg: ForceOffloadHandler, ForceOffloadService)
+        //  (eg: ForceOffloadHttpHandler, ForceOffloadService)
         new ForceOnload().Handle(new Request(null, null), new Response());
     }
 }

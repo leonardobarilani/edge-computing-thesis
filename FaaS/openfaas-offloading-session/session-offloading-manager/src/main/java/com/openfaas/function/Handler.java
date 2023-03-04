@@ -31,7 +31,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
         commands.put("onload-session", new OnloadSession());
         commands.put("update-session", new UpdateSession());
         commands.put("migrate-session", new MigrateSession());
-        commands.put("offload-manager", new OffloadManager());
+        commands.put("offload-trigger", new OffloadTrigger());
 
         // Debug API
         commands.put("test-function", new TestFunction());
