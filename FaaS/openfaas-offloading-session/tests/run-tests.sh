@@ -3,14 +3,18 @@ source $(dirname $BASH_SOURCE)/script-utils.sh
 COMPLETE_CLEAN=$SCRIPT_PATH/complete-clean.txt
 CREATE_SESSION_P2=$SCRIPT_PATH/create-session-p2.txt
 CREATE_SESSION_P3=$SCRIPT_PATH/create-session-p3.txt
+SESSIONS_TRIGGER_TEST=$SCRIPT_PATH/sessions-trigger-test.txt
 OFFLOADING_REJECT=$SCRIPT_PATH/offloading-reject.txt
 OFFLOADING_ACCEPT=$SCRIPT_PATH/offloading-accept.txt
 OFFLOADING_NULL=$SCRIPT_PATH/offloading-null.txt
 DEFAULT_CONFIG=$SCRIPT_PATH/default-config.txt
+TRIGGER_CONFIG=$SCRIPT_PATH/trigger-config.txt
+TRIGGER_ONLOAD_CONFIG=$SCRIPT_PATH/trigger-onload-config.txt
 SIMPLE_TEST=$SCRIPT_PATH/test.py
 OFFLOAD_TEST=$SCRIPT_PATH/test_offload.py
 ONLOAD_TEST=$SCRIPT_PATH/test_onload.py
 CHAIN_TEST=$SCRIPT_PATH/test_chain.py
+TRIGGER_TEST=$SCRIPT_PATH/test_trigger.py
 
 # ----------- BEGIN SIMPLE TEST -----------
 # Load data
@@ -65,7 +69,7 @@ echo End Onload Test
 
 # ----------- BEGIN CHAIN TEST -----------
 # Load data
-countdown "Loading data for CHAIN_TEST (Requires 3 node)"
+countdown "Loading data for CHAIN_TEST (Requires 3 nodes)"
 with_context k3d-p3
 execute_redis_commands $COMPLETE_CLEAN
 execute_redis_commands $DEFAULT_CONFIG
@@ -79,9 +83,26 @@ execute_redis_commands $COMPLETE_CLEAN
 execute_redis_commands $DEFAULT_CONFIG
 
 # Execute test
-countdown "Executing CHAIN_TEST (Requires 3 node)"
+countdown "Executing CHAIN_TEST (Requires 3 nodes)"
 python3 $CHAIN_TEST || exit 1
 
 echo End Chain Test
 # ----------- END CHAIN TEST -----------
 
+# ----------- BEGIN TRIGGER TEST -----------
+# Load data
+countdown "Loading data for TRIGGER_TEST (Requires 2 nodes)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $TRIGGER_CONFIG
+execute_redis_commands $SESSIONS_TRIGGER_TEST
+with_context k3d-p2
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+
+# Execute test
+countdown "Executing TRIGGER_TEST (Requires 2 nodes)"
+python3 $TRIGGER_TEST || exit 1
+
+echo End Trigger Test
+# ----------- END TRIGGER TEST -----------
