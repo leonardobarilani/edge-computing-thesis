@@ -29,7 +29,7 @@ public class SessionsLocksDAO extends RedisDAO {
                 throw new RuntimeException(e);
             }
             instance.randomValue = randomValue;
-            instance.setIfNotExists(sessionId, randomValue, ConfigurationDAO.getSessionsExpirationTime());
+            instance.setIfNotExists(sessionId, randomValue, ConfigurationDAO.getSessionsLocksExpirationTime());
 
             String checkRandomKey = instance.get(sessionId);
             returnValue = checkRandomKey.equals(instance.randomValue);
