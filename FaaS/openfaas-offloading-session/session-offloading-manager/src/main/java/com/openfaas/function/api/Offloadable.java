@@ -124,7 +124,15 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         res = HandleOffload(req);
         // The access time is updated regardless of a successful update of the data
         SessionsDAO.updateAccessTimestampToNow(sessionId);
-        SessionsLocksDAO.unlockSessionAndUpdateData(sessionId, EdgeDB.getCache());
+
+        // If the unlocking or the saving of data is unsuccessful, return failure
+        if(!SessionsLocksDAO.unlockSessionAndUpdateData(sessionId, EdgeDB.getCache())) {
+            String message = "423 Locked: can't release lock and/or can't save data on redis";
+            res = new Response();
+            res.setStatusCode(423);
+            res.setBody(message);
+            System.out.println(message);
+        }
         return res;
     }
 }
