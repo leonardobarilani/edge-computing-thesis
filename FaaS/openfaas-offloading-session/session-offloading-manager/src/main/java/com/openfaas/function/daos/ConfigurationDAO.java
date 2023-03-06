@@ -10,8 +10,8 @@ public class ConfigurationDAO extends RedisDAO {
         static String REJECT = "reject";
     }
 
-    private static class ExpirationTime {
-        static String SESSIONS_EXPIRATION_TIME = "sessions_expiration_time";
+    private static class SessionsLocksExpirationTime {
+        static String SESSIONS_LOCKS_EXPIRATION_TIME = "sessions_locks_expiration_time";
     }
 
     private static class OffloadingThreshold {
@@ -38,12 +38,12 @@ public class ConfigurationDAO extends RedisDAO {
         return instance.get(OffloadingPolicy.OFFLOADING);
     }
 
-    public static void setSessionsExpirationTime(long time) {
-        instance.set(ExpirationTime.SESSIONS_EXPIRATION_TIME, Long.toString(time));
+    public static void setSessionsLocksExpirationTime(long time) {
+        instance.set(SessionsLocksExpirationTime.SESSIONS_LOCKS_EXPIRATION_TIME, Long.toString(time));
     }
 
-    public static long getSessionsExpirationTime() {
-        return Long.parseLong(instance.get(ExpirationTime.SESSIONS_EXPIRATION_TIME));
+    public static long getSessionsLocksExpirationTime() {
+        return Long.parseLong(instance.get(SessionsLocksExpirationTime.SESSIONS_LOCKS_EXPIRATION_TIME));
     }
 
     public static void setOffloadTopThreshold(long bytes) {

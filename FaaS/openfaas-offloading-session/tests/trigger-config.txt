@@ -1,6 +1,6 @@
 select 0
 set offloading accept
-set sessions_expiration_time 3600
+set sessions_locks_expiration_time 3600
 set offload_top_threshold 300
 set offload_bottom_threshold 1
 set onload_threshold 0
