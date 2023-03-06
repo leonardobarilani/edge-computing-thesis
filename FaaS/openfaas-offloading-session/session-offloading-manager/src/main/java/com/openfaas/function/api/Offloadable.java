@@ -8,6 +8,9 @@ import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.Response;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
     public IResponse Handle(IRequest req) {
@@ -38,7 +41,13 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTrace = sw.toString();
+            String message = "500 Internal server error\n Stack trace: " + stackTrace;
+            System.out.println(message);
+            res.setBody(message);
+            res.setStatusCode(500);
         }
         System.out.println("--------END OFFLOADABLE--------");
         return res;
