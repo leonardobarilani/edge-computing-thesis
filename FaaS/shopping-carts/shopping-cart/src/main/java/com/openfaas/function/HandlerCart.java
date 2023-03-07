@@ -17,10 +17,14 @@ public class HandlerCart {
             EdgeDB.addToList("products", newProduct);
             System.out.println("Propagating: " + newProduct);
 
+            res.setStatusCode(200);
+
             new CounterWrapper()
                     .product(newProduct)
                     .call();
             // db.propagate(newProduct, "city", "products-counter");
+        } else {
+            res.setStatusCode(500);
         }
         String currentCart = EdgeDB.getList("products").toString();
         res.setBody(currentCart);
