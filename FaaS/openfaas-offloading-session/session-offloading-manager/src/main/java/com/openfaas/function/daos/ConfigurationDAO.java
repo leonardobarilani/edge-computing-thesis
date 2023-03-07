@@ -14,6 +14,10 @@ public class ConfigurationDAO extends RedisDAO {
         static String SESSIONS_LOCKS_EXPIRATION_TIME = "sessions_locks_expiration_time";
     }
 
+    private static class SessionsDataExpirationTime {
+        static String SESSIONS_DATA_EXPIRATION_TIME = "sessions_data_expiration_time";
+    }
+
     private static class OffloadingThreshold {
         static String OFFLOAD_TOP_THRESHOLD = "offload_top_threshold";
         static String OFFLOAD_BOTTOM_THRESHOLD = "offload_bottom_threshold";
@@ -44,6 +48,14 @@ public class ConfigurationDAO extends RedisDAO {
 
     public static long getSessionsLocksExpirationTime() {
         return Long.parseLong(instance.get(SessionsLocksExpirationTime.SESSIONS_LOCKS_EXPIRATION_TIME));
+    }
+
+    public static void setSessionsDataExpirationTime(long time) {
+        instance.set(SessionsDataExpirationTime.SESSIONS_DATA_EXPIRATION_TIME, Long.toString(time));
+    }
+
+    public static long getSessionsDataExpirationTime() {
+        return Long.parseLong(instance.get(SessionsDataExpirationTime.SESSIONS_DATA_EXPIRATION_TIME));
     }
 
     public static void setOffloadTopThreshold(long bytes) {

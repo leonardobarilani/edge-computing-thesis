@@ -15,6 +15,7 @@ OFFLOAD_TEST=$SCRIPT_PATH/test_offload.py
 ONLOAD_TEST=$SCRIPT_PATH/test_onload.py
 CHAIN_TEST=$SCRIPT_PATH/test_chain.py
 TRIGGER_TEST=$SCRIPT_PATH/test_trigger.py
+GARBAGE_COLLECTOR_TEST=$SCRIPT_PATH/test_garbage_collector.py
 
 # ----------- BEGIN SIMPLE TEST -----------
 # Load data
@@ -31,6 +32,21 @@ python3 $SIMPLE_TEST || exit 1
 echo End Simple Test
 # ----------- END SIMPLE TEST -----------
 
+# ----------- BEGIN GARBAGE COLLECTOR TEST -----------
+# Load data
+countdown "Loading data for GARBAGE_COLLECTOR_TEST (Requires 1 node)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+execute_redis_commands $CREATE_SESSION_P3
+
+# Execute test
+countdown "Executing GARBAGE_COLLECTOR_TEST (Requires 1 node)"
+python3 $GARBAGE_COLLECTOR_TEST || exit 1
+
+echo End Garbage Collector Test
+# ----------- END GARBAGE COLLECTOR TEST -----------
+exit 1
 # ----------- BEGIN OFFLOAD TEST -----------
 # Load data
 countdown "Loading data for OFFLOAD_TEST (Requires 2 node)"
