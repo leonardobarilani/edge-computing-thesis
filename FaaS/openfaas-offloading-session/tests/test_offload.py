@@ -1,17 +1,3 @@
-# Test:
-# Offload a session and access it succesfully
-
-# API calls:
-# p3 test-session
-# p2 test-session
-# p3 force-offload
-# (p2 offload-session)
-# (p3 update-session)
-# (p3 migrate-session)
-# p3 test-session
-# p2 test-session
-
-
 import time
 
 from connection import Connection

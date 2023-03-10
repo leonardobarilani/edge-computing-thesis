@@ -1,3 +1,4 @@
+import uuid
 import concurrent
 import time
 import random
@@ -30,7 +31,7 @@ def request(req: dict) -> str:
         res = 0
         while res != 200:
             time.sleep(delay_between_products_ms / 1000)
-            res = con3.get('shopping-cart?product=' + req['product'], headers={'X-session': req['session']})[1]
+            res = con3.get('shopping-cart?product=' + req['product'], headers={'X-session': req['session'],'X-session-request-id':str(uuid.uuid4())})[1]
     else:
         for _ in range(0, offloads_count):
             res = 0
@@ -43,7 +44,7 @@ def request(req: dict) -> str:
             con3.get('session-offloading-manager?command=force-onload')
 
 for session in range(0, sessions_count):
-    con3.get('shopping-cart?product=init', headers={'X-session': "session-" + str(session)})
+    con3.get('shopping-cart?product=init', headers={'X-session': "session-" + str(session),'X-session-request-id':str(uuid.uuid4())})
 
 print("Starting " + str(threads_count) + " threads")
 with ThreadPoolExecutor(max_workers=threads_count) as executor:
@@ -76,10 +77,12 @@ for session in range(0, sessions_count):
     for product in range(0, products_count):
         tested_value = '\\"product-' + str(session) + '-' + str(product) + '\\"'
         print("Tested value: " + tested_value)
-        if carts[session].count(tested_value) != 1:
+        count = carts[session].count(tested_value)
+        if count != 1:
             duplicated_data = True
-            print("^^^ Duplicated value ^^^")
+            print("^^^ Duplicated or missing value (count = "+str(count)+") ^^^")
 if duplicated_data:
     print("Found some duplicated values")
+    assert False
 else:
     print("No duplicated values found")

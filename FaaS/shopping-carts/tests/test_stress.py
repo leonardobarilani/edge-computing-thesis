@@ -1,3 +1,4 @@
+import uuid
 import concurrent
 from concurrent.futures import ThreadPoolExecutor
 from connection import Connection
@@ -16,7 +17,8 @@ for product in range(0, products_count):
 
 # ------------- 2/3 - Send requests to populate sessions -------------
 def request(req: dict) -> str:
-    return con3.get('shopping-cart?product=' + req["product"], headers={'X-session': req["session"]})[0]
+    return con3.get('shopping-cart?product=' + req["product"], 
+        headers={'X-session': req["session"],'X-session-request-id':str(uuid.uuid4())})[0]
 
 with ThreadPoolExecutor(max_workers=threads) as executor:
     future_to_url = {executor.submit(request, req) for req in requests}

@@ -49,13 +49,16 @@ public class SessionsLocksDAO extends RedisDAO {
      * @param sessionId
      * @return
      */
-    public static boolean unlockSessionAndUpdateData(String sessionId, Map<String, String> data) {
+    public static boolean unlockSessionAndUpdateData(String sessionId, Map<String, String> data, String requestId) {
         // ARGV[1] = sessionId
         // ARGV[2] = randomValue
+        // ARGV[3] = requestId
         final String scriptBegin =
                 "redis.call('select', '" + RedisDAO.SESSIONS_LOCKS + "'); \n" +
                 "if redis.call('get', ARGV[1]) == ARGV[2] then \n" +
                         "redis.call('del', ARGV[1]) ; \n" +
+                        "redis.call('select', '" + RedisDAO.SESSIONS_REQUESTS + "') ; \n" +
+                        "redis.call('sadd', ARGV[1], ARGV[3]) ; \n" +
                         "redis.call('select', '" + RedisDAO.SESSIONS_DATA + "'); \n";
         final String scriptEnd =
                         "return true \n" +
@@ -69,7 +72,7 @@ public class SessionsLocksDAO extends RedisDAO {
                     .reduce("", (subtotal, element) -> subtotal + element);
             String script = scriptBegin + mapAsHsets + scriptEnd;
 
-            returnValue = instance.eval(script, new String[]{sessionId}, sessionId, randomValue);
+            returnValue = instance.eval(script, new String[]{sessionId}, sessionId, randomValue, requestId);
             if (returnValue) {
                 System.out.println("(SessionsLocksDAO.unlockSessionAndUpdateData) Released lock on session <" + sessionId + ">");
             } else {

@@ -17,6 +17,8 @@ public abstract class RedisDAO extends StatefulDAO {
     public static final String SESSIONS = "1";
     public static final String SESSIONS_DATA = "2";
     public static final String SESSIONS_LOCKS = "3";
+    // IDs to identify each request and guarantee client consistency
+    public static final String SESSIONS_REQUESTS = "4";
 
     private final String url;
     private StatefulRedisConnection<String, String> connection;
@@ -82,11 +84,11 @@ public abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void sadd(String key, String value) {
+    void sadd(String key, String ... value) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
-            System.out.println("(RedisDAO.sadd) Redis sadd with key, value: " + key + ", " + value);
+            System.out.println("(RedisDAO.sadd) Redis sadd with key, value: " + key + ", " + Arrays.toString(value));
             syncCommands.sadd(key, value);
         }
 
@@ -100,6 +102,7 @@ public abstract class RedisDAO extends StatefulDAO {
         if (key != null) {
             System.out.println("(RedisDAO.smembers) Redis smembers with key: " + key);
             returnValue = syncCommands.smembers(key);
+            System.out.println("(RedisDAO.smembers) Members: " + returnValue);
         }
 
         closeConnection();

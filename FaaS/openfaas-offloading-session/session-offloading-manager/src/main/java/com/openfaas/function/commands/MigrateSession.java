@@ -2,25 +2,48 @@ package com.openfaas.function.commands;
 
 import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.SessionsDataDAO;
+import com.openfaas.function.daos.SessionsRequestsDAO;
 import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
 @RequiresQueryAnnotation.RequiresQuery(query = "session")
+@RequiresQueryAnnotation.RequiresQuery(query = "data-type")
 public class MigrateSession implements ICommand {
 
     @Override
     public void Handle(IRequest req, IResponse res) {
 
         String sessionId = req.getQuery().get("session");
+        String dataType = req.getQuery().get("data-type");
 
         System.out.println("About to migrate Session Id: " + sessionId);
 
-        SessionData data = SessionsDataDAO.getSessionData(sessionId);
+        if(dataType.equals("sessionData")) {
+            System.out.println("Migrating session data");
 
-        res.setBody(data.toJSON());
-        res.setStatusCode(200);
+            SessionData data = SessionsDataDAO.getSessionData(sessionId);
 
-        SessionsDataDAO.deleteSessionData(sessionId);
+            res.setBody(data.toJSON());
+            res.setStatusCode(200);
+
+            SessionsDataDAO.deleteSessionData(sessionId);
+        } else if(dataType.equals("requestIds")) {
+            System.out.println("Migrating session request ids");
+
+            String data = SessionsRequestsDAO.getSessionRequests(sessionId).toString();
+            data = data.substring(1, data.length() - 1);
+            data = data.replaceAll(" ", "");
+
+            res.setBody(data);
+            res.setStatusCode(200);
+
+            // TODO fare una query nel link per distinguere cosa stai migrando (data/requestsid)
+            // TODO aggiornare i tests
+
+            SessionsRequestsDAO.deleteSessionRequest(sessionId);
+        } else {
+
+        }
     }
 }
