@@ -6,6 +6,7 @@ import com.openfaas.function.commands.wrappers.WrapperMigrateSession;
 import com.openfaas.function.commands.wrappers.WrapperUpdateSession;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
+import com.openfaas.function.daos.SessionsRequestsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.model.sessiondata.SessionData;
 
@@ -26,19 +27,28 @@ public class MigrateUtils {
         // save new json object in redis
         SessionsDAO.setSessionToken(sessionToken);
 
-        // TODO maybe replace this code with https://redis.io/commands/migrate/
-        // migrate data from the location that has the session data, to this node
+        // (1/3) prepare for migration of data from the location that has the session data, to this node
         String fromLocation = EdgeInfrastructureUtils.getGateway(migrateFrom);
         String sessionToMigrate = sessionToken.session;
         System.out.println("Migrating session from:\n\t" + fromLocation);
 
-        Response response = new WrapperMigrateSession()
+        // (2/3) migrate session data
+        Response responseSessionData = new WrapperMigrateSession()
                 .gateway(fromLocation)
                 .sessionToMigrate(sessionToMigrate)
+                .typeSessionData()
                 .call();
+        SessionData sessionData = new Gson().fromJson(responseSessionData.getBody(), SessionData.class);
+        SessionsDataDAO.setSessionData(sessionToMigrate, sessionData);
 
-        SessionData data = new Gson().fromJson(response.getBody(), SessionData.class);
-        SessionsDataDAO.setSessionData(sessionToMigrate, data);
+        // (3/3) migrate request ids
+        Response responseRequestIds = new WrapperMigrateSession()
+                .gateway(fromLocation)
+                .sessionToMigrate(sessionToMigrate)
+                .typeRequestIds()
+                .call();
+        String[] requestIds = responseRequestIds.getBody().trim().split("\\s*,\\s*");
+        SessionsRequestsDAO.addSessionRequests(sessionToMigrate, requestIds);
 
         // send new json object to proprietaryLocation
         System.out.println("Updating proprietary:\n\t" + sessionToken.proprietaryLocation + "\n\t" + sessionToken.getJson());

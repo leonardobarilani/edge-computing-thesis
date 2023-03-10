@@ -3,6 +3,7 @@ package com.openfaas.function.commands.wrappers;
 public class WrapperMigrateSession extends HTTPWrapper {
 
     private String sessionToMigrate;
+    private String typeOfMigrate;
 
     public WrapperMigrateSession() {
         super();
@@ -18,9 +19,22 @@ public class WrapperMigrateSession extends HTTPWrapper {
         return this;
     }
 
+    public WrapperMigrateSession typeSessionData() {
+        this.typeOfMigrate = "sessionData";
+        return this;
+    }
+
+    public WrapperMigrateSession typeRequestIds() {
+        this.typeOfMigrate = "requestIds";
+        return this;
+    }
+
     @Override
     public Response call() {
-        setRemoteFunction("/function/session-offloading-manager-migrate-session?command=migrate-session&session=" + sessionToMigrate);
+        setRemoteFunction("/function/session-offloading-manager-migrate-session?" +
+                "command=migrate-session&" +
+                "session=" + sessionToMigrate + "&" +
+                "data-type=" + typeOfMigrate);
 
         try {
             get();

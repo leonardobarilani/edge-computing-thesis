@@ -46,7 +46,7 @@ python3 $GARBAGE_COLLECTOR_TEST || exit 1
 
 echo End Garbage Collector Test
 # ----------- END GARBAGE COLLECTOR TEST -----------
-exit 1
+
 # ----------- BEGIN OFFLOAD TEST -----------
 # Load data
 countdown "Loading data for OFFLOAD_TEST (Requires 2 node)"

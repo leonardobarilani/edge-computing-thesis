@@ -12,7 +12,7 @@ public abstract class StatefulDAO {
 
     abstract List<String> getAllKeys();
 
-    abstract void sadd(String key, String value);
+    abstract void sadd(String key, String ... value);
 
     abstract Set<String> smembers(String key);
 

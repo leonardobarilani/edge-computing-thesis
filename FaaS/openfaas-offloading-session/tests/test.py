@@ -1,10 +1,3 @@
-# Test:
-# Change offload status and test a session
-
-# API calls:
-# p3 set-offload-status
-# p3 test-function
-
 import time
 
 from connection import Connection
