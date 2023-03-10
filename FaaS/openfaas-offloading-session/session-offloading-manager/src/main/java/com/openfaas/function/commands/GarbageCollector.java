@@ -4,6 +4,7 @@ import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
+import com.openfaas.function.daos.SessionsRequestsDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -56,6 +57,7 @@ public class GarbageCollector implements ICommand {
                     SessionsDAO.deleteSessionToken(session.session);
                     SessionsDataDAO.deleteSessionData(session.session);
                     SessionsLocksDAO.unlockSession(session.session);
+                    SessionsRequestsDAO.deleteSessionRequest(session.session);
                     deletedSessionsCount++;
                 }
             }
