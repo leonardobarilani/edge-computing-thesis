@@ -1,6 +1,7 @@
 package com.openfaas.function.commands;
 
 import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
+import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
@@ -16,21 +17,36 @@ import java.util.List;
  * Header X-onload-location: location that requested the onload
  */
 @RequiresHeaderAnnotation.RequiresHeader(header = "X-onload-location")
+@RequiresQueryAnnotation.RequiresQuery(query = "action")
 public class OnloadSession implements ICommand {
 
     public void Handle(IRequest req, IResponse res) {
         String onloadLocation = req.getHeader("X-onload-location");
+        String action = req.getQuery().get("action");
 
-        /* --------- Checks before using the session --------- */
-        SessionToken onloadedSession = findOnloadableSession(res, onloadLocation);
-        if (!sessionExists(res, onloadedSession))
-            return;
+        switch(action) {
+            case "get-session":
+                /* --------- Checks before using the session --------- */
+                SessionToken onloadedSession = findOnloadableSession(res, onloadLocation);
+                if (!sessionExists(res, onloadedSession))
+                    return;
 
-        /* --------- Onload --------- */
-        onloadSession(res, onloadedSession);
-
-        /* --------- Release session --------- */
-        releaseLock(res, onloadedSession.session);
+                /* --------- Onload --------- */
+                onloadSession(res, onloadedSession);
+                break;
+            case "release-session":
+                /* --------- Release session --------- */
+                String session = req.getQuery().get("session");
+                String randomValue = req.getQuery().get("random-value");
+                SessionsLocksDAO.setRandomValue(randomValue);
+                releaseLock(res, session);
+                break;
+            default:
+                String message = "Action <" + action + "> not recognized";
+                System.out.println(message);
+                res.setStatusCode(400);
+                res.setBody(message);
+        }
     }
 
     private void onloadSession(IResponse res, SessionToken onloadedSession) {
@@ -39,6 +55,7 @@ public class OnloadSession implements ICommand {
 
         res.setStatusCode(200);
         res.setBody(onloadedSessionJson);
+        res.setHeader("X-random-value", SessionsLocksDAO.getRandomValue());
 
         // to allow a correct redirect from this node to the node that actually has the session,
         // we redirect to the proprietary that will finally redirect to the correct node

@@ -113,4 +113,12 @@ public class SessionsLocksDAO extends RedisDAO {
         }
         return returnValue;
     }
+
+    public static String getRandomValue() {
+        return instance.randomValue;
+    }
+
+    public static void setRandomValue(String randomValue) {
+        instance.randomValue = randomValue;
+    }
 }

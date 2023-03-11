@@ -5,6 +5,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 public abstract class HTTPWrapper {
 
@@ -18,6 +20,7 @@ public abstract class HTTPWrapper {
     private String body;
     private String gateway;
     private String remoteFunction;
+    private Map<String, List<String>> responseHeaders;
 
     protected void setBodyPOSTRequest(String body) {
         this.bodyPOST = body;
@@ -56,6 +59,7 @@ public abstract class HTTPWrapper {
 
         statusCode = response.statusCode();
         body = response.body();
+        responseHeaders = response.headers().map();
 
         System.out.println("(HTTPWrapper.get) Response: ");
         System.out.println("(HTTPWrapper.get) \tStatusCode: " + statusCode);
@@ -84,6 +88,7 @@ public abstract class HTTPWrapper {
 
         statusCode = response.statusCode();
         body = response.body();
+        responseHeaders = response.headers().map();
 
         System.out.println("(HTTPWrapper.post) Response: ");
         System.out.println("(HTTPWrapper.post) \tStatusCode: " + statusCode);
@@ -98,5 +103,9 @@ public abstract class HTTPWrapper {
 
     public String getBody() {
         return body;
+    }
+
+    public String getResponseHeader(String header) {
+        return responseHeaders.get(header).get(0);
     }
 }
