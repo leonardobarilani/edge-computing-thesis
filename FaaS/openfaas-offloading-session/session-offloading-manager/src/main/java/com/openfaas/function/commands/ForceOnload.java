@@ -19,9 +19,12 @@ public class ForceOnload implements ICommand {
         // call parent node to receive a session
         System.out.println("Onloading from:\n\t" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")));
 
-        Response response = new WrapperOnloadSession()
+        WrapperOnloadSession wrapper = new WrapperOnloadSession();
+        Response response = wrapper
                 .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
+                .actionGetSession()
                 .call();
+        String randomValue = wrapper.getRandomValue();
 
         // } end while
 
@@ -47,6 +50,13 @@ public class ForceOnload implements ICommand {
         }
 
         SessionToken newSession = MigrateUtils.migrateSessionFromRemoteToLocal(sessionJson);
+
+        new WrapperOnloadSession()
+                .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
+                .actionReleaseSession()
+                .setSession(sessionId)
+                .setRandomValue(randomValue)
+                .call();
 
         releaseLock(res, sessionId);
 
