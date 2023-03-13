@@ -11,10 +11,9 @@ import java.util.List;
 public class EdgeInfrastructureUtils {
 
     // common
-    private static Infrastructure infrastructure;
+    public static Infrastructure infrastructure;
 
     // getParentHost
-    private static String thisLocationName;
     private static String parentLocationHost;
     private static String parentLocationId;
     private static boolean stopSearch;
@@ -28,9 +27,8 @@ public class EdgeInfrastructureUtils {
             String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
             infrastructure = new Gson().fromJson(json, Infrastructure.class);
         }
-        thisLocationName = locationChild;
         stopSearch = false;
-        getParentRecursive(infrastructure.hierarchy[0]);
+        getParentRecursive(infrastructure.hierarchy[0], locationChild);
         return parentLocationHost;
     }
 
@@ -39,24 +37,23 @@ public class EdgeInfrastructureUtils {
             String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
             infrastructure = new Gson().fromJson(json, Infrastructure.class);
         }
-        thisLocationName = locationChild;
         stopSearch = false;
-        getParentRecursive(infrastructure.hierarchy[0]);
+        getParentRecursive(infrastructure.hierarchy[0], locationChild);
         return parentLocationId;
     }
 
-    private static void getParentRecursive(Area area) {
+    private static void getParentRecursive(Area area, String locationChild) {
         if (stopSearch)
             return;
         for (var a : area.areas)
-            if (a.areaName.equals(thisLocationName)) {
+            if (a.areaName.equals(locationChild)) {
                 parentLocationHost = area.mainLocation.openfaas_gateway;
                 parentLocationId = area.areaName;
                 stopSearch = true;
                 return;
             }
         for (var a : area.areas)
-            getParentRecursive(a);
+            getParentRecursive(a, locationChild);
     }
 
     // TODO this method can be changed in a hashtable generated at deployment time
@@ -117,8 +114,10 @@ public class EdgeInfrastructureUtils {
     // TODO testing this would be nice
 
     /**
-     * Get all the locations from the level of the hierarchy to the specified nodeName
-     *
+     * Get all the locations from the level of the hierarchy to the specified nodeName.
+     * The specified node must be under the level in the hierarchy.
+     * The list is ordered from the specified level to the specified node.
+     * The list also contains the specified node.
      * @param nodeName
      * @param level
      * @return
