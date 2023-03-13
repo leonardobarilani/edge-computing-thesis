@@ -9,37 +9,28 @@ import com.openfaas.function.utils.MigrateUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
+import java.util.List;
+
 public class ForceOnload implements ICommand {
 
+    private String randomValue;
+    private String remoteHost;
+
     public void Handle(IRequest req, IResponse res) {
+        /* --------- Try to find a session to onload --------- */
+        String sessionJson = onloadMetadata();
 
-        // TODO wrap this into a cycle to iterate until we reached the root or exit if we onloaded something
-        // while {
-
-        // call parent node to receive a session
-        System.out.println("Onloading from:\n\t" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")));
-
-        WrapperOnloadSession wrapper = new WrapperOnloadSession();
-        Response response = wrapper
-                .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
-                .actionGetSession()
-                .call();
-        String randomValue = wrapper.getRandomValue();
-
-        // } end while
-
-        if (response.getStatusCode() != 200) {
+        /* --------- Check if we have a session to onload --------- */
+        if(sessionJson == null) {
+            String message = "Unable to provide a valid session";
+            System.out.println(message);
+            res.setBody(message);
             res.setStatusCode(400);
-            System.out.println("/onload-session unable to provide a valid session");
-            res.setBody("/onload-session unable to provide a valid session");
             return;
         }
 
-        String sessionJson = response.getBody();
-
-        SessionToken sessionToken = SessionToken.Builder.buildFromJSON(sessionJson);
-
-        String sessionId = sessionToken.session;
+        /* --------- Lock the session locally --------- */
+        String sessionId = SessionToken.Builder.buildFromJSON(sessionJson).session;
         while(!acquireLock(res, sessionId))
         {
             try {
@@ -49,21 +40,62 @@ public class ForceOnload implements ICommand {
             }
         }
 
+        /* --------- Perform the onload --------- */
         SessionToken newSession = MigrateUtils.migrateSessionFromRemoteToLocal(sessionJson);
 
+        /* --------- Release locks --------- */
+        releaseRemoteLock(sessionId);
+        releaseLock(res, sessionId);
+
+        String message = "Unloaded:\n" +
+                "Old session: " + SessionToken.Builder.buildFromJSON(sessionJson).getJsonLocationsOnly() + "\n" +
+                "New session: " + newSession.getJsonLocationsOnly();
+        System.out.println(message);
+        res.setBody(message);
+        res.setStatusCode(200);
+    }
+
+    private String onloadMetadata() {
+        List<String> availableNodes = EdgeInfrastructureUtils.getLocationsFromNodeToLevel(
+                System.getenv("LOCATION_ID"), EdgeInfrastructureUtils.infrastructure.areaTypesIdentifiers[0]);
+        if(availableNodes.size() > 0)
+            availableNodes.remove(availableNodes.size() - 1);
+
+        String sessionJson = null;
+        String nodeToOnloadFrom;
+        boolean foundOnloadableSession = false;
+        // Ask for a session in the nodes until we find it or there are no more nodes to ask for it
+        while(!foundOnloadableSession && !availableNodes.isEmpty()) {
+            nodeToOnloadFrom = availableNodes.get(availableNodes.size() - 1);
+
+            System.out.println("Trying to onload from: " + nodeToOnloadFrom);
+
+            remoteHost = EdgeInfrastructureUtils.getGateway(nodeToOnloadFrom);
+            WrapperOnloadSession wrapper = new WrapperOnloadSession();
+            Response response = wrapper
+                    .gateway(remoteHost)
+                    .actionGetSession()
+                    .call();
+            if(response.getStatusCode() != 200) {
+                System.out.println("No available sessions from: " + nodeToOnloadFrom);
+                availableNodes.remove(availableNodes.size() - 1);
+            } else {
+                foundOnloadableSession = true;
+                randomValue = wrapper.getRandomValue();
+                sessionJson = response.getBody();
+            }
+        }
+
+        return sessionJson;
+    }
+
+    private void releaseRemoteLock(String sessionId) {
         new WrapperOnloadSession()
-                .gateway(EdgeInfrastructureUtils.getParentHost(System.getenv("LOCATION_ID")))
+                .gateway(remoteHost)
                 .actionReleaseSession()
                 .setSession(sessionId)
                 .setRandomValue(randomValue)
                 .call();
-
-        releaseLock(res, sessionId);
-
-        String oldSession = SessionToken.Builder.buildFromJSON(sessionJson).getJsonLocationsOnly();
-
-        res.setStatusCode(200);
-        res.setBody("Unloaded:\nOld session: " + oldSession + "\nNew session: " + newSession.getJsonLocationsOnly());
     }
 
     private boolean acquireLock (IResponse res, String session) {
