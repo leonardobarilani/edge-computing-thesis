@@ -8,6 +8,3 @@ registries:
       "docker.io":
         endpoint:
           - http://k3d-docker-io.localhost:5000
-options:
-  k3d:
-    disableLoadbalancer: true
