@@ -81,6 +81,19 @@ Session data <marco>: {"session_data":[]}
     test_function_6 = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p1"}
 Session data <marco>: {"session_data":[{"key":"key1","data":"value1"},{"key":"key2","data":"value2"}]}
 """
+    force_onload = """Unloaded:
+Old session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p1"}
+New session: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3"}"""
+    test_function_7 = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3"}
+Session data <marco>: {"session_data":[{"key":"key1","data":"value1"},{"key":"key2","data":"value2"}]}
+"""
+    test_function_8 = """Session metadata <marco>: <session_not_present_in_this_node>
+Session data <marco>: {"session_data":[]}
+"""
+    test_function_9 = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3"}
+Session data <marco>: {"session_data":[]}
+"""
+
 
 class DataGarbageCollector:
     test_before = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p3"}
