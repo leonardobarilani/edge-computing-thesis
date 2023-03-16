@@ -25,3 +25,13 @@ functions:
       com.openfaas.scale.min: 1
       com.openfaas.scale.max: 1
 
+  session-offloading-manager-trigger:
+    lang: java17
+    handler: ./session-offloading-manager
+    image: k3d-docker-io.localhost:5000/session-offloading-manager:latest
+    labels:
+      com.openfaas.scale.min: 1
+      com.openfaas.scale.max: 1
+    annotations:
+      topic: cron-trigger
+      schedule: "*/1 * * * *" # 1 minute
