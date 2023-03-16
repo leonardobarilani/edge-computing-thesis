@@ -34,44 +34,19 @@ public class EdgeDB extends RedisProxyDAO {
         System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Redis get with key: " + key);
         String rawList = instance.hget(sessionId, key);
         if (rawList == null) {
-            System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
-            return null;
+            System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") null value from Redis get with key: <" + key + ">. Returning new empty list");
+            return new ArrayList<>();
         }
         System.out.println("(EdgeDB.getList) (sessionId: " + sessionId + ") Parsing with Gson");
         return new Gson().fromJson(rawList, HList.class).list;
     }
 
-    /**
-     * The old API had single elements of the list expire.
-     * For the sake of the shopping-cart example we will not implement that.
-     * Need further discussion
-     *
-     * @param key
-     * @param value
-     */
-    public static void addToList(String key, String value) {
-        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis hexists with key: " + key);
-        if (!instance.hexists(sessionId, key)) {
-            HList list = new HList();
-            list.list.add(value);
-            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
-            String newJsonList = new Gson().toJson(list);
-            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
-            instance.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
-            return;
-        }
-        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis get with key: " + key);
-        String rawList = instance.hget(sessionId, key);
-        if (rawList == null) {
-            System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") null value from Redis get with key: " + key);
-            return;
-        }
-        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.fromJson");
-        var list = new Gson().fromJson(rawList, HList.class);
-        list.list.add(value);
-        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
-        String newJsonList = new Gson().toJson(list);
-        System.out.println("(EdgeDB.addToList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
+    public static void setList(String key, List<String> list) {
+        HList hlist = new HList();
+        hlist.list = list;
+        System.out.println("(EdgeDB.setList) (sessionId: " + sessionId + ") Parsing with Gson.toJson");
+        String newJsonList = new Gson().toJson(hlist);
+        System.out.println("(EdgeDB.setList) (sessionId: " + sessionId + ") Redis set with key, value: " + key + ", " + newJsonList);
         instance.hset(sessionId, Map.ofEntries(entry(key, newJsonList)));
     }
 

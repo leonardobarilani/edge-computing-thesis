@@ -14,7 +14,9 @@ public class HandlerCart {
         String newProduct = req.getQuery().get("product");
         if (newProduct != null) {
             System.out.println("Adding product to the cart: " + newProduct);
-            EdgeDB.addToList("products", newProduct);
+            var list = EdgeDB.getList("products");
+            list.add(newProduct);
+            EdgeDB.setList("products", list);
             System.out.println("Propagating: " + newProduct);
 
             res.setStatusCode(200);

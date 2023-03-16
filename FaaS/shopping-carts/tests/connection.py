@@ -25,7 +25,7 @@ class Connection:
         print ("Connection error: " + str(ConnectionError))
         return isinstance(exception, ConnectionError)
 
-    @retry(stop_max_attempt_number=3, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
+    @retry(stop_max_attempt_number=5, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
     def post(self, openfaas_fn: str, data: str, headers: dict={}):
         response = requests.post('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers, data=data)
@@ -39,7 +39,7 @@ class Connection:
         print()
         return str(response.content, "utf-8"), response.status_code
         
-    @retry(stop_max_attempt_number=3, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
+    @retry(stop_max_attempt_number=5, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
     def get(self, openfaas_fn: str, headers: dict={}) -> (str, int):
         response = requests.get('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers)
