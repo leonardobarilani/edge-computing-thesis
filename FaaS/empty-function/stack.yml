@@ -1,0 +1,9 @@
+version: 1.0
+provider:
+  name: openfaas
+functions:
+  empty-function:
+    lang: java17
+    handler: ./empty-function
+    image: k3d-docker-io.localhost:5000/empty-function:latest
+
