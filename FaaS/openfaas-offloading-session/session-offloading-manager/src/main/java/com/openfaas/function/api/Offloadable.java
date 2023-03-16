@@ -18,27 +18,35 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
     public IResponse Handle(IRequest req) {
         IResponse res = new Response();
         System.out.println("\n\n\n--------BEGIN OFFLOADABLE--------");
+        System.out.println("Queries:");
+        for (var v : req.getQuery().keySet())
+            System.out.println("\t" + v + ":\t" + req.getQuery().get(v));
+        System.out.println("Headers:");
+        for (var v : req.getHeaders().keySet())
+            System.out.println("\t" + v + ":\t" + req.getHeader(v));
         try {
             String sessionId = checkSessionHeader(req, res);
-            String requestId = checkRequestIdHeader(req, res);
-            if (sessionId != null && requestId != null) {
-                if (acquireLock(sessionId, res)) {
-                    System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
-                    SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
-                    if (sessionToken == null) {
-                        System.out.println("(Offloadable) Session does not exists. Creating new session with sessionId <" + sessionId + ">");
-                        // We are in the proprietary location, we create the session
-                        res = handleNewSession(req, sessionId, requestId);
-                    } else {
-                        System.out.println("(Offloadable) Session exists. Detecting if locally or offloaded...");
-                        if (!sessionToken.currentLocation.equals(System.getenv("LOCATION_ID"))) {
-                            // CurrentLocation doesn't match with this location, we have to perform a redirect
-                            System.out.println("(Offloadable) Session exists but it is offloaded. About to redirect the request...");
-                            res = handleRemoteSession(req, sessionToken);
+            if (sessionId != null) {
+                String requestId = checkRequestIdHeader(req, res);
+                if(requestId != null) {
+                    if (acquireLock(sessionId, res)) {
+                        System.out.println("(Offloadable) About to locate session <" + sessionId + ">...");
+                        SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
+                        if (sessionToken == null) {
+                            System.out.println("(Offloadable) Session does not exists. Creating new session with sessionId <" + sessionId + ">");
+                            // We are in the proprietary location, we create the session
+                            res = handleNewSession(req, sessionId, requestId);
                         } else {
-                            // Session exist and it is in this location
-                            System.out.println("(Offloadable) Session exists and it is local. About to handle the request...");
-                            res = handleLocalSession(req, sessionId, requestId);
+                            System.out.println("(Offloadable) Session exists. Detecting if locally or offloaded...");
+                            if (!sessionToken.currentLocation.equals(System.getenv("LOCATION_ID"))) {
+                                // CurrentLocation doesn't match with this location, we have to perform a redirect
+                                System.out.println("(Offloadable) Session exists but it is offloaded. About to redirect the request...");
+                                res = handleRemoteSession(req, sessionToken);
+                            } else {
+                                // Session exist and it is in this location
+                                System.out.println("(Offloadable) Session exists and it is local. About to handle the request...");
+                                res = handleLocalSession(req, sessionId, requestId);
+                            }
                         }
                     }
                 }
