@@ -10,20 +10,27 @@ from datetime import datetime, timezone
 
 parser = argparse.ArgumentParser(description='Make requests to a server and save results to a CSV file.')
 parser.add_argument('--count', type=int, default=100, help='Number of requests to make')
-parser.add_argument('--url', type=str, default='https://example.com', help='URL to make requests to')
 args = parser.parse_args()
 
 count = args.count
-url = args.url
+
+def get_ip(node_name: str):
+    ip_command = 'kubectl config use-context ' + node_name + ' > /dev/null && kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"'
+    return os.popen(ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
 
 def make_request(url: str):
     response = None
-    headers = {'X-session':'session','X-session-request-id':str(uuid.uuid4())}
+    headers = {'X-session':'session','X-session-request-id':str(uuid.uuid4()),'X-forced-session':'session'}
 
     for i in range(3):
         response = requests.get(url, headers=headers)
         if response.status_code == 200 or response.status_code == 208:
-            return response
+            break
+    if response.history:
+        print("Request was redirected:")
+        for resp in response.history:
+            print(resp.status_code, resp.url)
+        print()
     return response
 
 def save_to_csv(title: str, results):
@@ -38,11 +45,16 @@ def save_to_csv(title: str, results):
 
 times_and_codes = []  # a list to hold the time and response code of each request
 
+empty_function = f"http://{get_ip('k3d-p3')}:31112/function/empty-function"
+force_offload = f"http://{get_ip('k3d-p3')}:31112/function/session-offloading-manager?command=force-offload"
+make_request(empty_function)
+make_request(force_offload)
+
 for i in range(count):
     print(str(i))
     # make the request and record the start time
     start_time = time.monotonic()
-    response = make_request(url)
+    response = make_request(empty_function)
     end_time = time.monotonic()
 
     # calculate the time the request took and record the time and response code
@@ -50,7 +62,7 @@ for i in range(count):
     code = response.status_code
     times_and_codes.append((time_taken, code))
 
-save_to_csv('average_response_time', times_and_codes)
+save_to_csv('average_response_time_redirect', times_and_codes)
 
 # Create histogram
 times = [result[0] for result in times_and_codes]
