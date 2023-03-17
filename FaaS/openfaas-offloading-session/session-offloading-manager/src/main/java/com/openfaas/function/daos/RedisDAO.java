@@ -143,9 +143,11 @@ public abstract class RedisDAO extends StatefulDAO {
     protected void hset(String key, Map<String, String> map) {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        if (key != null && map != null) {
+        if (key != null && map != null && !map.isEmpty()) {
             System.out.println("(RedisDAO.hset) Redis hset with key, map: " + key + ", " + map);
             syncCommands.hset(key, map);
+        } else {
+            System.out.println("(RedisDAO.hset) Cannot execute redis hset with key, map: " + key + ", " + map);
         }
 
         closeConnection();
