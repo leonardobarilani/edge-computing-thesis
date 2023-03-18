@@ -7,6 +7,7 @@ import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -43,7 +44,7 @@ public class OnloadSession implements ICommand {
                 break;
             default:
                 String message = "Action <" + action + "> not recognized";
-                System.out.println(message);
+                Logger.log(message);
                 res.setStatusCode(400);
                 res.setBody(message);
         }
@@ -51,7 +52,7 @@ public class OnloadSession implements ICommand {
 
     private void onloadSession(IResponse res, SessionToken onloadedSession) {
         String onloadedSessionJson = onloadedSession.getJson();
-        System.out.println("Onloading:\n\t" + onloadedSessionJson);
+        Logger.log("Onloading:\n\t" + onloadedSessionJson);
 
         res.setStatusCode(200);
         res.setBody(onloadedSessionJson);
@@ -86,12 +87,12 @@ public class OnloadSession implements ICommand {
         }
 
         if (onloadedSession == null) {
-            System.out.println("Node is empty, can't force an unload");
+            Logger.log("Node is empty, can't force an unload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an unload");
         } else {
             String onloadedSessionJson = onloadedSession.getJson();
-            System.out.println("Onloading:\n\t" + onloadedSessionJson);
+            Logger.log("Onloading:\n\t" + onloadedSessionJson);
 
             res.setStatusCode(200);
             res.setBody(onloadedSessionJson);
@@ -103,7 +104,7 @@ public class OnloadSession implements ICommand {
     private boolean releaseLock (IResponse res, String session) {
         if (!SessionsLocksDAO.unlockSession(session))
         {
-            System.out.println("Cannot release lock on session <" + session + ">");
+            Logger.log("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);
             res.setBody("Cannot release lock on session <" + session + ">");
             return false;
@@ -114,7 +115,7 @@ public class OnloadSession implements ICommand {
     private boolean sessionExists (IResponse res, SessionToken session) {
         if (session == null)
         {
-            System.out.println("Node is empty, can't force an offload");
+            Logger.log("Node is empty, can't force an offload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an offload");
             return false;

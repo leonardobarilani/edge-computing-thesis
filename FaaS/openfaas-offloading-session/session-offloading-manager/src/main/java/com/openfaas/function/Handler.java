@@ -7,6 +7,7 @@ import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.commands.annotations.exceptions.BodyRequiredException;
 import com.openfaas.function.commands.annotations.exceptions.HeaderRequiredException;
 import com.openfaas.function.commands.annotations.exceptions.QueryRequiredException;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.Response;
@@ -44,12 +45,12 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
     public IResponse Handle(IRequest req) {
         IResponse res = new Response();
-        System.out.println("\n\n----------BEGIN NEW COMMAND----------");
-        System.out.println("Query raw: " + req.getQueryRaw());
+        Logger.log("\n\n----------BEGIN NEW COMMAND----------");
+        Logger.log("Query raw: " + req.getQueryRaw());
         try {
             for (var v : req.getQuery().keySet())
-                System.out.println("Key: " + v + ". Value: " + req.getQuery().get(v));
-            System.out.println("Headers: " + req.getHeaders());
+                Logger.log("Key: " + v + ". Value: " + req.getQuery().get(v));
+            Logger.log("Headers: " + req.getHeaders());
 
             ICommand command = getCommand(req, res);
             if (command != null) {
@@ -57,9 +58,9 @@ public class Handler extends com.openfaas.model.AbstractHandler {
                 boolean annotationsAreValid = processAnnotations(req, res, command);
                 if (annotationsAreValid) {
 
-                    System.out.println("\n----------BEGIN COMMAND <" + req.getQuery().get("command") + "> HANDLE----------");
+                    Logger.log("\n----------BEGIN COMMAND <" + req.getQuery().get("command") + "> HANDLE----------");
                     command.Handle(req, res);
-                    System.out.println("----------END COMMAND HANDLE----------\n");
+                    Logger.log("----------END COMMAND HANDLE----------\n");
                 }
             }
         } catch (Exception e) {
@@ -67,11 +68,11 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             e.printStackTrace(new PrintWriter(sw));
             String stackTrace = sw.toString();
             String message = "500 Internal server error\n Stack trace: " + stackTrace;
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(500);
         }
-        System.out.println("----------END NEW COMMAND----------\n\n");
+        Logger.log("----------END NEW COMMAND----------\n\n");
 	    return res;
     }
 
@@ -97,7 +98,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             return true;
         } catch (HeaderRequiredException | QueryRequiredException | BodyRequiredException e) {
             String message = "Error handling annotations: " + e.getMessage();
-            System.out.println(message);
+            Logger.log(message);
             e.printStackTrace();
             res.setStatusCode(400);
             res.setBody(message);

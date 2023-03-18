@@ -6,6 +6,7 @@ import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.daos.SessionsRequestsDAO;
 import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import org.joda.time.DateTime;
@@ -27,11 +28,11 @@ public class GarbageCollector implements ICommand {
 
         populateData();
 
-        System.out.println("Sessions count: " + sessions.size());
+        Logger.log("Sessions count: " + sessions.size());
 
         returnValue = deleteExpiredSessions();
 
-        System.out.println("Deleted sessions count: " + returnValue);
+        Logger.log("Deleted sessions count: " + returnValue);
 
         res.setBody(Long.toString(returnValue));
         res.setStatusCode(200);

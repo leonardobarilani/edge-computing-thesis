@@ -6,6 +6,7 @@ import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.function.utils.MigrateUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -20,7 +21,7 @@ public class OffloadSession implements ICommand {
         String offloading = ConfigurationDAO.getOffloading();
         if (offloading.equals("accept")) {
             // offload accepted
-            System.out.println("Offloading accepted");
+            Logger.log("Offloading accepted");
 
             SessionToken sessionToken = SessionToken.Builder.buildFromJSON(sessionJson);
 
@@ -42,8 +43,8 @@ public class OffloadSession implements ICommand {
             res.setBody("Offloaded:\n\tOld session: " + sessionJson + "\n\tNew session: " + newSession.getJson());
         } else {
             // offload redirected to parent
-            System.out.println("Offloading not accepted");
-            System.out.println("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")) + "\n\t" + sessionJson);
+            Logger.log("Offloading not accepted");
+            Logger.log("Redirecting session to parent:\n\t" + EdgeInfrastructureUtils.getParentLocationId(System.getenv("LOCATION_ID")) + "\n\t" + sessionJson);
 
             // call parent node to offload the session
             SessionToken sessionToOffload = SessionToken.Builder.buildFromJSON(sessionJson);
@@ -58,7 +59,7 @@ public class OffloadSession implements ICommand {
     private boolean acquireLock (IResponse res, String session) {
         if (!SessionsLocksDAO.lockSession(session))
         {
-            System.out.println("Cannot acquire lock on session <" + session + ">");
+            Logger.log("Cannot acquire lock on session <" + session + ">");
             res.setStatusCode(400);
             res.setBody("Cannot acquire lock on session <" + session + ">");
             return false;
@@ -69,7 +70,7 @@ public class OffloadSession implements ICommand {
     private boolean releaseLock (IResponse res, String session) {
         if (!SessionsLocksDAO.unlockSession(session))
         {
-            System.out.println("Cannot release lock on session <" + session + ">");
+            Logger.log("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);
             res.setBody("Cannot release lock on session <" + session + ">");
             return false;

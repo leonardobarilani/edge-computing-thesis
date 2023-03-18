@@ -5,6 +5,7 @@ import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -16,7 +17,7 @@ public class TestFunction implements ICommand {
         String typeRequested = req.getQuery().get("type");
         String valueRequested = req.getQuery().get("value");
 
-        System.out.println("About to test: " + typeRequested + " with " + valueRequested);
+        Logger.log("About to test: " + typeRequested + " with " + valueRequested);
 
         switch(typeRequested)
         {
@@ -44,7 +45,7 @@ public class TestFunction implements ICommand {
         String message =
                 "Offloading status: " + ConfigurationDAO.getOffloading();
 
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
@@ -53,7 +54,7 @@ public class TestFunction implements ICommand {
         String message =
                 "Session metadata <" + sessionId + ">: " + getSessionToken(sessionId) + "\n";
 
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
@@ -62,7 +63,7 @@ public class TestFunction implements ICommand {
         String message =
                 "Session metadata <" + sessionId + ">: " + getSessionTokenLocations(sessionId) + "\n";
 
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
@@ -71,7 +72,7 @@ public class TestFunction implements ICommand {
         String message =
                 "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
 
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
@@ -81,14 +82,14 @@ public class TestFunction implements ICommand {
                 "Session metadata <" + sessionId + ">: " + getSessionTokenLocations(sessionId) + "\n" +
                 "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
 
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
 
     private void error(String type, IResponse res) {
         String message = "Type <" + type + "> is not valid.\n";
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(400);
     }

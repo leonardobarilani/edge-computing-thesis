@@ -5,6 +5,7 @@ import com.openfaas.function.commands.wrappers.WrapperOnloadSession;
 import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.EdgeInfrastructureUtils;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.function.utils.MigrateUtils;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
@@ -23,7 +24,7 @@ public class ForceOnload implements ICommand {
         /* --------- Check if we have a session to onload --------- */
         if(sessionJson == null) {
             String message = "Unable to provide a valid session";
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(400);
             return;
@@ -50,7 +51,7 @@ public class ForceOnload implements ICommand {
         String message = "Unloaded:\n" +
                 "Old session: " + SessionToken.Builder.buildFromJSON(sessionJson).getJsonLocationsOnly() + "\n" +
                 "New session: " + newSession.getJsonLocationsOnly();
-        System.out.println(message);
+        Logger.log(message);
         res.setBody(message);
         res.setStatusCode(200);
     }
@@ -68,7 +69,7 @@ public class ForceOnload implements ICommand {
         while(!foundOnloadableSession && !availableNodes.isEmpty()) {
             nodeToOnloadFrom = availableNodes.get(availableNodes.size() - 1);
 
-            System.out.println("Trying to onload from: " + nodeToOnloadFrom);
+            Logger.log("Trying to onload from: " + nodeToOnloadFrom);
 
             remoteHost = EdgeInfrastructureUtils.getGateway(nodeToOnloadFrom);
             WrapperOnloadSession wrapper = new WrapperOnloadSession();
@@ -77,7 +78,7 @@ public class ForceOnload implements ICommand {
                     .actionGetSession()
                     .call();
             if(response.getStatusCode() != 200) {
-                System.out.println("No available sessions from: " + nodeToOnloadFrom);
+                Logger.log("No available sessions from: " + nodeToOnloadFrom);
                 availableNodes.remove(availableNodes.size() - 1);
             } else {
                 foundOnloadableSession = true;
@@ -101,7 +102,7 @@ public class ForceOnload implements ICommand {
     private boolean acquireLock (IResponse res, String session) {
         if (!SessionsLocksDAO.lockSession(session))
         {
-            System.out.println("Cannot acquire lock on session <" + session + ">");
+            Logger.log("Cannot acquire lock on session <" + session + ">");
             res.setStatusCode(400);
             res.setBody("Cannot acquire lock on session <" + session + ">");
             return false;
@@ -112,7 +113,7 @@ public class ForceOnload implements ICommand {
     private boolean releaseLock (IResponse res, String session) {
         if (!SessionsLocksDAO.unlockSession(session))
         {
-            System.out.println("Cannot release lock on session <" + session + ">");
+            Logger.log("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);
             res.setBody("Cannot release lock on session <" + session + ">");
             return false;

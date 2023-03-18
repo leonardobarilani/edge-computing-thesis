@@ -1,5 +1,6 @@
 package com.openfaas.function.daos;
 
+import com.openfaas.function.utils.Logger;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.SetArgs;
@@ -35,7 +36,7 @@ public abstract class RedisDAO extends StatefulDAO {
         String port = System.getenv("REDIS_PORT");
         url = "redis://" + password + "@" + host + ":" + port + "/" + table;
 
-        System.out.println("(RedisDAO) (Constructor) Url: " + url);
+        Logger.log("(RedisDAO) (Constructor) Url: " + url);
     }
 
     private RedisCommands<String, String> openConnection() {
@@ -54,7 +55,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         String returnValue = null;
         if (key != null) {
-            System.out.println("(RedisDAO.get) Redis get with key: " + key);
+            Logger.log("(RedisDAO.get) Redis get with key: " + key);
             returnValue = syncCommands.get(key);
         }
 
@@ -66,7 +67,7 @@ public abstract class RedisDAO extends StatefulDAO {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
-            System.out.println("(RedisDAO.set) Redis set with key, value: " + key + ", " + value);
+            Logger.log("(RedisDAO.set) Redis set with key, value: " + key + ", " + value);
             syncCommands.set(key, value);
         }
 
@@ -77,7 +78,7 @@ public abstract class RedisDAO extends StatefulDAO {
         RedisCommands<String, String> syncCommands = openConnection();
 
         List<String> returnValue;
-        System.out.println("(RedisDAO.getAllKeys) Redis keys");
+        Logger.log("(RedisDAO.getAllKeys) Redis keys");
         returnValue = syncCommands.keys("*");
 
         closeConnection();
@@ -88,7 +89,7 @@ public abstract class RedisDAO extends StatefulDAO {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
-            System.out.println("(RedisDAO.sadd) Redis sadd with key, value: " + key + ", " + Arrays.toString(value));
+            Logger.log("(RedisDAO.sadd) Redis sadd with key, value: " + key + ", " + Arrays.toString(value));
             syncCommands.sadd(key, value);
         }
 
@@ -100,9 +101,9 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Set<String> returnValue = null;
         if (key != null) {
-            System.out.println("(RedisDAO.smembers) Redis smembers with key: " + key);
+            Logger.log("(RedisDAO.smembers) Redis smembers with key: " + key);
             returnValue = syncCommands.smembers(key);
-            System.out.println("(RedisDAO.smembers) Members: " + returnValue);
+            Logger.log("(RedisDAO.smembers) Members: " + returnValue);
         }
 
         closeConnection();
@@ -112,12 +113,12 @@ public abstract class RedisDAO extends StatefulDAO {
     String getRandom() {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        System.out.println("(RedisDAO.getRandom) Redis randomkey");
+        Logger.log("(RedisDAO.getRandom) Redis randomkey");
         String randomKey = syncCommands.randomkey();
 
         String returnValue = null;
         if (randomKey != null) {
-            System.out.println("(RedisDAO.getRandom) Redis get with key: " + randomKey);
+            Logger.log("(RedisDAO.getRandom) Redis get with key: " + randomKey);
             returnValue = syncCommands.get(randomKey);
         }
 
@@ -128,12 +129,12 @@ public abstract class RedisDAO extends StatefulDAO {
     void deleteAll() {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        System.out.println("(RedisDAO.getRandom) Redis randomkey");
+        Logger.log("(RedisDAO.getRandom) Redis randomkey");
         String key = syncCommands.randomkey();
         while (key != null) {
-            System.out.println("(RedisDAO.getRandom) Redis del with key: " + key);
+            Logger.log("(RedisDAO.getRandom) Redis del with key: " + key);
             syncCommands.del(key);
-            System.out.println("(RedisDAO.getRandom) Redis randomkey");
+            Logger.log("(RedisDAO.getRandom) Redis randomkey");
             key = syncCommands.randomkey();
         }
 
@@ -144,10 +145,10 @@ public abstract class RedisDAO extends StatefulDAO {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && map != null && !map.isEmpty()) {
-            System.out.println("(RedisDAO.hset) Redis hset with key, map: " + key + ", " + map);
+            Logger.log("(RedisDAO.hset) Redis hset with key, map: " + key + ", " + map);
             syncCommands.hset(key, map);
         } else {
-            System.out.println("(RedisDAO.hset) Cannot execute redis hset with key, map: " + key + ", " + map);
+            Logger.log("(RedisDAO.hset) Cannot execute redis hset with key, map: " + key + ", " + map);
         }
 
         closeConnection();
@@ -158,7 +159,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         String returnValue = null;
         if (key != null && field != null) {
-            System.out.println("(RedisDAO.hget) Redis hget with key, field: " + key + ", " + field);
+            Logger.log("(RedisDAO.hget) Redis hget with key, field: " + key + ", " + field);
             returnValue = syncCommands.hget(key, field);
         }
 
@@ -171,7 +172,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Map<String, String> returnValue = null;
         if (key != null) {
-            System.out.println("(RedisDAO.hgetall) Redis hgetall with key: " + key);
+            Logger.log("(RedisDAO.hgetall) Redis hgetall with key: " + key);
             returnValue = syncCommands.hgetall(key);
         }
 
@@ -183,7 +184,7 @@ public abstract class RedisDAO extends StatefulDAO {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null) {
-            System.out.println("(RedisDAO.del) Redis del with key, value: " + key);
+            Logger.log("(RedisDAO.del) Redis del with key, value: " + key);
             syncCommands.del(key);
         }
 
@@ -195,7 +196,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Long returnValue = null;
         if (key != null) {
-            System.out.println("(RedisDAO.hlen) Redis hlen with key: " + key);
+            Logger.log("(RedisDAO.hlen) Redis hlen with key: " + key);
             returnValue = syncCommands.hlen(key);
         }
 
@@ -208,7 +209,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Boolean returnValue = null;
         if (key != null && field != null) {
-            System.out.println("(RedisDAO.hexists) Redis hexists with key: " + key);
+            Logger.log("(RedisDAO.hexists) Redis hexists with key: " + key);
             returnValue = syncCommands.hexists(key, field);
         }
 
@@ -221,7 +222,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Long returnValue = null;
         if (key != null) {
-            System.out.println("(RedisDAO.exists) Redis exists with key: " + key);
+            Logger.log("(RedisDAO.exists) Redis exists with key: " + key);
             returnValue = syncCommands.exists(key);
         }
 
@@ -234,7 +235,7 @@ public abstract class RedisDAO extends StatefulDAO {
 
         Long returnValue = null;
         if (key != null && field != null) {
-            System.out.println("(RedisDAO.hdel) Redis hdel with key: " + key);
+            Logger.log("(RedisDAO.hdel) Redis hdel with key: " + key);
             returnValue = syncCommands.hdel(key, field);
         }
 
@@ -245,10 +246,10 @@ public abstract class RedisDAO extends StatefulDAO {
     boolean eval(String script, String[] accessedKey, String ... scriptArgument) {
         RedisCommands<String, String> syncCommands = openConnection();
 
-        System.out.println("(RedisDAO.eval) Redis eval:");
-        System.out.println("(RedisDAO.eval) Script: " + script);
-        System.out.println("(RedisDAO.eval) AccessedKeys: " + Arrays.toString(accessedKey));
-        System.out.println("(RedisDAO.eval) ScriptArguments: " + Arrays.toString(scriptArgument));
+        Logger.log("(RedisDAO.eval) Redis eval:");
+        Logger.log("(RedisDAO.eval) Script: " + script);
+        Logger.log("(RedisDAO.eval) AccessedKeys: " + Arrays.toString(accessedKey));
+        Logger.log("(RedisDAO.eval) ScriptArguments: " + Arrays.toString(scriptArgument));
         boolean returnObject = syncCommands.eval(script, ScriptOutputType.BOOLEAN, accessedKey, scriptArgument);
 
         closeConnection();
@@ -261,7 +262,7 @@ public abstract class RedisDAO extends StatefulDAO {
         SetArgs args = new SetArgs();
         args.nx();
         args.ex(timeout);
-        System.out.println("(RedisDAO.setIfNotExists) Redis set: " + key + ", " + value + ", " + timeout);
+        Logger.log("(RedisDAO.setIfNotExists) Redis set: " + key + ", " + value + ", " + timeout);
         syncCommands.set(key, value, args);
 
         closeConnection();

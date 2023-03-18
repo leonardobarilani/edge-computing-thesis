@@ -2,6 +2,7 @@ package com.openfaas.function.daos;
 
 import com.openfaas.function.model.sessiondata.SessionData;
 import com.openfaas.function.model.sessiondata.SessionRecord;
+import com.openfaas.function.utils.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class SessionsDataDAO extends RedisDAO {
             i++;
         }
 
-        System.out.println("(SessionDataDAO.getSessionData) Returning session_data");
+        Logger.log("(SessionDataDAO.getSessionData) Returning session_data");
         return data;
     }
 

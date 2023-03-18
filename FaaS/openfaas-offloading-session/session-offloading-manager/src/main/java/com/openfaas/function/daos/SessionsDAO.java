@@ -1,6 +1,7 @@
 package com.openfaas.function.daos;
 
 import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
@@ -18,7 +19,7 @@ public class SessionsDAO extends RedisDAO {
     public static SessionToken getSessionToken(String sessionId) {
         SessionToken sessionToken = null;
 
-        System.out.println("(SessionsDAO.getSessionToken) Trying to fetch session: " + sessionId);
+        Logger.log("(SessionsDAO.getSessionToken) Trying to fetch session: " + sessionId);
         if (sessionId != null && instance.exists(sessionId) > 0) {
             sessionToken = new SessionToken();
             sessionToken.session = sessionId;
@@ -30,7 +31,7 @@ public class SessionsDAO extends RedisDAO {
                     String.valueOf(SessionToken.Fields.TIMESTAMP_LAST_ACCESS));
             sessionToken.timestampCreation = instance.hget(sessionId,
                     String.valueOf(SessionToken.Fields.TIMESTAMP_CREATION));
-            System.out.println("(SessionsDAO.getSessionToken) Session fetched from local storage: " + sessionToken.getJson());
+            Logger.log("(SessionsDAO.getSessionToken) Session fetched from local storage: " + sessionToken.getJson());
         }
         return sessionToken;
     }
@@ -42,7 +43,7 @@ public class SessionsDAO extends RedisDAO {
         map.put(String.valueOf(SessionToken.Fields.TIMESTAMP_LAST_ACCESS), sessionToken.timestampLastAccess);
         map.put(String.valueOf(SessionToken.Fields.TIMESTAMP_CREATION), sessionToken.timestampCreation);
         instance.hset(sessionToken.session, map);
-        System.out.println("(SessionsDAO.setSessionToken) Session saved to local storage: " + sessionToken.getJson());
+        Logger.log("(SessionsDAO.setSessionToken) Session saved to local storage: " + sessionToken.getJson());
     }
 
     public static void updateAccessTimestampToNow(String sessionId) {
@@ -50,7 +51,7 @@ public class SessionsDAO extends RedisDAO {
         HashMap<String, String> map = new HashMap<>();
         map.put(String.valueOf(SessionToken.Fields.TIMESTAMP_LAST_ACCESS), now);
         instance.hset(sessionId, map);
-        System.out.println("(SessionsDAO.updateAccessTimestampToNow) Updated last access time of session <" + sessionId + "> to <" + now + ">");
+        Logger.log("(SessionsDAO.updateAccessTimestampToNow) Updated last access time of session <" + sessionId + "> to <" + now + ">");
     }
 
     public static void deleteAllSessionTokens() {
