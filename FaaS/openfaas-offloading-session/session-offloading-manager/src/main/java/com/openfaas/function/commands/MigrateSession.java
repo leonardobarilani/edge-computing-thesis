@@ -38,12 +38,12 @@ public class MigrateSession implements ICommand {
             res.setBody(data);
             res.setStatusCode(200);
 
-            // TODO fare una query nel link per distinguere cosa stai migrando (data/requestsid)
-            // TODO aggiornare i tests
-
             SessionsRequestsDAO.deleteSessionRequest(sessionId);
         } else {
-
+            String message = "Data-type <" + dataType + "> not recognized";
+            System.out.println(message);
+            res.setBody(message);
+            res.setStatusCode(400);
         }
     }
 }
