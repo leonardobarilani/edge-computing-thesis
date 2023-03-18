@@ -1,5 +1,6 @@
 package com.openfaas.function.daos;
 
+import com.openfaas.function.utils.Logger;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -18,7 +19,7 @@ public class RedisProxyDAO {
         String port = System.getenv("REDIS_PORT");
         String url = "redis://" + password + "@" + host + ":" + port + "/" + table;
 
-        System.out.println("(RedisProxyDAO) (Constructor) Url: " + url);
+        Logger.log("(RedisProxyDAO) (Constructor) Url: " + url);
 
         localCache = new HashMap<>();
 

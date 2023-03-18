@@ -4,12 +4,16 @@ import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 import com.openfaas.model.Request;
 import com.openfaas.model.Response;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class OffloadTrigger implements ICommand {
 
@@ -48,20 +52,20 @@ public class OffloadTrigger implements ICommand {
 
         populateData();
 
-        System.out.println("Current status: \n" +
+        Logger.log("Current status: \n" +
                 "Used memory: " + usedMemory + "\n" +
                 "OffloadTopThreshold: " + offloadTopThreshold + "\n" +
                 "OffloadBottomThreshold: " + offloadBottomThreshold + "\n" +
                 "OnloadThreshold: " + onloadThreshold);
         if (usedMemory >= offloadTopThreshold) {
-            System.out.println("Triggered offload");
+            Logger.log("Triggered offload");
             returnValue = manageOffload();
         } else if (usedMemory <= onloadThreshold) {
-            System.out.println("Triggered onload");
+            Logger.log("Triggered onload");
             manageOnload();
             returnValue = -1;
         } else {
-            System.out.println("Node is healthy, nothing is triggered");
+            Logger.log("Node is healthy, nothing is triggered");
         }
         res.setBody(Long.toString(returnValue));
         res.setStatusCode(200);

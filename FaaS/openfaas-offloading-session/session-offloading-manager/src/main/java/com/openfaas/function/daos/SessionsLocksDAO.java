@@ -1,5 +1,7 @@
 package com.openfaas.function.daos;
 
+import com.openfaas.function.utils.Logger;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class SessionsLocksDAO extends RedisDAO {
             try {
                 randomValue = String.valueOf(SecureRandom.getInstanceStrong().nextLong());
             } catch (NoSuchAlgorithmException e) {
-                System.out.println("(SessionsLocksDAO.lockSession) Cannot create a random value");
+                Logger.log("(SessionsLocksDAO.lockSession) Cannot create a random value");
                 throw new RuntimeException(e);
             }
             instance.randomValue = randomValue;
@@ -34,12 +36,12 @@ public class SessionsLocksDAO extends RedisDAO {
             String checkRandomKey = instance.get(sessionId);
             returnValue = checkRandomKey.equals(instance.randomValue);
             if (returnValue) {
-                System.out.println("(SessionsLocksDAO.lockSession) Acquired lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.lockSession) Acquired lock on session <" + sessionId + ">");
             } else {
-                System.out.println("(SessionsLocksDAO.lockSession) Was not able to acquire lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.lockSession) Was not able to acquire lock on session <" + sessionId + ">");
             }
         } else {
-            System.out.println("(SessionsLocksDAO.lockSession) Session parameter equals to null");
+            Logger.log("(SessionsLocksDAO.lockSession) Session parameter equals to null");
         }
         return returnValue;
     }
@@ -74,12 +76,12 @@ public class SessionsLocksDAO extends RedisDAO {
 
             returnValue = instance.eval(script, new String[]{sessionId}, sessionId, randomValue, requestId);
             if (returnValue) {
-                System.out.println("(SessionsLocksDAO.unlockSessionAndUpdateData) Released lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.unlockSessionAndUpdateData) Released lock on session <" + sessionId + ">");
             } else {
-                System.out.println("(SessionsLocksDAO.unlockSessionAndUpdateData) Was not able to release lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.unlockSessionAndUpdateData) Was not able to release lock on session <" + sessionId + ">");
             }
         } else {
-            System.out.println("(SessionsLocksDAO.unlockSessionAndUpdateData) Session parameter equals to null");
+            Logger.log("(SessionsLocksDAO.unlockSessionAndUpdateData) Session parameter equals to null");
         }
         return returnValue;
     }
@@ -104,12 +106,12 @@ public class SessionsLocksDAO extends RedisDAO {
         if (sessionId != null) {
             returnValue = instance.eval(script, new String[]{sessionId}, sessionId, randomValue);
             if (returnValue) {
-                System.out.println("(SessionsLocksDAO.unlockSession) Released lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.unlockSession) Released lock on session <" + sessionId + ">");
             } else {
-                System.out.println("(SessionsLocksDAO.unlockSession) Was not able to release lock on session <" + sessionId + ">");
+                Logger.log("(SessionsLocksDAO.unlockSession) Was not able to release lock on session <" + sessionId + ">");
             }
         } else {
-            System.out.println("(SessionsLocksDAO.unlockSession) Session parameter equals to null");
+            Logger.log("(SessionsLocksDAO.unlockSession) Session parameter equals to null");
         }
         return returnValue;
     }

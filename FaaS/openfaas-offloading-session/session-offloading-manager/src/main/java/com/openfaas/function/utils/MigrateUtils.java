@@ -30,7 +30,7 @@ public class MigrateUtils {
         // (1/3) prepare for migration of data from the location that has the session data, to this node
         String fromLocation = EdgeInfrastructureUtils.getGateway(migrateFrom);
         String sessionToMigrate = sessionToken.session;
-        System.out.println("Migrating session from:\n\t" + fromLocation);
+        Logger.log("Migrating session from:\n\t" + fromLocation);
 
         // (2/3) migrate session data
         Response responseSessionData = new WrapperMigrateSession()
@@ -51,7 +51,7 @@ public class MigrateUtils {
         SessionsRequestsDAO.addSessionRequests(sessionToMigrate, requestIds);
 
         // send new json object to proprietaryLocation
-        System.out.println("Updating proprietary:\n\t" + sessionToken.proprietaryLocation + "\n\t" + sessionToken.getJson());
+        Logger.log("Updating proprietary:\n\t" + sessionToken.proprietaryLocation + "\n\t" + sessionToken.getJson());
         new WrapperUpdateSession()
                 .gateway(EdgeInfrastructureUtils.getGateway(sessionToken.proprietaryLocation))
                 .sessionToUpdate(sessionToken)

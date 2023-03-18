@@ -3,6 +3,7 @@ package com.openfaas.function.commands;
 import com.openfaas.function.commands.annotations.RequiresHeaderAnnotation;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.model.SessionToken;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -21,7 +22,7 @@ public class UpdateSession implements ICommand {
             String message = "Trying to update-session on the wrong leaf:\n\t" +
                     System.getenv("LOCATION_ID") + "\n\t" +
                     sessionJson;
-            System.out.println(message);
+            Logger.log(message);
 
             res.setBody(message);
             res.setStatusCode(400);
@@ -30,7 +31,7 @@ public class UpdateSession implements ICommand {
 
             String message = "The session doesn't exist:\n\t" +
                     sessionJson;
-            System.out.println(message);
+            Logger.log(message);
 
             res.setBody(message);
             res.setStatusCode(400);
@@ -44,7 +45,7 @@ public class UpdateSession implements ICommand {
             String message = "Session updated:\n\t" +
                     oldSession.getJson() + " -> " + sessionJson;
 
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(200);
         }

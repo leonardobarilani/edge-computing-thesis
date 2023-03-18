@@ -4,6 +4,7 @@ import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.SessionsDataDAO;
 import com.openfaas.function.daos.SessionsRequestsDAO;
 import com.openfaas.function.model.sessiondata.SessionData;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -17,10 +18,10 @@ public class MigrateSession implements ICommand {
         String sessionId = req.getQuery().get("session");
         String dataType = req.getQuery().get("data-type");
 
-        System.out.println("About to migrate Session Id: " + sessionId);
+        Logger.log("About to migrate Session Id: " + sessionId);
 
         if(dataType.equals("sessionData")) {
-            System.out.println("Migrating session data");
+            Logger.log("Migrating session data");
 
             SessionData data = SessionsDataDAO.getSessionData(sessionId);
 
@@ -29,7 +30,7 @@ public class MigrateSession implements ICommand {
 
             SessionsDataDAO.deleteSessionData(sessionId);
         } else if(dataType.equals("requestIds")) {
-            System.out.println("Migrating session request ids");
+            Logger.log("Migrating session request ids");
 
             String data = SessionsRequestsDAO.getSessionRequests(sessionId).toString();
             data = data.substring(1, data.length() - 1);
@@ -41,7 +42,7 @@ public class MigrateSession implements ICommand {
             SessionsRequestsDAO.deleteSessionRequest(sessionId);
         } else {
             String message = "Data-type <" + dataType + "> not recognized";
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(400);
         }

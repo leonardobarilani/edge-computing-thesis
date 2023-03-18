@@ -2,6 +2,7 @@ package com.openfaas.function.commands;
 
 import com.openfaas.function.commands.annotations.RequiresQueryAnnotation;
 import com.openfaas.function.daos.ConfigurationDAO;
+import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
 import com.openfaas.model.IResponse;
 
@@ -14,7 +15,7 @@ public class SetOffloadStatus implements ICommand {
         if (!offloading.equals("accept") && !offloading.equals("reject")) {
             String message = "Malformed request: <" + offloading + "> is not a valid offloading status (valid offloading statuses: accept/reject)";
 
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(400);
         } else {
@@ -24,7 +25,7 @@ public class SetOffloadStatus implements ICommand {
             else
                 ConfigurationDAO.rejectOffloading();
 
-            System.out.println(message);
+            Logger.log(message);
             res.setBody(message);
             res.setStatusCode(200);
         }

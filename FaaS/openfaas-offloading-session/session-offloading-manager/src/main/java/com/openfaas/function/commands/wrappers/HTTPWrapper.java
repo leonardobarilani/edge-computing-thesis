@@ -1,5 +1,7 @@
 package com.openfaas.function.commands.wrappers;
 
+import com.openfaas.function.utils.Logger;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -46,11 +48,11 @@ public abstract class HTTPWrapper {
                 .uri(URI.create(uri))
                 .setHeader("User-Agent", "session-offloading-manager");
 
-        System.out.println("Sending GET:\n\tURI:" + uri);
+        Logger.log("Sending GET:\n\tURI:" + uri);
         // Add all the additional headers to the request
         for (var entry : headers.entrySet()) {
             requestBuilder.setHeader(entry.getKey(), entry.getValue());
-            System.out.println("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
+            Logger.log("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
         }
 
         HttpRequest request = requestBuilder.build();
@@ -61,9 +63,9 @@ public abstract class HTTPWrapper {
         body = response.body();
         responseHeaders = response.headers().map();
 
-        System.out.println("(HTTPWrapper.get) Response: ");
-        System.out.println("(HTTPWrapper.get) \tStatusCode: " + statusCode);
-        System.out.println("(HTTPWrapper.get) \tBody: " + body);
+        Logger.log("(HTTPWrapper.get) Response: ");
+        Logger.log("(HTTPWrapper.get) \tStatusCode: " + statusCode);
+        Logger.log("(HTTPWrapper.get) \tBody: " + body);
     }
 
     protected void post() throws Exception {
@@ -75,13 +77,13 @@ public abstract class HTTPWrapper {
                 .setHeader("User-Agent", "session-offloading-manager")
                 .header("Content-Type", "application/json");
 
-        System.out.println("Sending POST:\n\tURI:" + uri);
+        Logger.log("Sending POST:\n\tURI:" + uri);
         // Add all the additional headers to the request
         for (var entry : headers.entrySet()) {
             requestBuilder.setHeader(entry.getKey(), entry.getValue());
-            System.out.println("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
+            Logger.log("\tExtra header: " + entry.getKey() + " = " + entry.getValue());
         }
-        System.out.println("\tBody: " + bodyPOST);
+        Logger.log("\tBody: " + bodyPOST);
 
         HttpRequest request = requestBuilder.build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -90,9 +92,9 @@ public abstract class HTTPWrapper {
         body = response.body();
         responseHeaders = response.headers().map();
 
-        System.out.println("(HTTPWrapper.post) Response: ");
-        System.out.println("(HTTPWrapper.post) \tStatusCode: " + statusCode);
-        System.out.println("(HTTPWrapper.post) \tBody: " + body);
+        Logger.log("(HTTPWrapper.post) Response: ");
+        Logger.log("(HTTPWrapper.post) \tStatusCode: " + statusCode);
+        Logger.log("(HTTPWrapper.post) \tBody: " + body);
     }
 
     public abstract Response call();
