@@ -97,3 +97,12 @@ Session data <marco>: {"session_data":[{"key":"products","data":"{\\"list\\":[\\
 	test6 = """Session metadata <counter-k3d-p2>: {"session":"counter-k3d-p2","proprietaryLocation":"k3d-p2","currentLocation":"k3d-p2"}
 Session data <counter-k3d-p2>: {"session_data":[{"key":"banana","data":"1"},{"key":"kiwi","data":"1"},{"key":"orange","data":"1"},{"key":"pear","data":"1"}]}
 """
+
+class DataOffloadNewSession:
+	cart1 = "[kiwi]"
+	test1 = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2"}
+Session data <marco>: {"session_data":[]}
+"""
+	test2 = """Session metadata <marco>: {"session":"marco","proprietaryLocation":"k3d-p3","currentLocation":"k3d-p2"}
+Session data <marco>: {"session_data":[{"key":"products","data":"{\\"list\\":[\\"kiwi\\"]}"}]}
+"""

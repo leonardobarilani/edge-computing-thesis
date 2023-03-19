@@ -12,6 +12,7 @@ STRESS=$SCRIPT_PATH/test_stress.py
 OFFLOAD_STRESS=$SCRIPT_PATH/test_stress_offloading.py
 UPDATE_ACCESS_TIMESTAMP_TEST=$SCRIPT_PATH/test_update_access_timestamp.py
 CLIENT_CENTRIC_CONSISTENCY_TEST=$SCRIPT_PATH/test_client_centric_consistency.py
+OFFLOAD_NEW_SESSION=$SCRIPT_PATH/test_offload_new_session.py
 
 # ----------- BEGIN SIMPLE TEST -----------
 # Load data
@@ -97,6 +98,24 @@ python3 $OFFLOAD_BOTH || exit 1
 
 echo End Offload Both Test
 # ----------- END OFFLOAD BOTH TEST -----------
+
+# ----------- BEGIN OFFLOAD NEW SESSION TEST -----------
+# Load data
+countdown "Loading data for OFFLOAD_NEW_SESSION (Requires 2 nodes)"
+with_context k3d-p3
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+execute_redis_commands $OFFLOADING_REJECT
+with_context k3d-p2
+execute_redis_commands $COMPLETE_CLEAN
+execute_redis_commands $DEFAULT_CONFIG
+
+# Execute test
+countdown "Executing OFFLOAD_NEW_SESSION (Requires 2 nodes)"
+python3 $OFFLOAD_NEW_SESSION || exit 1
+
+echo End Offload New Session Test
+# ----------- END OFFLOAD NEW SESSION TEST -----------
 
 # ----------- BEGIN STRESS TEST -----------
 # Load data

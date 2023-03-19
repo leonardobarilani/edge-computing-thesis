@@ -1,5 +1,7 @@
 package com.openfaas.function.api;
 
+import com.openfaas.function.commands.services.ForceOffloadService;
+import com.openfaas.function.daos.ConfigurationDAO;
 import com.openfaas.function.daos.SessionsDAO;
 import com.openfaas.function.daos.SessionsLocksDAO;
 import com.openfaas.function.daos.SessionsRequestsDAO;
@@ -122,17 +124,23 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
     }
 
     private IResponse handleNewSession (IRequest req, String sessionId, String requestId) {
-        IResponse res;
+        IResponse res = new Response();
 
         SessionToken sessionToken = new SessionToken();
         sessionToken.init(sessionId);
-
         Logger.log("(Offloadable) New session created: \n\t" + sessionToken.getJson());
 
         SessionsDAO.setSessionToken(sessionToken);
-
         Logger.log("(Offloadable) Session saved in Redis");
-        res = handle(req, sessionId, requestId);
+
+        if(ConfigurationDAO.getOffloading().equals("accept")) {
+            res = handle(req, sessionId, requestId);
+        } else {
+            Logger.log("(Offloadable) Node is at full capacity, offloading the new session");
+            new ForceOffloadService().Handle(res, sessionId);
+            res = handleRemoteSession(req, sessionToken);
+            SessionsLocksDAO.unlockSession(sessionId);
+        }
 
         return res;
     }
