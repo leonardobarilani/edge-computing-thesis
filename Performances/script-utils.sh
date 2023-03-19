@@ -30,7 +30,10 @@ function execute_redis_commands ()
 	fi
 	create_generator_script $1
 	kubectl exec -n openfaas-fn -it my-openfaas-redis-master-0 -- \
-		sh -c "rm /tmp/$TMP_FILENAME 2> /dev/null ; echo $(base64 -w 0 $TMP_FILEPATH) | base64 --decode > /tmp/$TMP_FILENAME ; chmod +x /tmp/$TMP_FILENAME ; sh -c /tmp/$TMP_FILENAME ; rm /tmp/$TMP_FILENAME" \
+		sh -c "rm /tmp/$TMP_FILENAME 2> /dev/null ;"
+	kubectl cp -n openfaas-fn $TMP_FILEPATH my-openfaas-redis-master-0:/tmp/$TMP_FILENAME
+	kubectl exec -n openfaas-fn -it my-openfaas-redis-master-0 -- \
+		sh -c "chmod +x /tmp/$TMP_FILENAME ; sh -c /tmp/$TMP_FILENAME ; rm /tmp/$TMP_FILENAME" \
 		|| { echo;echo execute_redis_commands: Failed running remote commands to setup redis;exit 1; }
 	rm $TMP_FILEPATH || { echo;echo execute_redis_commands: Failed cleaning the generator script locally;exit 1; }
 }
