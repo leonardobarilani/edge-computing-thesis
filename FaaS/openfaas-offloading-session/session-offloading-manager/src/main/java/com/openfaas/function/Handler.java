@@ -37,10 +37,6 @@ public class Handler extends com.openfaas.model.AbstractHandler {
 
         // Debug API
         commands.put("test-function", new TestFunction());
-
-        // Propagate API
-        commands.put("receive-propagate", new ReceivePropagate());
-        commands.put("register-receive-propagate", new RegisterReceivePropagate());
     }
 
     public IResponse Handle(IRequest req) {
