@@ -24,7 +24,6 @@ public class Main {
                     --inAreas <area>: The name of the areas in which to deploy the function.
                         If not specified the function is deployed everywhere.
                     --exceptIn <area>: The name of the areas in which to NOT deploy the function.
-                    --receivePropagate: Set this function to be a receiver of propagate() calls.
                     --faas-cli <faas-cli deploy compatible parameter>: The argument of this parameter will be directly passed to faas-cli deploy.
                         See https://github.com/openfaas/faas-cli for more info.
                         You can specify this parameter multiple times.
@@ -61,7 +60,6 @@ public class Main {
                 String inEvery = "";
                 List<String> inAreas = new LinkedList<>();
                 List<String> exceptIn = new LinkedList<>();
-                boolean receivePropagate = false;
                 List<String> faasCliArguments = new ArrayList<>();
 
                 int i = 3;
@@ -84,10 +82,6 @@ public class Main {
                                 faasCliArguments.add(args[i + 1]);
                                 i += 2;
                             }
-                            case "--receivePropagate" -> {
-                                receivePropagate = true;
-                                i += 1;
-                            }
                             default -> {
                                 System.err.println("Not sure what '" + args[i] + "' refers to.\n" + helpString);
                                 i += 1;
@@ -101,7 +95,6 @@ public class Main {
                         inEvery,
                         inAreas.toArray(new String[0]),
                         exceptIn.toArray(new String[0]),
-                        receivePropagate,
                         faasCliArguments
                 );
             }
