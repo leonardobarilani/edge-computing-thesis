@@ -11,10 +11,14 @@ from datetime import datetime, timezone
 parser = argparse.ArgumentParser(description='Make requests to a server and save results to a CSV file.')
 parser.add_argument('--count', type=int, default=2, help='Number of requests to make')
 parser.add_argument('--tests', type=int, default=100, help='Number of tests to make')
+parser.add_argument('--filename', type=str, default='test', help='Filename (including the extension) to save the plotted graph')
 args = parser.parse_args()
 
 count = args.count
 tests = args.tests
+filename = args.filename
+
+session = 'marco'
 
 def get_ip(node_name: str):
     ip_command = 'kubectl config use-context ' + node_name + ' > /dev/null && kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"'
@@ -22,7 +26,7 @@ def get_ip(node_name: str):
 
 def make_request(url: str):
     response = None
-    headers = {'X-session':'session','X-session-request-id':str(uuid.uuid4()),'X-forced-session':'session'}
+    headers = {'X-session':session,'X-session-request-id':str(uuid.uuid4()),'X-forced-session':session}
 
     for i in range(3):
         response = requests.get(url, headers=headers)
@@ -54,16 +58,15 @@ force_onload = f"http://{get_ip('k3d-p3')}:31112/function/session-offloading-man
 
 for test in range(tests):
     # make the test and record the time
-    start_time = time.monotonic()
     for req in range(count):
         if req == count / 2:
             print('offloading')
+            start_time = time.monotonic()
             make_request(force_offload)
+            end_time = time.monotonic()
 
         print(str(req))
         response = make_request(empty_function)
-    end_time = time.monotonic()
-
     # return the session for the next test
     print('onloading')
     make_request(force_onload)
@@ -83,4 +86,4 @@ plt.xlabel('Time (s)')
 plt.ylabel('Frequency')
 plt.title('Histogram of Request Times')
 
-plt.show()
+plt.savefig(filename)

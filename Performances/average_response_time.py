@@ -16,9 +16,11 @@ args = parser.parse_args()
 count = args.count
 url = args.url
 
+session = 'marco'
+
 def make_request(url: str):
     response = None
-    headers = {'X-session':'session','X-session-request-id':str(uuid.uuid4())}
+    headers = {'X-session':session,'X-session-request-id':str(uuid.uuid4())}
 
     for i in range(3):
         response = requests.get(url, headers=headers)

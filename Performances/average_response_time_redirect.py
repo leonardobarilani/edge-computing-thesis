@@ -14,13 +14,15 @@ args = parser.parse_args()
 
 count = args.count
 
+session = 'marco'
+
 def get_ip(node_name: str):
     ip_command = 'kubectl config use-context ' + node_name + ' > /dev/null && kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"'
     return os.popen(ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
 
 def make_request(url: str):
     response = None
-    headers = {'X-session':'session','X-session-request-id':str(uuid.uuid4()),'X-forced-session':'session'}
+    headers = {'X-session':session,'X-session-request-id':str(uuid.uuid4()),'X-forced-session':session}
 
     for i in range(3):
         response = requests.get(url, headers=headers)
