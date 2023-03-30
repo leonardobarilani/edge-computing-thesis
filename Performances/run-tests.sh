@@ -19,7 +19,6 @@ function now ()
 	date --utc +%Y-%m-%dT%TZ
 }
 
-if false; then
 echo Test average_response_time
 with_context k3d-p3
 execute_redis_commands $COMPLETE_CLEAN
@@ -94,8 +93,6 @@ with_context k3d-p2
 execute_redis_commands $COMPLETE_CLEAN
 execute_redis_commands $DEFAULT_CONFIG
 python3 average_offload_time.py --count 2 --tests 100 --filename results/$(now)average_offload_time_50mb.png
-
-fi
 
 echo Test average_offload_time with 100MB
 with_context k3d-p3
