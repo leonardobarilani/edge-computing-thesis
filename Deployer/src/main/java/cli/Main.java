@@ -87,7 +87,10 @@ public class Main {
                                 i += 1;
                             }
                         }
-                } catch (IndexOutOfBoundsException e) { System.out.println("Error parsing command line arguments"); e.printStackTrace(); }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Error parsing command line arguments");
+                    e.printStackTrace();
+                }
 
                 Deploy.deploy(
                         functionName,

@@ -9,49 +9,5 @@
         <module name="edge-deployer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="echo.function" target="13" />
-      <module name="echo.function.main" target="13" />
-      <module name="echo.function.test" target="13" />
-      <module name="function" target="17" />
-      <module name="function.main" target="17" />
-      <module name="function.test" target="17" />
-      <module name="get-less-crowded-path" target="13" />
-      <module name="get-less-crowded-path.main" target="13" />
-      <module name="get-less-crowded-path.test" target="13" />
-      <module name="iot-data-receiver" target="13" />
-      <module name="iot-data-receiver.main" target="13" />
-      <module name="iot-data-receiver.test" target="13" />
-      <module name="iot-data-reducer" target="13" />
-      <module name="iot-data-reducer.main" target="13" />
-      <module name="iot-data-reducer.test" target="13" />
-      <module name="products-counter" target="13" />
-      <module name="products-counter.main" target="13" />
-      <module name="products-counter.test" target="13" />
-      <module name="redirect.function" target="13" />
-      <module name="redirect.function.main" target="13" />
-      <module name="redirect.function.test" target="13" />
-      <module name="search-analytics-data-receivers" target="11" />
-      <module name="search-analytics-data-receivers.main" target="11" />
-      <module name="search-analytics-data-receivers.test" target="11" />
-      <module name="search-analytics-performer" target="13" />
-      <module name="search-analytics-performer.main" target="13" />
-      <module name="search-analytics-performer.test" target="13" />
-      <module name="search-analytics-store-data" target="13" />
-      <module name="search-analytics-store-data.main" target="13" />
-      <module name="search-analytics-store-data.test" target="13" />
-      <module name="shopping-carts" target="11" />
-      <module name="shopping-carts.main" target="11" />
-      <module name="shopping-carts.test" target="11" />
-      <module name="stateful-append" target="13" />
-      <module name="stateful-append.main" target="13" />
-      <module name="stateful-append.test" target="13" />
-      <module name="store-crowdness" target="11" />
-      <module name="store-crowdness.main" target="11" />
-      <module name="store-crowdness.test" target="11" />
-      <module name="video-footage-receiver" target="13" />
-      <module name="video-footage-receiver.main" target="13" />
-      <module name="video-footage-receiver.test" target="13" />
-    </bytecodeTargetLevel>
   </component>
 </project>

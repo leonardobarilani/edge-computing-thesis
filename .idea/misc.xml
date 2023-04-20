@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/chat/chat" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/iot-data-reduction/iot-data-receiver" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/iot-data-reduction/iot-data-reducer" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/less-crowded-path/get-less-crowded-path" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/less-crowded-path/store-crowdness" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/less-crowded-path/video-footage-receiver" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-prometheus-example/prometheus-example" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-redirect-example/echo" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-redirect-example/redirect" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/search-analytics/search-analytics-data-receivers" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/search-analytics/search-analytics-performer" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/search-analytics/search-analytics-store-data" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/shopping-carts/products-counter" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/shopping-carts/shopping-cart" />
-    <file type="web" url="file://$PROJECT_DIR$/FaaS/stateful-append/stateful-append" />
-  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
@@ -26,5 +8,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="oracle-17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
