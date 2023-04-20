@@ -1,40 +1,33 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'maven-publish'
-    id 'distribution'
+    id 'application'
 }
 
-// Since we are using openfaas' template java17, we have to make sure the compiler uses the correct java version
-targetCompatibility = '17'
-sourceCompatibility = '17'
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:23.0'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
-
-    api 'com.openfaas:model:0.1.1'
-    api 'com.openfaas:entrypoint:0.1.0'
-
-    // Gson dependency
-    api 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.openfaas:entrypoint:2.1.0'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.2'
 
     // Build: shopping-cart -> Tasks -> distribution -> assembleDist
     // Copy from: build/libs/session-offloading-manager.jar
-    api files('./libs/session-offloading-manager.jar')
+    implementation files('./libs/session-offloading-manager.jar')
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+    maven {
+        name = 'localrepo'
+        url = layout.buildDirectory.dir("../../localrepo")
+    }
 
     flatDir {
         dirs '../libs'
@@ -49,21 +42,15 @@ jar {
 }
 
 
-distributions {
-    main {
-        contents {
-            from jar
-            into('libs') {
-                from(project.configurations.runtimeClasspath)
-            }
-        }
+jar {
+    manifest {
+        attributes 'mainClass': 'com.openfaas.entrypoint.App',
+                'Implementation-Title': 'OpenFaaS Function',
+                'Implementation-Version': '2.0'
     }
 }
 
-publishing {
-    repositories {
-        flatDir {
-            dirs 'repos'
-        }
-    }
+application {
+    mainClass = 'com.openfaas.entrypoint.App'
+    applicationDefaultJvmArgs = ['-XX:+UseContainerSupport']
 }
