@@ -69,7 +69,7 @@ public class Handler extends com.openfaas.model.AbstractHandler {
             res.setStatusCode(500);
         }
         Logger.log("----------END NEW COMMAND----------\n\n");
-	    return res;
+        return res;
     }
 
     private ICommand getCommand(IRequest req, IResponse res) {

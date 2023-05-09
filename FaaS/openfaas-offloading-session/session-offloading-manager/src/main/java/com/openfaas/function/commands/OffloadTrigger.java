@@ -70,7 +70,7 @@ public class OffloadTrigger implements ICommand {
         res.setBody(Long.toString(returnValue));
         res.setStatusCode(200);
     }
-    
+
     private void populateData() {
         sessions = new HashMap<>();
         sessionsPerMemory = new HashMap<>();
@@ -82,7 +82,7 @@ public class OffloadTrigger implements ICommand {
 
         List<String> sessionsKeys = SessionsDataDAO.getAllSessionsIds();
 
-        for(var sessionId : sessionsKeys) {
+        for (var sessionId : sessionsKeys) {
             SessionToken session = SessionsDAO.getSessionToken(sessionId);
             sessions.put(sessionId, session);
 
@@ -119,7 +119,7 @@ public class OffloadTrigger implements ICommand {
         List<String> sessionsToBeOffloaded = new ArrayList<>();
 
         // offload sessions until we have freed enough space
-        while(usedMemory - freedMemory >= offloadBottomThreshold) {
+        while (usedMemory - freedMemory >= offloadBottomThreshold) {
 
             // find the sessions with the highest memory consumption
             if (sessionsToBeOffloaded.isEmpty()) {
@@ -150,14 +150,14 @@ public class OffloadTrigger implements ICommand {
             sessionsPerMemory
                     .get(memoryCurrentSession)
                     .remove(sessionToOffload);
-            if(sessionsPerMemory.get(memoryCurrentSession).isEmpty())
+            if (sessionsPerMemory.get(memoryCurrentSession).isEmpty())
                 sessionsPerMemory.remove(memoryCurrentSession);
 
             String sessionLastAccess = sessions.get(sessionToOffload).timestampLastAccess;
             sessionsPerAccessTimestamp
                     .get(sessionLastAccess)
                     .remove(sessionToOffload);
-            if(sessionsPerAccessTimestamp.get(sessionLastAccess).isEmpty())
+            if (sessionsPerAccessTimestamp.get(sessionLastAccess).isEmpty())
                 sessionsPerAccessTimestamp.remove(sessionLastAccess);
 
             sessions.remove(sessionToOffload);

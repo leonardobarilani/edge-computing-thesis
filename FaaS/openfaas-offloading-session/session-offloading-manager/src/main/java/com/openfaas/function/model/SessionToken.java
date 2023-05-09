@@ -1,7 +1,6 @@
 package com.openfaas.function.model;
 
 import com.google.gson.Gson;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;

@@ -17,6 +17,7 @@ public class SessionsLocksDAO extends RedisDAO {
 
     /**
      * Returns true if the lock has been successfully acquired. False otherwise
+     *
      * @param sessionId
      * @return
      */
@@ -48,6 +49,7 @@ public class SessionsLocksDAO extends RedisDAO {
 
     /**
      * Returns true if the lock has been successfully released. False otherwise
+     *
      * @param sessionId
      * @return
      */
@@ -57,16 +59,16 @@ public class SessionsLocksDAO extends RedisDAO {
         // ARGV[3] = requestId
         final String scriptBegin =
                 "redis.call('select', '" + RedisDAO.SESSIONS_LOCKS + "'); \n" +
-                "if redis.call('get', ARGV[1]) == ARGV[2] then \n" +
+                        "if redis.call('get', ARGV[1]) == ARGV[2] then \n" +
                         "redis.call('del', ARGV[1]) ; \n" +
                         "redis.call('select', '" + RedisDAO.SESSIONS_REQUESTS + "') ; \n" +
                         "redis.call('sadd', ARGV[1], ARGV[3]) ; \n" +
                         "redis.call('select', '" + RedisDAO.SESSIONS_DATA + "'); \n";
         final String scriptEnd =
-                        "return true \n" +
-                "else \n" +
+                "return true \n" +
+                        "else \n" +
                         "return false \n" +
-                "end";
+                        "end";
         boolean returnValue = false;
         if (sessionId != null) {
             String mapAsHsets = data.keySet().stream()
@@ -88,6 +90,7 @@ public class SessionsLocksDAO extends RedisDAO {
 
     /**
      * Returns true if the lock has been successfully released. False otherwise
+     *
      * @param sessionId
      * @return
      */

@@ -21,7 +21,7 @@ public class ForceOffloadService {
         offloadSession(res, sessionToOffload);
     }
 
-    private void offloadSession (IResponse res, SessionToken sessionToOffload) {
+    private void offloadSession(IResponse res, SessionToken sessionToOffload) {
         Logger.log("Session token about to be offloaded: " + sessionToOffload.getJson());
 
         // call parent node to offload the session
@@ -46,10 +46,9 @@ public class ForceOffloadService {
         res.setBody(message);
     }
 
-    private boolean sessionExists (IResponse res, String session) {
+    private boolean sessionExists(IResponse res, String session) {
         SessionToken sessionToken = SessionsDAO.getSessionToken(session);
-        if (sessionToken == null)
-        {
+        if (sessionToken == null) {
             Logger.log("Node is empty, can't force an offload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an offload");

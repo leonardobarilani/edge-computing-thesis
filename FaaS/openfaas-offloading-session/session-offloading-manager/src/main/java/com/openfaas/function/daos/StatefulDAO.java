@@ -12,7 +12,7 @@ public abstract class StatefulDAO {
 
     abstract List<String> getAllKeys();
 
-    abstract void sadd(String key, String ... value);
+    abstract void sadd(String key, String... value);
 
     abstract Set<String> smembers(String key);
 
@@ -28,5 +28,5 @@ public abstract class StatefulDAO {
 
     abstract Long hlen(String key);
 
-    abstract boolean eval(String script, String[] accessedKey, String ... scriptArgument);
+    abstract boolean eval(String script, String[] accessedKey, String... scriptArgument);
 }

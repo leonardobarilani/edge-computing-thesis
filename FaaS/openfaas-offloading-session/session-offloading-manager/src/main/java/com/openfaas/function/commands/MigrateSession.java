@@ -20,7 +20,7 @@ public class MigrateSession implements ICommand {
 
         Logger.log("About to migrate Session Id: " + sessionId);
 
-        if(dataType.equals("sessionData")) {
+        if (dataType.equals("sessionData")) {
             Logger.log("Migrating session data");
 
             SessionData data = SessionsDataDAO.getSessionData(sessionId);
@@ -29,7 +29,7 @@ public class MigrateSession implements ICommand {
             res.setStatusCode(200);
 
             SessionsDataDAO.deleteSessionData(sessionId);
-        } else if(dataType.equals("requestIds")) {
+        } else if (dataType.equals("requestIds")) {
             Logger.log("Migrating session request ids");
 
             String data = SessionsRequestsDAO.getSessionRequests(sessionId).toString();

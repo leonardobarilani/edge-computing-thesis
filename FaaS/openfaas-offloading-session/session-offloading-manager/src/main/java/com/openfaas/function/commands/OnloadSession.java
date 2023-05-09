@@ -25,7 +25,7 @@ public class OnloadSession implements ICommand {
         String onloadLocation = req.getHeader("X-onload-location");
         String action = req.getQuery().get("action");
 
-        switch(action) {
+        switch (action) {
             case "get-session":
                 /* --------- Checks before using the session --------- */
                 SessionToken onloadedSession = findOnloadableSession(res, onloadLocation);
@@ -64,7 +64,7 @@ public class OnloadSession implements ICommand {
         SessionsDAO.setSessionToken(onloadedSession);
     }
 
-    private SessionToken findOnloadableSession (IResponse res, String location) {
+    private SessionToken findOnloadableSession(IResponse res, String location) {
         // FIXME
         // Fix onload-session bug (example: A with children B and C. B offload to A.
         // C call onload on A. A onload session of node B to node C)
@@ -101,9 +101,8 @@ public class OnloadSession implements ICommand {
     }
 
 
-    private boolean releaseLock (IResponse res, String session) {
-        if (!SessionsLocksDAO.unlockSession(session))
-        {
+    private boolean releaseLock(IResponse res, String session) {
+        if (!SessionsLocksDAO.unlockSession(session)) {
             Logger.log("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);
             res.setBody("Cannot release lock on session <" + session + ">");
@@ -112,9 +111,8 @@ public class OnloadSession implements ICommand {
         return true;
     }
 
-    private boolean sessionExists (IResponse res, SessionToken session) {
-        if (session == null)
-        {
+    private boolean sessionExists(IResponse res, SessionToken session) {
+        if (session == null) {
             Logger.log("Node is empty, can't force an offload");
             res.setStatusCode(400);
             res.setBody("Node is empty, can't force an offload");

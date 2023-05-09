@@ -85,7 +85,7 @@ public abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    void sadd(String key, String ... value) {
+    void sadd(String key, String... value) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         if (key != null && value != null) {
@@ -243,7 +243,7 @@ public abstract class RedisDAO extends StatefulDAO {
         return returnValue;
     }
 
-    boolean eval(String script, String[] accessedKey, String ... scriptArgument) {
+    boolean eval(String script, String[] accessedKey, String... scriptArgument) {
         RedisCommands<String, String> syncCommands = openConnection();
 
         Logger.log("(RedisDAO.eval) Redis eval:");
