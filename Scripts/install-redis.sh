@@ -1,4 +1,6 @@
-
+#todo set persistance as optional
+#todo isn't simple deployment lighter than the helm one?
+#todo test that disableCommands actually work to enable flushdb
 if [ $# -eq 0 ]
 then
 	echo One argument needed: profilename
@@ -15,6 +17,6 @@ helm upgrade --install my-openfaas-redis \
 	--set persistence.enabled=false \
 	--set master.disableCommands=null \
 	--wait \
-	bitnami/redis 
+	bitnami/redis
 # For extra options, visit:
 # https://github.com/bitnami/charts/tree/main/bitnami/redis#parameters
