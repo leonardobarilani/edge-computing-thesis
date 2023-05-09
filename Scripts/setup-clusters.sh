@@ -1,4 +1,4 @@
-
+#todo add list of names to deploy
 if [ $# -eq 0 ]
 then
     echo One argument needed: profilename
