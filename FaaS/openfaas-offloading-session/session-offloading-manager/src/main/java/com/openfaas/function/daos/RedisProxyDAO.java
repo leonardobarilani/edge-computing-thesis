@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class RedisProxyDAO {
 
+    private final HashMap<String, String> localCache;
     private String url;
     private RedisClient redisClient;
     private StatefulRedisConnection<String, String> connection;
-    private final HashMap<String, String> localCache;
 
     protected RedisProxyDAO(String table) {
         String host = System.getenv("REDIS_HOST");

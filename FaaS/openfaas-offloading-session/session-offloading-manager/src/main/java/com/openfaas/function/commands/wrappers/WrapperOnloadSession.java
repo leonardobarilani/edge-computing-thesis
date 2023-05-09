@@ -41,7 +41,7 @@ public class WrapperOnloadSession extends HTTPWrapper {
 
     @Override
     public Response call() {
-        if("get-session".equals(action))
+        if ("get-session".equals(action))
             setRemoteFunction("/function/session-offloading-manager?command=onload-session&action=" + action);
         else
             setRemoteFunction("/function/session-offloading-manager?command=onload-session&" +
@@ -49,7 +49,7 @@ public class WrapperOnloadSession extends HTTPWrapper {
         setHeader("X-onload-location", System.getenv("LOCATION_ID"));
         try {
             get();
-            if("get-session".equals(action) && getStatusCode() == 200)
+            if ("get-session".equals(action) && getStatusCode() == 200)
                 this.randomValue = getResponseHeader("X-random-value");
         } catch (Exception e) {
             throw new RuntimeException(e);

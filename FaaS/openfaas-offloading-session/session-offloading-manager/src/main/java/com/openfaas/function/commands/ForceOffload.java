@@ -29,9 +29,8 @@ public class ForceOffload implements ICommand {
         releaseLock(res, forcedSessionId);
     }
 
-    private boolean acquireLock (IResponse res, String session) {
-        if (!SessionsLocksDAO.lockSession(session))
-        {
+    private boolean acquireLock(IResponse res, String session) {
+        if (!SessionsLocksDAO.lockSession(session)) {
             Logger.log("Cannot acquire lock on session <" + session + ">");
             res.setStatusCode(400);
             res.setBody("Cannot acquire lock on session <" + session + ">");
@@ -40,9 +39,8 @@ public class ForceOffload implements ICommand {
         return true;
     }
 
-    private boolean releaseLock (IResponse res, String session) {
-        if (!SessionsLocksDAO.unlockSession(session))
-        {
+    private boolean releaseLock(IResponse res, String session) {
+        if (!SessionsLocksDAO.unlockSession(session)) {
             Logger.log("Cannot release lock on session <" + session + ">");
             res.setStatusCode(500);
             res.setBody("Cannot release lock on session <" + session + ">");

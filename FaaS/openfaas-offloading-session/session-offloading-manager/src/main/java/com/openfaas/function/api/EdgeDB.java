@@ -56,7 +56,7 @@ public class EdgeDB extends RedisProxyDAO {
         instance.hdel(sessionId, key);
     }
 
-    static void setCurrentSession (String sessionId) {
+    static void setCurrentSession(String sessionId) {
         instance = new EdgeDB();
         Logger.log("(EdgeDB.setCurrentSession) Current session id: " + sessionId);
         instance.sessionId = sessionId;
@@ -66,11 +66,11 @@ public class EdgeDB extends RedisProxyDAO {
         return instance.getLocalCache();
     }
 
-    private static class HList {
-        List<String> list = new ArrayList<>();
-    }
-
     public static String getCurrentVirtualLocation() {
         return SessionsDAO.getSessionToken(instance.sessionId).proprietaryLocation;
+    }
+
+    private static class HList {
+        List<String> list = new ArrayList<>();
     }
 }

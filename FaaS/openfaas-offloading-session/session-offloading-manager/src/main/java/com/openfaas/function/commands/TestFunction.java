@@ -19,8 +19,7 @@ public class TestFunction implements ICommand {
 
         Logger.log("About to test: " + typeRequested + " with " + valueRequested);
 
-        switch(typeRequested)
-        {
+        switch (typeRequested) {
             case "configuration":
                 testConfiguration(res);
                 break;
@@ -80,7 +79,7 @@ public class TestFunction implements ICommand {
     private void testSession(String sessionId, IResponse res) {
         String message =
                 "Session metadata <" + sessionId + ">: " + getSessionTokenLocations(sessionId) + "\n" +
-                "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
+                        "Session data <" + sessionId + ">: " + SessionsDataDAO.getSessionData(sessionId).toJSON() + "\n";
 
         Logger.log(message);
         res.setBody(message);

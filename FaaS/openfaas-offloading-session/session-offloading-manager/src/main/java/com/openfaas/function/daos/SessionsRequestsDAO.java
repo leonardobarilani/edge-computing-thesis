@@ -10,7 +10,7 @@ public class SessionsRequestsDAO extends RedisDAO {
         super(SESSIONS_REQUESTS);
     }
 
-    public static void addSessionRequests(String sessionId, String ... requestId) {
+    public static void addSessionRequests(String sessionId, String... requestId) {
         instance.sadd(sessionId, requestId);
     }
 

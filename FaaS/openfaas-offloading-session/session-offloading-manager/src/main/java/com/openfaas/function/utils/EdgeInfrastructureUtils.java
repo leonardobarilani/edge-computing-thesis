@@ -118,6 +118,7 @@ public class EdgeInfrastructureUtils {
      * The specified node must be under the level in the hierarchy.
      * The list is ordered from the specified level to the specified node.
      * The list also contains the specified node.
+     *
      * @param nodeName
      * @param level
      * @return

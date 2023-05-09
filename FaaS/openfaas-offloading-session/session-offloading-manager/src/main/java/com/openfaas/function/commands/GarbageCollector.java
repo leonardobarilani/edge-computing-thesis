@@ -1,10 +1,6 @@
 package com.openfaas.function.commands;
 
-import com.openfaas.function.daos.ConfigurationDAO;
-import com.openfaas.function.daos.SessionsDAO;
-import com.openfaas.function.daos.SessionsDataDAO;
-import com.openfaas.function.daos.SessionsLocksDAO;
-import com.openfaas.function.daos.SessionsRequestsDAO;
+import com.openfaas.function.daos.*;
 import com.openfaas.function.model.SessionToken;
 import com.openfaas.function.utils.Logger;
 import com.openfaas.model.IRequest;
@@ -37,13 +33,13 @@ public class GarbageCollector implements ICommand {
         res.setBody(Long.toString(returnValue));
         res.setStatusCode(200);
     }
-    
+
     private void populateData() {
         sessions = new HashSet<>();
 
         List<String> sessionsKeys = SessionsDataDAO.getAllSessionsIds();
 
-        for(var sessionId : sessionsKeys) {
+        for (var sessionId : sessionsKeys) {
             SessionToken session = SessionsDAO.getSessionToken(sessionId);
             sessions.add(session);
         }
@@ -51,10 +47,10 @@ public class GarbageCollector implements ICommand {
 
     private long deleteExpiredSessions() {
         long deletedSessionsCount = 0;
-        for(SessionToken session : sessions) {
+        for (SessionToken session : sessions) {
             int elapsedSeconds = elapsedSeconds(session.timestampLastAccess);
-            if(elapsedSeconds > ConfigurationDAO.getSessionsDataExpirationTime()) {
-                if(SessionsLocksDAO.lockSession(session.session)) {
+            if (elapsedSeconds > ConfigurationDAO.getSessionsDataExpirationTime()) {
+                if (SessionsLocksDAO.lockSession(session.session)) {
                     SessionsDAO.deleteSessionToken(session.session);
                     SessionsDataDAO.deleteSessionData(session.session);
                     SessionsLocksDAO.unlockSession(session.session);

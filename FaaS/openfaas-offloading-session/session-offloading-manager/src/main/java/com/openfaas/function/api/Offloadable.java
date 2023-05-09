@@ -31,7 +31,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             String sessionId = checkSessionHeader(req, res);
             if (sessionId != null) {
                 String requestId = checkRequestIdHeader(req, res);
-                if(requestId != null) {
+                if (requestId != null) {
                     if (acquireLock(sessionId, res)) {
                         Logger.log("(Offloadable) About to locate session <" + sessionId + ">...");
                         SessionToken sessionToken = SessionsDAO.getSessionToken(sessionId);
@@ -69,7 +69,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
     public abstract IResponse HandleOffload(IRequest req);
 
-    private String checkSessionHeader (IRequest req, IResponse res) {
+    private String checkSessionHeader(IRequest req, IResponse res) {
         String sessionId = req.getHeader("X-session");
         Logger.log("(Offloadable) X-session: " + sessionId);
         if (sessionId == null) {
@@ -80,7 +80,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         return sessionId;
     }
 
-    private String checkRequestIdHeader (IRequest req, IResponse res) {
+    private String checkRequestIdHeader(IRequest req, IResponse res) {
         String requestId = req.getHeader("X-session-request-id");
         Logger.log("(Offloadable) X-session-request-id: " + requestId);
         if (requestId == null) {
@@ -91,7 +91,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
             Pattern UUID_REGEX =
                     Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
-            if(!UUID_REGEX.matcher(requestId).matches()) {
+            if (!UUID_REGEX.matcher(requestId).matches()) {
                 Logger.log("(Offloadable) X-session-request-id <" + requestId + "> is not a UUID string, sending 300");
                 res.setStatusCode(300);
                 res.setBody("300 Header X-session-request-id <" + requestId + "> is not a UUID string");
@@ -101,7 +101,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         return requestId;
     }
 
-    private boolean checkRequestIdUniqueness (String sessionId, String requestId, IResponse res) {
+    private boolean checkRequestIdUniqueness(String sessionId, String requestId, IResponse res) {
         if (SessionsRequestsDAO.existsSessionRequest(sessionId, requestId)) {
             Logger.log("(Offloadable) X-session-request-id was already processed, sending 208");
             res.setStatusCode(208);
@@ -123,7 +123,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         return true;
     }
 
-    private IResponse handleNewSession (IRequest req, String sessionId, String requestId) {
+    private IResponse handleNewSession(IRequest req, String sessionId, String requestId) {
         IResponse res = new Response();
 
         SessionToken sessionToken = new SessionToken();
@@ -133,7 +133,7 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         SessionsDAO.setSessionToken(sessionToken);
         Logger.log("(Offloadable) Session saved in Redis");
 
-        if(ConfigurationDAO.getOffloading().equals("accept")) {
+        if (ConfigurationDAO.getOffloading().equals("accept")) {
             res = handle(req, sessionId, requestId);
         } else {
             Logger.log("(Offloadable) Node is at full capacity, offloading the new session");
@@ -144,8 +144,8 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
 
         return res;
     }
-    
-    private IResponse handleRemoteSession (IRequest req, SessionToken sessionToken) {
+
+    private IResponse handleRemoteSession(IRequest req, SessionToken sessionToken) {
         SessionsLocksDAO.unlockSession(sessionToken.session);
 
         String redirectUrl =
@@ -162,8 +162,8 @@ public abstract class Offloadable extends com.openfaas.model.AbstractHandler {
         res.setHeader("Location", redirectUrl);
         return res;
     }
-    
-    private IResponse handleLocalSession (IRequest req, String sessionId, String requestId) {
+
+    private IResponse handleLocalSession(IRequest req, String sessionId, String requestId) {
         IResponse res;
         res = handle(req, sessionId, requestId);
         return res;
