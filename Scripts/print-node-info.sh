@@ -1,4 +1,4 @@
-
+#todo if no argument given, print info about the current kubectl context
 if [ $# -eq 0 ]
 then
 	echo No arguments given: printing all the context:

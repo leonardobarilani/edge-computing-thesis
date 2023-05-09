@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+//todo riscrivi usando apache commmons cli
+//todo json dovrebbe essere autogenerato da classe usando jackson o simili
+//todo redis e openfaas password should be optional or null
+//todo implementa versione che usa direttamente docker deployando faas-netes
+//todo test che parse json (con e senza parametri password (pass) e senza paramentri necessari (fail)
+//todo test che i parametri siano actually sensati? whatever, al massimo crasha
 public class Main {
 
     public static void main(String[] args) {

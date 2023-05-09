@@ -15,6 +15,8 @@ public class OpenFaaSRedisConfiguration {
     /* probably will be removed */
     public String location_id;
 
+
+    //todo autofill as a long list of nested locations, as many as the nodes deployed
     public void autoFillMissing(String areaName) throws IOException {
         String scriptGateway =
                 "kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}' --context=" + areaName;

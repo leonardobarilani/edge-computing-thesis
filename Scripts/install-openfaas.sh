@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#todo make cron-connector optional
 if [ $# -eq 0 ]
 then
     echo One argument needed: profilename

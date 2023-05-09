@@ -1,4 +1,4 @@
-
+#todo add an optional port option to expose the port the localhost
 if [ $# -eq 0 ]
 then
     echo 'One argument needed (will be appended to "k3d-"): profilename'
