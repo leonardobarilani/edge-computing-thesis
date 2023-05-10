@@ -69,6 +69,8 @@ public class Deploy {
         else
             shellPreamble = "";
 
+        //todo deploy configuration as a secretmap
+
         // Deploy to all locations.
         for (Area location : listOfLocations) {
             OpenFaaSRedisConfiguration conf = location.mainLocation;
