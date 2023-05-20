@@ -3,7 +3,7 @@ package cli.commands;
 import cli.infrastucture.Area;
 import cli.infrastucture.Infrastructure;
 import cli.utils.InfrastructureParser;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,11 +13,9 @@ import java.util.Arrays;
 public class DisplayInfrastructure {
 
     public static void displayInfrastructure(String fileName) {
-        Gson g = new Gson();
         Infrastructure infrastructure;
         try {
-            infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
-
+            infrastructure = new ObjectMapper().readValue(Files.readString(Path.of(fileName)), Infrastructure.class);
             // Check correctness of infrastructure file.
             System.err.println("🔄 Checking if infrastructure is correct.");
             if (!InfrastructureParser.isInfrastructureJsonCorrect(infrastructure)) {
@@ -43,8 +41,7 @@ public class DisplayInfrastructure {
             System.out.print("    ");
         System.out.println(area.areaName);
 
-        if (area.areas.length > 0)
-            for (Area a : area.areas)
-                depthFirstPrint(a, level + 1);
+        for (Area a : area.areas)
+            depthFirstPrint(a, level + 1);
     }
 }

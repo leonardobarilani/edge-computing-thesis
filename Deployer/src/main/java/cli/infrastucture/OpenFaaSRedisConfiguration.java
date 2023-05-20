@@ -1,5 +1,7 @@
 package cli.infrastucture;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +9,12 @@ import java.io.InputStreamReader;
 public class OpenFaaSRedisConfiguration {
 
     public String openfaas_gateway;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public String openfaas_password;
     public String redis_host;
     public int redis_port;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+
     public String redis_password;
 
     /* probably will be removed */
