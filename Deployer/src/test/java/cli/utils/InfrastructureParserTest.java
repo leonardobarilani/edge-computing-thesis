@@ -1,7 +1,7 @@
 package cli.utils;
 
 import cli.infrastucture.Infrastructure;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ public class InfrastructureParserTest {
     @Test
     public void testGson() {
         String path = "src/main/resources/new-infrastructure.json";
-        Gson g = new Gson();
         Infrastructure infrastructure;
         try {
-            infrastructure = g.fromJson(Files.readString(Path.of(path)), Infrastructure.class);
+            infrastructure = new ObjectMapper().readValue(Files.readString(Path.of(path)), Infrastructure.class);
+
 
             assert infrastructure.areaTypesIdentifiers[0].equals("continent");
             assert infrastructure.areaTypesIdentifiers[1].equals("country");
@@ -42,10 +42,9 @@ public class InfrastructureParserTest {
     @Test
     public void testCheckInfrastructure() {
         String fileName = "src/main/resources/new-infrastructure.json";
-        Gson g = new Gson();
         Infrastructure infrastructure;
         try {
-            infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
+            infrastructure = new ObjectMapper().readValue(Files.readString(Path.of(fileName)), Infrastructure.class);
             assert InfrastructureParser.isInfrastructureJsonCorrect(infrastructure);
         } catch (IOException e) {
             e.printStackTrace();

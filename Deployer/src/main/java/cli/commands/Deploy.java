@@ -5,7 +5,7 @@ import cli.infrastucture.Infrastructure;
 import cli.infrastucture.OpenFaaSRedisConfiguration;
 import cli.utils.InfrastructureParser;
 import cli.utils.LocationsGetter;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,14 +23,14 @@ public class Deploy {
                               String[] inAreas,
                               String[] exceptIn,
                               List<String> faasCliArguments) {
-        Gson g = new Gson();
         Infrastructure infrastructure;
         String infrastructureString;
         try {
             infrastructureString = Files.readString(Path.of(infrastructureFileName));
-            infrastructure = g.fromJson(infrastructureString, Infrastructure.class);
+            ObjectMapper mapper = new ObjectMapper();
+            infrastructure = mapper.readValue(Files.readString(Path.of(infrastructureString)), Infrastructure.class);
             infrastructure.autoFill();
-            infrastructureString = g.toJson(infrastructure);
+            infrastructureString = mapper.writeValueAsString(infrastructure);
 
             // Check correctness of infrastructure file.
             System.out.println("🔄 Checking if infrastructure is correct.");

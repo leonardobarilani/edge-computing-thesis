@@ -2,7 +2,7 @@ package cli.commands;
 
 import cli.infrastucture.Infrastructure;
 import cli.utils.InfrastructureParser;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,10 +11,9 @@ import java.nio.file.Path;
 public class CheckInfrastructure {
 
     public static void checkInfrastructure(String fileName) {
-        Gson g = new Gson();
         Infrastructure infrastructure;
         try {
-            infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
+            infrastructure = new ObjectMapper().readValue(Files.readString(Path.of(fileName)), Infrastructure.class);
 
             // Check correctness of infrastructure file.
             System.err.println("🔄 Checking if infrastructure is correct.");
