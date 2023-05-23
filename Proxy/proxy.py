@@ -14,13 +14,14 @@ def proxy_request():
     url = f'http://{service_name}.openfaas-fn.svc.cluster.local:8080'
     headers = {}
 
+    # Set X-session-request-id header with a random UUID4
+    headers['X-session-request-id'] = str(uuid.uuid4())
+
     # Remove headers from the query and add them to the request headers
     for header, value in request.args.items():
         if header.lower() != 'service':
             headers[header] = value
 
-    # Set X-session-request-id header with a random UUID4
-    headers['X-session-request-id'] = str(uuid.uuid4())
 
     # Make the request to the service
     try:
