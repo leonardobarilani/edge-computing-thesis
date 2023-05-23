@@ -2,33 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/get-less-crowded-path.iml" filepath="$PROJECT_DIR$/.idea/modules/get-less-crowded-path.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/get-less-crowded-path.main.iml" filepath="$PROJECT_DIR$/.idea/modules/get-less-crowded-path.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/get-less-crowded-path.test.iml" filepath="$PROJECT_DIR$/.idea/modules/get-less-crowded-path.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-receiver.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-receiver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-receiver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-receiver.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-receiver.test.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-receiver.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-reducer.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-reducer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-reducer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-reducer.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/iot-data-reducer.test.iml" filepath="$PROJECT_DIR$/.idea/modules/iot-data-reducer.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.main.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.test.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-data-receivers.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-performer.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-performer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-performer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-performer.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-performer.test.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-performer.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-store-data.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-store-data.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-store-data.main.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-store-data.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/search-analytics-store-data.test.iml" filepath="$PROJECT_DIR$/.idea/modules/search-analytics-store-data.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stateful-append.iml" filepath="$PROJECT_DIR$/.idea/modules/stateful-append.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stateful-append.main.iml" filepath="$PROJECT_DIR$/.idea/modules/stateful-append.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stateful-append.test.iml" filepath="$PROJECT_DIR$/.idea/modules/stateful-append.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/store-crowdness.iml" filepath="$PROJECT_DIR$/.idea/modules/store-crowdness.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/store-crowdness.main.iml" filepath="$PROJECT_DIR$/.idea/modules/store-crowdness.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/store-crowdness.test.iml" filepath="$PROJECT_DIR$/.idea/modules/store-crowdness.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/video-footage-receiver.iml" filepath="$PROJECT_DIR$/.idea/modules/video-footage-receiver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/video-footage-receiver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/video-footage-receiver.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/video-footage-receiver.test.iml" filepath="$PROJECT_DIR$/.idea/modules/video-footage-receiver.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/edge-computing-thesis.iml" filepath="$PROJECT_DIR$/.idea/edge-computing-thesis.iml" />
     </modules>
   </component>
 </project>
