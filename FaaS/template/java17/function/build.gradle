@@ -19,15 +19,11 @@ repositories {
 
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
     maven {
         name = 'localrepo'
-        url = layout.buildDirectory.dir("../../../libs")
+        url = layout.buildDirectory.dir("../libs")
     }
-    maven {
-        name = 'docker_template_repo'
-        url = layout.buildDirectory.dir("../../libs")
-    }
-    mavenCentral()
 }
 
 jar {

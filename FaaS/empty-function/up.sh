@@ -1,5 +1,6 @@
 echo building and pushing to local register
-faas-cli up --skip-deploy
+cd ../
+faas-cli up --skip-deploy --parallel 1 --filter empty-function || exit 1
 
 echo Deploying
-./deploy.sh || exit 1
+./empty-function/deploy.sh || exit 1
