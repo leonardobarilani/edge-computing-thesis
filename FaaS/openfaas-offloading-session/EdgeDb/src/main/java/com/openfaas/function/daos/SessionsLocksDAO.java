@@ -58,12 +58,12 @@ public class SessionsLocksDAO extends RedisDAO {
         // ARGV[2] = randomValue
         // ARGV[3] = requestId
         final String scriptBegin =
-                "redis.call('select', '" + RedisDAO.SESSIONS_LOCKS + "'); \n" +
+                "redis.call('select', '" + SESSIONS_LOCKS + "'); \n" +
                         "if redis.call('get', ARGV[1]) == ARGV[2] then \n" +
                         "redis.call('del', ARGV[1]) ; \n" +
-                        "redis.call('select', '" + RedisDAO.SESSIONS_REQUESTS + "') ; \n" +
+                        "redis.call('select', '" + SESSIONS_REQUESTS + "') ; \n" +
                         "redis.call('sadd', ARGV[1], ARGV[3]) ; \n" +
-                        "redis.call('select', '" + RedisDAO.SESSIONS_DATA + "'); \n";
+                        "redis.call('select', '" + SESSIONS_DATA + "'); \n";
         final String scriptEnd =
                 "return true \n" +
                         "else \n" +
@@ -98,7 +98,7 @@ public class SessionsLocksDAO extends RedisDAO {
         // ARGV[1] = sessionId
         // ARGV[2] = randomValue
         final String script =
-                "redis.call('select', '" + RedisDAO.SESSIONS_LOCKS + "')" +
+                "redis.call('select', '" + SESSIONS_LOCKS + "')" +
                         "if redis.call('get', ARGV[1]) == ARGV[2] then " +
                         "redis.call('del', ARGV[1]) ; " +
                         "return true " +
