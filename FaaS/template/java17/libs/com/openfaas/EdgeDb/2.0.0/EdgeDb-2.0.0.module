@@ -1,0 +1,90 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.openfaas",
+    "module": "EdgeDb",
+    "version": "2.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "EdgeDb-2.0.0.jar",
+          "url": "EdgeDb-2.0.0.jar",
+          "size": 78777,
+          "sha512": "b47fc2561749d3153b5d5f1bd9ab2625fbba2c8d672555ab1dadad95181977e00a231424ea4a10cb288347d9a7f68d1caa433790259953ab2c8bf855551d03b5",
+          "sha256": "7098896ccb95afa29eb7965c1784c06bbf050520a5a203d38dd6d4e716c72c2b",
+          "sha1": "305debd65c3957a3d4231ddc9e6c35a3e5f22d99",
+          "md5": "5c96f1fd386bee2ec64cc07b85661b0b"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.openfaas",
+          "module": "entrypoint",
+          "version": {
+            "requires": "2.1.0"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10.1"
+          }
+        },
+        {
+          "group": "io.lettuce",
+          "module": "lettuce-core",
+          "version": {
+            "requires": "6.2.3.RELEASE"
+          }
+        },
+        {
+          "group": "joda-time",
+          "module": "joda-time",
+          "version": {
+            "requires": "2.12.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "EdgeDb-2.0.0.jar",
+          "url": "EdgeDb-2.0.0.jar",
+          "size": 78777,
+          "sha512": "b47fc2561749d3153b5d5f1bd9ab2625fbba2c8d672555ab1dadad95181977e00a231424ea4a10cb288347d9a7f68d1caa433790259953ab2c8bf855551d03b5",
+          "sha256": "7098896ccb95afa29eb7965c1784c06bbf050520a5a203d38dd6d4e716c72c2b",
+          "sha1": "305debd65c3957a3d4231ddc9e6c35a3e5f22d99",
+          "md5": "5c96f1fd386bee2ec64cc07b85661b0b"
+        }
+      ]
+    }
+  ]
+}
