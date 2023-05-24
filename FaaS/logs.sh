@@ -12,4 +12,4 @@ kubectl config use-context $1
 
 echo ---------- Logs for context of $1 ----------
 
-for i in $(kubectl get pods -n openfaas-fn | cut -d" " -f1 | grep empty-function); do kubectl logs $i -n openfaas-fn; done
+for i in $(kubectl get pods -n openfaas-fn | cut -d" " -f1); do kubectl logs $i -n openfaas-fn; done

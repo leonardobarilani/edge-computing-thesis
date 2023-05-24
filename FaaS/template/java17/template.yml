@@ -1,0 +1,4 @@
+language: java17
+welcome_message: |
+  You have created a function using the java17 template which uses an LTS
+  version of the OpenJDK.

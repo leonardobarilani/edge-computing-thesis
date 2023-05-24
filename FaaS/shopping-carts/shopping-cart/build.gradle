@@ -13,32 +13,23 @@ dependencies {
     testCompileOnly 'junit:junit:4.13.2'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.2'
 
-    // Build: shopping-cart -> Tasks -> distribution -> assembleDist
-    // Copy from: build/libs/session-offloading-manager.jar
-    implementation files('./libs/session-offloading-manager.jar')
+    implementation ('com.openfaas:EdgeDb:2.0.0')
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
+
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    // You can declare any Maven/Ivy/file repository here.
-    mavenCentral()
     maven {
         name = 'localrepo'
-        url = layout.buildDirectory.dir("../../localrepo")
+        url = layout.buildDirectory.dir("../../../libs")
     }
-
-    flatDir {
-        dirs '../libs'
+    maven {
+        name = 'docker_template_repo'
+        url = layout.buildDirectory.dir("../../libs")
     }
-}
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'OpenFaaS Function',
-                'Implementation-Version': '1.0'
-    }
+    mavenCentral()
 }
 
 

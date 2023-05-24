@@ -1,3 +1,4 @@
-template
 build
-/empty-function/.gradle/
+.gradle
+.idea
+__pycache__

@@ -14,6 +14,9 @@ execute_redis_commands $DEFAULT_CONFIG
 # Execute test
 countdown "Executing SIMPLE_TEST (Requires 2 nodes)"
 python3 $SIMPLE_TEST || exit 1
+xdg-open "http://127.0.0.1:8000/?file=mp4"
+python3 $SCRIPT_PATH/proxy.py
+
 
 echo End Simple Test
 # ----------- END SIMPLE TEST -----------
