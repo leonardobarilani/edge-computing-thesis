@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-download" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-upload" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/empty-function/empty-function" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
     <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/shopping-carts/shopping-cart" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

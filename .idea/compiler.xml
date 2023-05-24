@@ -10,6 +10,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="com.openfaas.session-offloading-manager" target="17" />
+      <module name="com.openfaas.session-offloading-manager.main" target="17" />
+      <module name="com.openfaas.session-offloading-manager.test" target="17" />
+      <module name="Deployer" target="17" />
       <module name="function" target="17" />
       <module name="function.main" target="17" />
       <module name="function.test" target="17" />
