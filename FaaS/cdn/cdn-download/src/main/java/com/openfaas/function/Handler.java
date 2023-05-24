@@ -10,6 +10,10 @@ public class Handler extends NonBlockingOffloadable {
 
     public IResponse HandleNonBlockingOffload(IRequest req) {
         Response res = new Response();
+        res.setContentType("video/mp4");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-session, X-request-id");
+
 
         String requestedFile = req.getQuery().get("file");
 

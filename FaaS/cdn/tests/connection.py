@@ -2,6 +2,7 @@ import os
 import requests
 from retrying import retry
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -22,14 +23,16 @@ class Connection:
         self.__ip = os.popen(self.__ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
 
     def __retry_if_connection_error(exception):
-        print ("Connection error: " + str(ConnectionError))
+        print("Connection error: " + str(ConnectionError))
         return isinstance(exception, ConnectionError)
 
-    @retry(stop_max_attempt_number=5, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
+    @retry(stop_max_attempt_number=5, wait_fixed=1000,
+           retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
-    def post(self, openfaas_fn: str, data: str, headers: dict={}):
+    def post(self, openfaas_fn: str, data: str, headers: dict = {}) -> (str, int, dict):
         response = requests.post('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers, data=data)
-        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8")[:1024] + bcolors.ENDC)
+        print(bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(
+            response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8")[:1024] + bcolors.ENDC)
         if len(str(response.content, "utf-8")) > 1024:
             print("(Response string capped at 1024 chars)")
         if response.history:
@@ -39,13 +42,17 @@ class Connection:
             print("Final destination:")
             print(response.status_code, response.url, bcolors.ENDC)
         print()
-        return str(response.content, "utf-8"), response.status_code
-        
-    @retry(stop_max_attempt_number=5, wait_fixed=1000, retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
+        return str(response.content, "utf-8"), response.status_code, response.headers
+
+    @retry(stop_max_attempt_number=5, wait_fixed=1000,
+           retry_on_result=lambda result: result[1] != 200 and result[1] != 208)
     @retry(retry_on_exception=__retry_if_connection_error, wait_fixed=50)
-    def get(self, openfaas_fn: str, headers: dict={}) -> (str, int):
-        response = requests.get('http://' + self.__ip + ':31112/function/' + openfaas_fn, headers=headers)
-        print (bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8")[:1024] + bcolors.ENDC)
+    def get(self, openfaas_fn: str, headers: dict = {}) -> (str, int, dict):
+        url = 'http://' + self.__ip + ':31112/function/' + openfaas_fn
+        print(url)
+        response = requests.get(url, headers=headers)
+        print(bcolors.OKCYAN + self.__node_name + "  " + openfaas_fn + " response (" + str(
+            response.status_code) + "): \n" + bcolors.OKGREEN + str(response.content, "utf-8")[:1024] + bcolors.ENDC)
         if len(str(response.content, "utf-8")) > 1024:
             print("(Response string capped at 1024 chars)")
         if response.history:
@@ -55,4 +62,4 @@ class Connection:
             print("Final destination:")
             print(response.status_code, response.url, bcolors.ENDC)
         print()
-        return str(response.content, "utf-8"), response.status_code
+        return str(response.content, "utf-8"), response.status_code, response.headers
