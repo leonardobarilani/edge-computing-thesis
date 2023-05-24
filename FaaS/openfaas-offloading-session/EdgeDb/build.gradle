@@ -1,8 +1,13 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
-    id 'application'
+    id 'java-library'
+    id 'maven-publish'
+
 }
 
+group = 'com.openfaas'
+archivesBaseName = 'session-offloading-library'
+version = '2.0.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -17,9 +22,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'io.lettuce:lettuce-core:6.2.3.RELEASE'
     implementation 'joda-time:joda-time:2.12.2'
-
-    implementation ('com.openfaas:EdgeDb:2.0.0')
-
 }
 
 
@@ -48,7 +50,16 @@ jar {
     }
 }
 
-application {
-    mainClass = 'com.openfaas.entrypoint.App'
-    applicationDefaultJvmArgs = ['-XX:+UseContainerSupport']
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = 'localrepo'
+            url = layout.buildDirectory.dir("../../../libs")
+        }
+    }
 }

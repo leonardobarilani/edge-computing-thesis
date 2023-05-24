@@ -1,5 +1,6 @@
 template
 build
+.gradle
 .idea
 __pycache__
 /session-offloading-manager/session-offloading-manager.iml
