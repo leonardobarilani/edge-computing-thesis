@@ -17,9 +17,14 @@
       <option name="url" value="file:$PROJECT_DIR$/FaaS/empty-function/empty-function/libs/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="MavenRepo" />
-      <option name="name" value="MavenRepo" />
-      <option name="url" value="https://repo.maven.apache.org/maven2/" />
+      <option name="id" value="localrepo" />
+      <option name="name" value="localrepo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/libs/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/empty-function/libs" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -29,12 +34,47 @@
     <remote-repository>
       <option name="id" value="localrepo" />
       <option name="name" value="localrepo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/cdn/cdn-download/libs/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="localrepo" />
+      <option name="name" value="localrepo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/cdn/cdn-upload/libs/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/cdn/libs" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenRepo" />
+      <option name="name" value="MavenRepo" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/shopping-carts/libs" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="localrepo" />
+      <option name="name" value="localrepo" />
       <option name="url" value="file:$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager/libs/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/cron-function-example/libs" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/openfaas-offloading-session/libs" />
     </remote-repository>
   </component>
 </project>
