@@ -16,7 +16,7 @@ helm upgrade --install my-openfaas-redis \
 	--set architecture=standalone \
 	--set persistence.enabled=false \
 	--set master.disableCommands=null \
-	--wait \
+	--debug \
 	bitnami/redis
 # For extra options, visit:
 # https://github.com/bitnami/charts/tree/main/bitnami/redis#parameters

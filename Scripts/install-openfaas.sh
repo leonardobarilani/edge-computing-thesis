@@ -15,9 +15,9 @@ helm upgrade openfaas --install openfaas/openfaas \
   --namespace openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
-  --wait
+  --debug
 
-helm upgrade --install cron-connector openfaas/cron-connector --namespace openfaas --set basic_auth=false --wait
+#helm upgrade --install cron-connector openfaas/cron-connector --namespace openfaas --set basic_auth=false --wait
 
 # For extra options, visit:
 # https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/README.md#configuration
