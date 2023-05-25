@@ -76,5 +76,10 @@
       <option name="name" value="docker_template_repo" />
       <option name="url" value="file:$PROJECT_DIR$/FaaS/openfaas-offloading-session/libs" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="docker_template_repo" />
+      <option name="name" value="docker_template_repo" />
+      <option name="url" value="file:$PROJECT_DIR$/FaaS/shopping-carts/libs/" />
+    </remote-repository>
   </component>
 </project>
