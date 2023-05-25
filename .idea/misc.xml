@@ -4,6 +4,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-download" />
     <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-upload" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cron-function-example/example" />
     <file type="web" url="file://$PROJECT_DIR$/FaaS/empty-function/empty-function" />
     <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
     <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />

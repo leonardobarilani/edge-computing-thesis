@@ -4,38 +4,6 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/cdn/cdn-download" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/FaaS/cdn/cdn-download" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/cdn/cdn-upload" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/FaaS/cdn/cdn-upload" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/cron-function-example/example" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/FaaS/cron-function-example/example" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/empty-function/empty-function" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/FaaS/empty-function/empty-function" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
         <option name="modules">
           <set>
