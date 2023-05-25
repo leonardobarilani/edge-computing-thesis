@@ -36,11 +36,11 @@
         {
           "name": "entrypoint-2.1.0.jar",
           "url": "entrypoint-2.1.0.jar",
-          "size": 5107,
-          "sha512": "99ac8ceff69c6d695f1ddb242c91f51b9a03dab8d1695b1d865299ce1bb4f4702a16beb5f8af00242666308ae0123b37265ae495e67fa5dad3e5b03dbb2939e0",
-          "sha256": "557fbd17e42f120b4d1e3650cbc78224fc6ba71686890c25908b0e77a141fc40",
-          "sha1": "3c7dd511971e40a2640b51576759322170805934",
-          "md5": "6d27e5e3d96f7d88d33d6ebf05f942c6"
+          "size": 5091,
+          "sha512": "218d6b49eff313bbc07b53358f415e99f846cc173584fded61e144a3925bcc8b1ace4f0c243a7ad0e16fcd85f84dd619d1396e4b0e93baff7c967789be0e90f4",
+          "sha256": "a5ad7e53641bf9553301f0a6b8e000f3b116ff2e1d9f668407d14399693817c0",
+          "sha1": "ffebd6168a410c7998fbb32d5f874527d2533cad",
+          "md5": "442eb01a1d14180b03904cc0985da438"
         }
       ]
     },
@@ -54,20 +54,6 @@
         "org.gradle.usage": "java-runtime"
       },
       "dependencies": [
-        {
-          "group": "org.eclipse.jetty",
-          "module": "jetty-http-spi",
-          "version": {
-            "requires": "11.0.15"
-          }
-        },
-        {
-          "group": "org.eclipse.jetty",
-          "module": "jetty-server",
-          "version": {
-            "requires": "11.0.15"
-          }
-        },
         {
           "group": "commons-io",
           "module": "commons-io",
@@ -87,11 +73,11 @@
         {
           "name": "entrypoint-2.1.0.jar",
           "url": "entrypoint-2.1.0.jar",
-          "size": 5107,
-          "sha512": "99ac8ceff69c6d695f1ddb242c91f51b9a03dab8d1695b1d865299ce1bb4f4702a16beb5f8af00242666308ae0123b37265ae495e67fa5dad3e5b03dbb2939e0",
-          "sha256": "557fbd17e42f120b4d1e3650cbc78224fc6ba71686890c25908b0e77a141fc40",
-          "sha1": "3c7dd511971e40a2640b51576759322170805934",
-          "md5": "6d27e5e3d96f7d88d33d6ebf05f942c6"
+          "size": 5091,
+          "sha512": "218d6b49eff313bbc07b53358f415e99f846cc173584fded61e144a3925bcc8b1ace4f0c243a7ad0e16fcd85f84dd619d1396e4b0e93baff7c967789be0e90f4",
+          "sha256": "a5ad7e53641bf9553301f0a6b8e000f3b116ff2e1d9f668407d14399693817c0",
+          "sha1": "ffebd6168a410c7998fbb32d5f874527d2533cad",
+          "md5": "442eb01a1d14180b03904cc0985da438"
         }
       ]
     },
@@ -107,11 +93,11 @@
         {
           "name": "entrypoint-2.1.0-javadoc.jar",
           "url": "entrypoint-2.1.0-javadoc.jar",
-          "size": 83412,
-          "sha512": "2a87206eae85010b152808b852db5cf701a5d490d7c16e0e33c5b980d2b77af6a4b455a3c17ca4d3c479542a7126f2fa0cd841ca9ba8ebbf2f6f0c4038e6289e",
-          "sha256": "ae7f8738fdf3c83126a6cd278741e88518de7e5420335188c5ca1f0b84c80cce",
-          "sha1": "8b8e999ea59650415a551b292e1ffe0e3ffeaf32",
-          "md5": "0e4f0ca2e0262df9f36a06862bfdd318"
+          "size": 76611,
+          "sha512": "7ddb2e43e6cd116307057fa21406f23c80fc736b27bfc8d8c39f2ff4634f245ccd3645335ebf11c0d4da983003239e1dad1d001d53ae5ced433b53ee89658d17",
+          "sha256": "a43c9334ece47c766d8f92239f428a899edbb1d87c971605b3083c030351615c",
+          "sha1": "533fd06cac3a9728fbe1b11f78a90070b2ed92dd",
+          "md5": "bf6dd155142f2379152300f238657c1c"
         }
       ]
     },
@@ -127,11 +113,11 @@
         {
           "name": "entrypoint-2.1.0-sources.jar",
           "url": "entrypoint-2.1.0-sources.jar",
-          "size": 2757,
-          "sha512": "cfed7ab5d06425b7cc83375e4fee6a2a48625c6b586d474b4bb122238983a412a41b0b8885760057bc4c16c666ba5cc2308bc39b94281c7a00c12f8a82282d37",
-          "sha256": "c92956c2842896a59cfbe1eefe1f4f99489039ea53df6a36f59aa481a9c55f52",
-          "sha1": "b18f5fce1e865b4216a1866419e67f70ede0498c",
-          "md5": "bcf77ad37e2b223379d70039f00172bc"
+          "size": 2738,
+          "sha512": "2c8314104520638273478aeef1480f8fc7463d5540919d36ee64ae70314093f169bdd217390af930e9e3cd3e30dd7565e0f638192284c0cd628c5d54916290d3",
+          "sha256": "0e0cd81caffffaf5fe5fe9df5bd0c5d508708b37adcdd27835bc0a2e4ff3fa65",
+          "sha1": "fe0c185df48bb02e66dcf60f432ba6e47d420e5d",
+          "md5": "b73fc7bb36297f3ef3e435374038c9b1"
         }
       ]
     }
