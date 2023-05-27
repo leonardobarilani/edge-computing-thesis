@@ -1,13 +1,19 @@
-import time
+from data_test import DataGarbageCollector
+from conftest import *
 
-from connection import Connection
-from data_test import DataGarbageCollector as Data
 
-session = 'marco'
-con = Connection(node_name='k3d-p3')
+def test_function(setup_teardown):
+    node_name = "k3d-p3"
+    ip_address = get_ip(node_name)
+    setup_sessions_metadata(node_name)
+    setup_node_metadata(node_name)
+    con = Connection(node_name='k3d-p3', ip=ip_address)
+    session = 'marco'
 
-assert Data.test_before == con.get('session-offloading-manager?command=test-function&type=session&value=' + session)
+    assert DataGarbageCollector.test_before == con.get(
+        'session-offloading-manager?command=test-function&type=session&value=' + session)
 
-assert Data.garbage_collector == con.get('session-offloading-manager?command=garbage-collector')
+    assert DataGarbageCollector.garbage_collector == con.get('session-offloading-manager?command=garbage-collector')
 
-assert Data.test_after == con.get('session-offloading-manager?command=test-function&type=session&value=' + session)
+    assert DataGarbageCollector.test_after == con.get(
+        'session-offloading-manager?command=test-function&type=session&value=' + session)

@@ -13,8 +13,10 @@ helm upgrade --install my-openfaas-redis \
 	--namespace openfaas-fn \
 	--set auth.enabled=false \
 	--set architecture=standalone \
-	--set persistence.enabled=false \
+	--set master.persistence.enabled=false \
 	--set master.disableCommands=null \
+	--set master.livenessProbe.initialDelaySeconds=1 \
+	--set master.readinessProbe.initialDelaySeconds=1 \
 	--wait \
 	--debug \
 	--set master.service.type=LoadBalancer \
