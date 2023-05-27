@@ -1,0 +1,11 @@
+subprojects {
+    version = '1.0'
+}
+
+repositories {
+    jcenter()
+
+    flatDir {
+        dirs 'libs'
+    }
+}
