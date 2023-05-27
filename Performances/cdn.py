@@ -75,8 +75,9 @@ save_to_csv('cdn-' + str(offloaded_percentage) + '-', times_and_codes)
 times = [result[0] for result in times_and_codes]
 num_bins = 10
 n, bins, patches = plt.hist(times, num_bins, facecolor='blue', alpha=0.5)
-
-plt.xlabel('Time (s)')
+avg_time = sum(times) / len(times)
+plt.axvline(avg_time, color='r', linestyle='dashed', linewidth=1)
+plt.xlabel(f"Time (s) (Average: {avg_time:.3f})")
 plt.ylabel('Frequency')
 plt.title('Histogram of Request Times')
 
