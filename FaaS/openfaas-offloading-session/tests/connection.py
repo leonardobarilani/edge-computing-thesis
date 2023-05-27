@@ -1,6 +1,5 @@
-import os
 import requests
-import uuid
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -15,20 +14,18 @@ class bcolors:
 
 
 class Connection:
-    def __init__(self, node_name: str, session: str = 'marco', auth: (str, str) = ('admin', 'password')):
-        self._session = session
+    def __init__(self, node_name: str, ip):
         self._node_name = node_name
+        self._ip = ip
 
-        self._ip_command = 'kubectl config use-context ' + node_name + ' > /dev/null && kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}"'
-        self._ip = os.popen(self._ip_command).read().translate(str.maketrans('', '', ' \n\t\r'))
-        self._auth = auth
-
-    def post(self, openfaas_fn: str, data: str, headers: dict={}):
-        response = requests.post('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=headers, data=data)
-        print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+    def post(self, openfaas_fn: str, data: str, headers: dict = {}):
+        response = requests.post('http://' + self._ip + ':31112/function/' + openfaas_fn, headers=headers, data=data)
+        print(bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(
+            response.content, "utf-8") + bcolors.ENDC + "\n")
         return str(response.content, "utf-8")
-        
-    def get(self, openfaas_fn: str, headers: dict={}):
-        response = requests.get('http://' + self._ip + ':31112/function/' + openfaas_fn, auth=self._auth, headers=headers)
-        print (bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(response.content, "utf-8") + bcolors.ENDC + "\n")
+
+    def get(self, openfaas_fn: str, headers: dict = {}):
+        response = requests.get('http://' + self._ip + ':31112/function/' + openfaas_fn, headers=headers)
+        print(bcolors.OKCYAN + self._node_name + "  " + openfaas_fn + " response: \n" + bcolors.OKGREEN + str(
+            response.content, "utf-8") + bcolors.ENDC + "\n")
         return str(response.content, "utf-8")
