@@ -6,15 +6,15 @@ then
     exit 1
 fi
 
-kubectl config use-context $1
 printf "\n"
 
-kubectl apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
+kubectl --context $1 apply -f https://raw.githubusercontent.com/openfaas/faas-netes/master/namespaces.yml
 
 helm upgrade openfaas --install openfaas/openfaas \
   --namespace openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
+  --kube-context $1 \
   --debug
 
 #helm upgrade --install cron-connector openfaas/cron-connector --namespace openfaas --set basic_auth=false --wait
