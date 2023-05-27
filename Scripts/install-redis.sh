@@ -7,7 +7,6 @@ then
 	exit 1
 fi
 
-kubectl config use-context $1
 printf "\n"
 
 helm upgrade --install my-openfaas-redis \
@@ -16,7 +15,10 @@ helm upgrade --install my-openfaas-redis \
 	--set architecture=standalone \
 	--set persistence.enabled=false \
 	--set master.disableCommands=null \
+	--wait \
 	--debug \
+	--set master.service.type=LoadBalancer \
+	--kube-context $1 \
 	bitnami/redis
 # For extra options, visit:
 # https://github.com/bitnami/charts/tree/main/bitnami/redis#parameters
