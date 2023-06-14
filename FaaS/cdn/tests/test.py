@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     encoded_string = base64.b64encode(original_bytes).decode('utf-8')
 
-    assert 200 == con3.post('cdn-upload', encoded_string,
+    assert 200 == con3.post('cdn-upload?file=mp4', encoded_string,
                             headers={'X-session': session, 'X-session-request-id': str(uuid.uuid4())})[1]
 
     print("after")
