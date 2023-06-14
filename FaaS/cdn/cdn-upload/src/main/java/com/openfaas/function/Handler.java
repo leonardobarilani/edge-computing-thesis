@@ -13,6 +13,16 @@ public class Handler extends Offloadable {
         Response res = new Response();
         String body = req.getBody();
 
+        String requestedFile = req.getQuery().get("file");
+
+        if(requestedFile == null) {
+            String message = "{\"statusCode\":\"400\",\"message\":\"400 Missing query parameter 'file' in url\"}";
+            System.out.println(message);
+            res.setBody(message);
+            res.setStatusCode(400);
+            return res;
+        }
+
         if(body == null) {
             String message = "{\"statusCode\":\"400\",\"message\":\"400 Missing body in http message\"}";
             System.out.println(message);
@@ -20,7 +30,7 @@ public class Handler extends Offloadable {
             res.setStatusCode(400);
             return res;
         }
-        EdgeDB.set("mp4", body);
+        EdgeDB.set(requestedFile, body);
         System.out.println("Successfully uploaded file to EdgeDB class");
         res.setStatusCode(200);
 	    return res;
