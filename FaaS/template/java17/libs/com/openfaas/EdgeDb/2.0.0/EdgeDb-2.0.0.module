@@ -1,0 +1,106 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.openfaas",
+    "module": "EdgeDb",
+    "version": "2.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.openfaas",
+          "module": "model",
+          "version": {
+            "requires": "2.1.1"
+          }
+        },
+        {
+          "group": "io.lettuce",
+          "module": "lettuce-core",
+          "version": {
+            "requires": "6.2.3.RELEASE"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "EdgeDb-2.0.0.jar",
+          "url": "EdgeDb-2.0.0.jar",
+          "size": 78771,
+          "sha512": "b67c6c01a48722c91fda4e71755a6968ca292e86cb8cb5a87ceb658b7d1c1cb125dcd85e1ae2ad59ecb6de61a313d0fad57bb8ad8b35a16b5a9aa5ab2295c993",
+          "sha256": "7fc2f49ffeefc47a8e94bd854ef0ab433b9b61b4dceaa95b9de313bcedd135ea",
+          "sha1": "f1c70f52f663e4674599913d6cbcc63e092c9de9",
+          "md5": "25b2c975b381094e576be2e842097c3e"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10.1"
+          }
+        },
+        {
+          "group": "joda-time",
+          "module": "joda-time",
+          "version": {
+            "requires": "2.12.2"
+          }
+        },
+        {
+          "group": "com.openfaas",
+          "module": "model",
+          "version": {
+            "requires": "2.1.1"
+          }
+        },
+        {
+          "group": "io.lettuce",
+          "module": "lettuce-core",
+          "version": {
+            "requires": "6.2.3.RELEASE"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "EdgeDb-2.0.0.jar",
+          "url": "EdgeDb-2.0.0.jar",
+          "size": 78771,
+          "sha512": "b67c6c01a48722c91fda4e71755a6968ca292e86cb8cb5a87ceb658b7d1c1cb125dcd85e1ae2ad59ecb6de61a313d0fad57bb8ad8b35a16b5a9aa5ab2295c993",
+          "sha256": "7fc2f49ffeefc47a8e94bd854ef0ab433b9b61b4dceaa95b9de313bcedd135ea",
+          "sha1": "f1c70f52f663e4674599913d6cbcc63e092c9de9",
+          "md5": "25b2c975b381094e576be2e842097c3e"
+        }
+      ]
+    }
+  ]
+}

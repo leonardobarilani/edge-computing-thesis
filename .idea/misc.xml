@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-download" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cdn/cdn-upload" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/cron-function-example/example" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/empty-function/empty-function" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />
+    <file type="web" url="file://$PROJECT_DIR$/FaaS/shopping-carts/shopping-cart" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Deployer/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="oracle-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

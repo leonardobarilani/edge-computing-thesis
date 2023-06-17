@@ -1,67 +1,37 @@
 import uuid
 from connection import Connection
-from data_test import DataTest as Data
-import threading
-import json
-import os
 import base64
 
 con3 = Connection(node_name='k3d-p3')
-con2 = Connection(node_name='k3d-p2')
 
-session = 'session'
-
-file_name_1 = 'file1'
-file_name_2 = 'file2'
-file_name_3 = 'file3'
-
-file_size_kb_1 = 1024 * 10 # 10 MB
-file_size_kb_2 = 1024 * 10 # 10 MB
-file_size_kb_3 = 1024 * 10 # 10 MB
-
-file_data_1 = base64.b64encode(os.urandom(file_size_kb_1 * 1024)).decode('utf-8')
-file_data_2 = base64.b64encode(os.urandom(file_size_kb_2 * 1024)).decode('utf-8')
-file_data_3 = base64.b64encode(os.urandom(file_size_kb_3 * 1024)).decode('utf-8')
-
-file_payload_1 = json.dumps({'fileName':file_name_1,'fileData':file_data_1})
-file_payload_2 = json.dumps({'fileName':file_name_2,'fileData':file_data_2})
-file_payload_3 = json.dumps({'fileName':file_name_3,'fileData':file_data_3})
-
-def send_file(payload: str) -> int:
-	return con3.post('cdn-upload', payload, 
-		headers={'X-session':session, 'X-session-request-id':str(uuid.uuid4())})[1]
-
-def get_file(result_dict: dict, file_name: str) -> dict:
-	result = con3.get('cdn-download?file=' + file_name,
-		headers={'X-session':session, 'X-session-request-id':str(uuid.uuid4())})
-	result_dict[file_name] = result
+session = 'sessionnnn'
+file_path = "../very_serious_video.mp4"
 
 if __name__ == "__main__":
-	assert 200 == send_file(file_payload_1)
-	assert 200 == send_file(file_payload_2)
-	assert 200 == send_file(file_payload_3)
+    print("before")
 
-	result_dict = {}
-	thread1 = threading.Thread(target=get_file, args=(result_dict, file_name_1))
-	thread2 = threading.Thread(target=get_file, args=(result_dict, file_name_2))
-	thread3 = threading.Thread(target=get_file, args=(result_dict, file_name_3))
-	
-	thread1.start()
-	thread2.start()
-	thread3.start()
+    with open(file_path, "rb") as file:
+        original_bytes = file.read()
 
-	thread1.join()
-	thread2.join()
-	thread3.join()
+    encoded_string = base64.b64encode(original_bytes).decode('utf-8')
 
-	result1 = result_dict[file_name_1]
-	result2 = result_dict[file_name_2]
-	result3 = result_dict[file_name_3]
+    assert 200 == con3.post('cdn-upload?file=mp4', encoded_string,
+                            headers={'X-session': session, 'X-session-request-id': str(uuid.uuid4())})[1]
 
-	assert result1[1] == 200
-	assert result2[1] == 200
-	assert result3[1] == 200
+    print("after")
+    result = con3.get('cdn-download?file=' + "mp4",
+                          headers={'X-session': session, 'X-session-request-id': str(uuid.uuid4())})
 
-	assert result1[0] == file_data_1
-	assert result2[0] == file_data_2
-	assert result3[0] == file_data_3
+    assert result[1] == 200
+
+
+    with open(file_path, 'rb') as file:
+        assert result[0] == encoded_string
+
+    decoded_bytes = base64.b64decode(result[0])
+    assert decoded_bytes == original_bytes
+    assert result[2].get("Access-Control-Allow-Origin") == "*"
+
+    print("OK")
+    print("try to start proxy.py and open the URL http://127.0.0.1:8000/?file=mp4")
+

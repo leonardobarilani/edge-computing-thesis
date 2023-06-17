@@ -1,17 +1,21 @@
 package com.openfaas.function;
 
-import com.openfaas.function.api.Offloadable;
-import com.openfaas.model.IHandler;
-import com.openfaas.model.IResponse;
-import com.openfaas.model.IRequest;
-import com.openfaas.model.Response;
+import  com.openfaas.model.*;
 
-public class Handler extends Offloadable {
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-    public IResponse HandleOffload(IRequest req) {
+public class Handler extends AbstractHandler {
+
+    public IResponse Handle(IRequest req) {
         Response res = new Response();
-	    res.setBody("Hello, world!");
+        try {
+            res.setBody(Inet4Address.getLocalHost().getHostAddress() +"\n"+ InetAddress.getLocalHost().getHostName());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
 
-	    return res;
+        return res;
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/FaaS/openfaas-offloading-session/EdgeDb" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/FaaS/openfaas-offloading-session/session-offloading-manager" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/FaaS/shopping-carts/shopping-cart" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/FaaS/shopping-carts/shopping-cart" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

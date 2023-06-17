@@ -1,2 +1,4 @@
 build
-/template/
+.gradle
+.idea
+__pycache__

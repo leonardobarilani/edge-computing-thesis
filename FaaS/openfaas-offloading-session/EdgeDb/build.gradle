@@ -1,0 +1,65 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+    id 'maven-publish'
+
+}
+
+group = 'com.openfaas'
+archivesBaseName = 'session-offloading-library'
+version = '2.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+    implementation 'com.openfaas:model:2.1.1'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    api 'io.lettuce:lettuce-core:6.2.3.RELEASE'
+    implementation 'joda-time:joda-time:2.12.2'
+}
+
+
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    maven {
+        name = 'localrepo'
+        url = layout.buildDirectory.dir("../../../libs")
+    }
+    maven {
+        name = 'docker_template_repo'
+        url = layout.buildDirectory.dir("../../libs")
+    }
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes 'mainClass': 'com.openfaas.entrypoint.App',
+                'Implementation-Title': 'OpenFaaS Function',
+                'Implementation-Version': '2.0'
+    }
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = 'localrepo'
+            url = layout.buildDirectory.dir("../../../libs")
+        }
+    }
+}

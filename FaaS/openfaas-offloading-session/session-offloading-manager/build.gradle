@@ -1,66 +1,51 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'maven-publish'
-    id 'distribution'
-
-    // Allows the creation of a uber-jar (Tasks -> shadow -> shadowJar) to ship all the dependencies
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'application'
 }
 
-// Since we are using openfaas' template java17, we have to make sure the compiler uses the correct java version
-targetCompatibility = '17'
-sourceCompatibility = '17'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 dependencies {
-    api 'com.openfaas:model:0.1.1'
-    api 'com.openfaas:entrypoint:0.1.0'
+    implementation 'com.openfaas:entrypoint:2.1.0'
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testCompileOnly 'junit:junit:4.12'
+    testCompileOnly 'junit:junit:4.13.2'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.2'
 
-    api 'com.google.code.gson:gson:2.9.0'
-    api 'io.lettuce:lettuce-core:latest.release'
-    implementation 'joda-time:joda-time:2.10.13'
+    implementation ('com.openfaas:EdgeDb:2.0.0')
+
 }
+
+
 
 // In this section you declare where to find the dependencies of your project
 repositories {
+
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-
-    mavenCentral()
-    jcenter()
-
-    flatDir {
-        dirs '../libs'
+    maven {
+        name = 'localrepo'
+        url = layout.buildDirectory.dir("../../../libs")
     }
+    maven {
+        name = 'docker_template_repo'
+        url = layout.buildDirectory.dir("../../libs")
+    }
+    mavenCentral()
 }
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'OpenFaaS Function',
-                   'Implementation-Version': '1.0'
+        attributes 'mainClass': 'com.openfaas.entrypoint.App',
+                'Implementation-Title': 'OpenFaaS Function',
+                'Implementation-Version': '2.0'
     }
 }
 
-
-distributions {
-    main {
-        contents {
-            from jar
-            into('libs') {
-                from(project.configurations.runtimeClasspath)
-            }
-        }
-    }
+application {
+    mainClass = 'com.openfaas.entrypoint.App'
+    applicationDefaultJvmArgs = ['-XX:+UseContainerSupport']
 }
-publishing {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
-}
-
-

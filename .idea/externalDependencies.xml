@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalDependencies">
+    <plugin id="Docker" />
+    <plugin id="Pythonid" />
+    <plugin id="com.intellij.kubernetes" />
+    <plugin id="com.jetbrains.sh" />
+    <plugin id="izhangzhihao.rainbow.brackets" />
+    <plugin id="org.jetbrains.plugins.yaml" />
+  </component>
+</project>

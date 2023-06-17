@@ -2,7 +2,7 @@ package cli.utils;
 
 import cli.infrastucture.Area;
 import cli.infrastucture.Infrastructure;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,10 +14,9 @@ public class LocationsGetterTest {
     @Test
     public void testGetAllLocations() {
         String fileName = "src/main/resources/new-infrastructure.json";
-        Gson g = new Gson();
         Infrastructure infrastructure;
         try {
-            infrastructure = g.fromJson(Files.readString(Path.of(fileName)), Infrastructure.class);
+            infrastructure = new ObjectMapper().readValue(Files.readString(Path.of(fileName)), Infrastructure.class);
 
             Area[] result = LocationsGetter.getAllLocations(
                     infrastructure,

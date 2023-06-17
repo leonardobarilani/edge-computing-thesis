@@ -1,0 +1,125 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.openfaas",
+    "module": "entrypoint",
+    "version": "2.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.openfaas",
+          "module": "model",
+          "version": {
+            "requires": "2.1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "entrypoint-2.1.0.jar",
+          "url": "entrypoint-2.1.0.jar",
+          "size": 5091,
+          "sha512": "218d6b49eff313bbc07b53358f415e99f846cc173584fded61e144a3925bcc8b1ace4f0c243a7ad0e16fcd85f84dd619d1396e4b0e93baff7c967789be0e90f4",
+          "sha256": "a5ad7e53641bf9553301f0a6b8e000f3b116ff2e1d9f668407d14399693817c0",
+          "sha1": "ffebd6168a410c7998fbb32d5f874527d2533cad",
+          "md5": "442eb01a1d14180b03904cc0985da438"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.11.0"
+          }
+        },
+        {
+          "group": "com.openfaas",
+          "module": "model",
+          "version": {
+            "requires": "2.1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "entrypoint-2.1.0.jar",
+          "url": "entrypoint-2.1.0.jar",
+          "size": 5091,
+          "sha512": "218d6b49eff313bbc07b53358f415e99f846cc173584fded61e144a3925bcc8b1ace4f0c243a7ad0e16fcd85f84dd619d1396e4b0e93baff7c967789be0e90f4",
+          "sha256": "a5ad7e53641bf9553301f0a6b8e000f3b116ff2e1d9f668407d14399693817c0",
+          "sha1": "ffebd6168a410c7998fbb32d5f874527d2533cad",
+          "md5": "442eb01a1d14180b03904cc0985da438"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "entrypoint-2.1.0-javadoc.jar",
+          "url": "entrypoint-2.1.0-javadoc.jar",
+          "size": 76611,
+          "sha512": "7ddb2e43e6cd116307057fa21406f23c80fc736b27bfc8d8c39f2ff4634f245ccd3645335ebf11c0d4da983003239e1dad1d001d53ae5ced433b53ee89658d17",
+          "sha256": "a43c9334ece47c766d8f92239f428a899edbb1d87c971605b3083c030351615c",
+          "sha1": "533fd06cac3a9728fbe1b11f78a90070b2ed92dd",
+          "md5": "bf6dd155142f2379152300f238657c1c"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "entrypoint-2.1.0-sources.jar",
+          "url": "entrypoint-2.1.0-sources.jar",
+          "size": 2738,
+          "sha512": "2c8314104520638273478aeef1480f8fc7463d5540919d36ee64ae70314093f169bdd217390af930e9e3cd3e30dd7565e0f638192284c0cd628c5d54916290d3",
+          "sha256": "0e0cd81caffffaf5fe5fe9df5bd0c5d508708b37adcdd27835bc0a2e4ff3fa65",
+          "sha1": "fe0c185df48bb02e66dcf60f432ba6e47d420e5d",
+          "md5": "b73fc7bb36297f3ef3e435374038c9b1"
+        }
+      ]
+    }
+  ]
+}

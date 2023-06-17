@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="edge-deployer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cdn-download" target="17" />
+      <module name="cdn-download.main" target="17" />
+      <module name="cdn-download.test" target="17" />
+      <module name="cdn-upload" target="17" />
+      <module name="cdn-upload.main" target="17" />
+      <module name="cdn-upload.test" target="17" />
+      <module name="com.openfaas.session-offloading-manager" target="17" />
+      <module name="com.openfaas.session-offloading-manager.main" target="17" />
+      <module name="com.openfaas.session-offloading-manager.test" target="17" />
+      <module name="Deployer" target="17" />
+      <module name="edgeDb.main" target="17" />
+      <module name="edgeDb.test" target="17" />
+      <module name="empty-function" target="17" />
+      <module name="empty-function.main" target="17" />
+      <module name="empty-function.test" target="17" />
+      <module name="example" target="17" />
+      <module name="example.main" target="17" />
+      <module name="example.test" target="17" />
+      <module name="function" target="17" />
+      <module name="function.main" target="17" />
+      <module name="function.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

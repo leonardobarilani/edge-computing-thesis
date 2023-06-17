@@ -1,9 +1,9 @@
 echo building and pushing to local register
-faas-cli up --skip-deploy
+cd ../
+faas-cli up --skip-deploy --parallel 1 --filter shopping-cart  || exit 1
 
-echo Deploying
-./deploy.sh || exit 1
+./shopping-carts/deploy.sh || exit 1
 
 echo Testing
 read -p "Press enter to start tests"
-./tests/run-tests.sh || exit 1
+./shopping-carts/tests/run-tests.sh || exit 1
