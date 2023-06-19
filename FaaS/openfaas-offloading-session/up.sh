@@ -1,5 +1,7 @@
 echo building and pushing to local register
-cd ../
+cd EdgeDb
+./gradlew publish
+cd ../../
 faas-cli up --skip-deploy --filter session-offloading-manager || exit 1
 
 echo Deploying
