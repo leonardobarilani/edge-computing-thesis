@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-offload-trigger
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: url-caller-offload-trigger
+            image: k3d-docker-io.localhost:5000/curl:latest
+            command:
+              - sh
+              - -c
+              - curl http://gateway.openfaas.svc.cluster.local:8080/function/session-offloading-manager?command=offload-trigger
+          restartPolicy: OnFailure
