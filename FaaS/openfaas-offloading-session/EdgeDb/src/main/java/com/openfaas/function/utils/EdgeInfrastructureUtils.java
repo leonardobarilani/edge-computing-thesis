@@ -21,6 +21,14 @@ public class EdgeInfrastructureUtils {
     private EdgeInfrastructureUtils() {
     }
 
+    public static Infrastructure getInfrastructure () {
+        if (infrastructure == null) {
+            String json = new String(Base64.getDecoder().decode(System.getenv("EDGE_INFRASTRUCTURE")));
+            infrastructure = new Gson().fromJson(json, Infrastructure.class);
+        }
+        return infrastructure;
+    }
+
     // TODO this should be done once in the deployer by setting a PARENT_HOST env variable
     public static String getParentHost(String locationChild) {
         if (infrastructure == null) {

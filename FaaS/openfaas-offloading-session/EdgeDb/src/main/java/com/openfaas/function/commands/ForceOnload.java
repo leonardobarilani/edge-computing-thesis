@@ -57,7 +57,7 @@ public class ForceOnload implements ICommand {
 
     private String onloadMetadata() {
         List<String> availableNodes = EdgeInfrastructureUtils.getLocationsFromNodeToLevel(
-                System.getenv("LOCATION_ID"), EdgeInfrastructureUtils.infrastructure.areaTypesIdentifiers[0]);
+                System.getenv("LOCATION_ID"), EdgeInfrastructureUtils.getInfrastructure().areaTypesIdentifiers[0]);
         if (availableNodes.size() > 0)
             availableNodes.remove(availableNodes.size() - 1);
 
