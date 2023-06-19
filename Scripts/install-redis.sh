@@ -24,3 +24,14 @@ helm upgrade --install my-openfaas-redis \
 	bitnami/redis
 # For extra options, visit:
 # https://github.com/bitnami/charts/tree/main/bitnami/redis#parameters
+
+# Check if Redis Python library is installed
+if python3 -c "import redis" &>/dev/null; then
+    echo "Redis Python library is already installed."
+else
+    echo "Redis Python library not found. Installing..."
+    pip install redis
+fi
+
+python3 load-redis-default-config.py --host $(kubectl --context $1 get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
+
