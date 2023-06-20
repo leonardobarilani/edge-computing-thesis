@@ -36,11 +36,11 @@
         {
           "name": "EdgeDb-2.0.0.jar",
           "url": "EdgeDb-2.0.0.jar",
-          "size": 78831,
-          "sha512": "18b6f59452167ff3dbec1d4853a1f461fffcccb04da8123d3ad1d74284fb914712ae9f9988d9c5937f2ff6c5effc6f550e6333196ef7835f17b641de716ac60c",
-          "sha256": "799222b6615b3937aff29bbffc0ec23a993dbbb2ce490e5ccc399aa0a46e74e5",
-          "sha1": "a2fdccd66e20eec0d40077017234aa08c50ac39a",
-          "md5": "8f73c8eea119fc41772d0793e2952edd"
+          "size": 78921,
+          "sha512": "282b2b3614391079c5725f17715c2043c78d9d8e7ce4f54fe4f458c742b3c83c67232b8e9b3e911e0ccc00de4c350cb345c0f313af42629f2984630625735f44",
+          "sha256": "575d30f23bd3a9d6320ffb670d7bcb5bd68a2d234f27c277fe838bbc73680eed",
+          "sha1": "0dc690cc4328071dbbc10269a5e652dc856627dd",
+          "md5": "c4a62c60c1d81c38ef739c851abb024a"
         }
       ]
     },
@@ -87,11 +87,11 @@
         {
           "name": "EdgeDb-2.0.0.jar",
           "url": "EdgeDb-2.0.0.jar",
-          "size": 78831,
-          "sha512": "18b6f59452167ff3dbec1d4853a1f461fffcccb04da8123d3ad1d74284fb914712ae9f9988d9c5937f2ff6c5effc6f550e6333196ef7835f17b641de716ac60c",
-          "sha256": "799222b6615b3937aff29bbffc0ec23a993dbbb2ce490e5ccc399aa0a46e74e5",
-          "sha1": "a2fdccd66e20eec0d40077017234aa08c50ac39a",
-          "md5": "8f73c8eea119fc41772d0793e2952edd"
+          "size": 78921,
+          "sha512": "282b2b3614391079c5725f17715c2043c78d9d8e7ce4f54fe4f458c742b3c83c67232b8e9b3e911e0ccc00de4c350cb345c0f313af42629f2984630625735f44",
+          "sha256": "575d30f23bd3a9d6320ffb670d7bcb5bd68a2d234f27c277fe838bbc73680eed",
+          "sha1": "0dc690cc4328071dbbc10269a5e652dc856627dd",
+          "md5": "c4a62c60c1d81c38ef739c851abb024a"
         }
       ]
     }

@@ -58,9 +58,15 @@ public class OffloadTrigger implements ICommand {
                 "OffloadBottomThreshold: " + offloadBottomThreshold + "\n" +
                 "OnloadThreshold: " + onloadThreshold);
         if (usedMemory >= offloadTopThreshold) {
+            Logger.log("Setting status of node to reject offloads");
+            ConfigurationDAO.rejectOffloading();
+
             Logger.log("Triggered offload");
             returnValue = manageOffload();
         } else if (usedMemory <= onloadThreshold) {
+            Logger.log("Setting status of node to accept offloads");
+            ConfigurationDAO.acceptOffloading();
+
             Logger.log("Triggered onload");
             manageOnload();
             returnValue = -1;
