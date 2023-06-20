@@ -30,6 +30,15 @@ if python3 -c "import redis" &>/dev/null; then
     echo "Redis Python library is already installed."
 else
     echo "Redis Python library not found. Installing..."
+    
+    # Check if pip is installed
+    if ! command -v pip &>/dev/null; then
+        echo "pip is not found. Installing pip..."
+        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        python get-pip.py
+        rm get-pip.py
+    fi
+    
     pip install redis
 fi
 
