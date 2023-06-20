@@ -19,8 +19,8 @@ $DEPLOY session-offloading-manager-update-session $SCRIPTS_PATH/infrastructure.j
 
 ./openfaas-offloading-session/load-curl-in-local-registry.sh
 
-kubectl apply -f caller-offload-trigger.yaml --context $NODE
-kubectl apply -f caller-garbage-collector.yaml --context $NODE
+kubectl apply -f ./openfaas-offloading-session/caller-offload-trigger.yaml --context $NODE
+kubectl apply -f ./openfaas-offloading-session/caller-garbage-collector.yaml --context $NODE
 
 printf "\nIf you'd like to stop the offload trigger caller, execute this in the appropriate kubectl context: kubectl delete -f caller-offload-trigger.yaml\n"
 printf "\nIf you'd like to stop the garbage collector caller, execute this in the appropriate kubectl context: kubectl delete -f caller-garbage-collector.yaml\n"
