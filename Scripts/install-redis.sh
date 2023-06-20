@@ -32,14 +32,13 @@ else
     echo "Redis Python library not found. Installing..."
     
     # Check if pip is installed
-    if ! command -v pip &>/dev/null; then
-        echo "pip is not found. Installing pip..."
-        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        python3 get-pip.py
-        rm get-pip.py
+    if ! command -v pip3 &>/dev/null; then
+        echo "pip3 is not found. Installing pip..."
+	sudo apt update
+	sudo apt install -y python3-pip
     fi
     
-    pip install redis
+    pip3 install redis
 fi
 
 python3 load-redis-default-config.py --host $(kubectl --context $1 get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
