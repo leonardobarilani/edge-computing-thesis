@@ -35,7 +35,7 @@ else
     if ! command -v pip &>/dev/null; then
         echo "pip is not found. Installing pip..."
         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        python get-pip.py
+        python3 get-pip.py
         rm get-pip.py
     fi
     
