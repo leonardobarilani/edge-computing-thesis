@@ -13,9 +13,9 @@ cd ../
 
 DEPLOY="java -jar $SCRIPTS_PATH/edge-deployer.jar deploy "
 
-$DEPLOY session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ../stack.yml"
-$DEPLOY session-offloading-manager-migrate-session $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ../stack.yml"
-$DEPLOY session-offloading-manager-update-session $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ../stack.yml"
+$DEPLOY session-offloading-manager $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ./stack.yml"
+$DEPLOY session-offloading-manager-migrate-session $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ./stack.yml"
+$DEPLOY session-offloading-manager-update-session $SCRIPTS_PATH/infrastructure.json --inEvery $LEVEL --inAreas $NODE --faas-cli "--label com.openfaas.scale.min=1" --faas-cli "--yaml ./stack.yml"
 
 ./openfaas-offloading-session/load-curl-in-local-registry.sh
 
