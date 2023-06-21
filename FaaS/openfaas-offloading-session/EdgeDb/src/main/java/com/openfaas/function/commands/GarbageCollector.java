@@ -116,13 +116,16 @@ public class GarbageCollector implements ICommand {
         // if we are not the proprietary of the session we are deleting,
         // we have to ping the proprietary to tell it to delete the session
         String proprietaryLocation = SessionsDAO.getSessionToken(session).proprietaryLocation;
-        if (System.getenv("LOCATION_ID").equals(proprietaryLocation)) {
+        if (!System.getenv("LOCATION_ID").equals(proprietaryLocation)) {
             Response responseSessionData = new Response("", 0);
             while(responseSessionData.getStatusCode() != 200) {
                 responseSessionData = new WrapperGarbageCollector()
                         .gateway(EdgeInfrastructureUtils.getGateway(proprietaryLocation))
                         .sessionToDelete(session)
                         .call();
+                try {
+                    Thread.sleep(1000);
+                } catch(Exception e) {}
             }
         }
 

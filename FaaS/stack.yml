@@ -47,6 +47,10 @@ functions:
     lang: java17
     handler: ./openfaas-offloading-session/session-offloading-manager
     image: k3d-docker-io.localhost:5000/session-offloading-manager:latest
+  session-offloading-manager-garbage-collector:
+    lang: java17
+    handler: ./openfaas-offloading-session/session-offloading-manager
+    image: k3d-docker-io.localhost:5000/session-offloading-manager:latest
 
   session-offloading-manager-trigger:
     lang: java17

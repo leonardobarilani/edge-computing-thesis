@@ -20,7 +20,7 @@ public class WrapperGarbageCollector extends HTTPWrapper {
 
     @Override
     public Response call() {
-        setRemoteFunction("/function/session-offloading-manager?" +
+        setRemoteFunction("/function/session-offloading-manager-garbage-collector?" +
                 "command=garbage-collector&" +
                 "deletePolicy=forced&" +
                 "sessionId=" + sessionToDelete);

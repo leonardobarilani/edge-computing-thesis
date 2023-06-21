@@ -13,7 +13,7 @@ def test_function(setup_teardown):
     assert DataGarbageCollector.test_before == con.get(
         'session-offloading-manager?command=test-function&type=session&value=' + session)
 
-    assert DataGarbageCollector.garbage_collector == con.get('session-offloading-manager?command=garbage-collector')
+    assert DataGarbageCollector.garbage_collector == con.get('session-offloading-manager-garbage-collector?command=garbage-collector&deletePolicy=forced&sessionId=' + session)
 
     assert DataGarbageCollector.test_after == con.get(
         'session-offloading-manager?command=test-function&type=session&value=' + session)
