@@ -15,6 +15,7 @@ helm upgrade openfaas --install openfaas/openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
   --kube-context $1 \
+  --set gateway.directFunctions=true \
   --debug
 
 #helm upgrade --install cron-connector openfaas/cron-connector --namespace openfaas --set basic_auth=false --wait
