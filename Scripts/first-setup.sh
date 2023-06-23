@@ -60,3 +60,5 @@ kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null #o
 k3d completion bash | sudo tee /etc/bash_completion.d/k3d > /dev/null #optional
 helm completion bash | sudo tee /etc/bash_completion.d/helm > /dev/null #optional
 faas-cli completion --shell bash | sudo tee /etc/bash_completion.d/faas-cli > /dev/null #optional
+
+echo Installation ended
