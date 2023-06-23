@@ -11,11 +11,11 @@ echo 3
 sudo apt update
 echo 4
 sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
-#sudo groupadd docker
+sudo groupadd docker
 echo 5
 sudo usermod -aG docker $USER
 echo 6
-newgrp docker
+# newgrp docker
 echo 7
 docker run hello-world #check if working
 echo 8
