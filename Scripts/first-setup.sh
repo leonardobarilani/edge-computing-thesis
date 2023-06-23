@@ -14,9 +14,13 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 #sudo groupadd docker
 echo 5
 sudo usermod -aG docker $USER
+echo 6
 newgrp docker
+echo 7
 docker run hello-world #check if working
+echo 8
 docker rm -f "$(docker ps -a -q)"
+echo 9
 docker rmi hello-world
 
 #Install kubectl:
