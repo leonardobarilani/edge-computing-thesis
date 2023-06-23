@@ -12,7 +12,7 @@ echo \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
-sudo groupadd docker
+#sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 docker run hello-world #check if working
@@ -42,13 +42,14 @@ helm repo update
 curl -sSL https://cli.openfaas.com | sudo sh
 
 #install SCRIPTS_PATH and aliases in .bashrc
+SHELLRC=$HOME/.bashrc
+source $SHELLRC
 if [[ -z "${SCRIPTS_PATH}" ]]; then
-	SHELLRC=$HOME/.bashrc
-	read -p "The env variable SCRIPTS_PATH is not defined. It will be place in $(echo -n $SHELLRC). Please specify the full absolute path that contains the scripts (example: /foo/bar/edge-computing-thesis/Scripts): " NEW_SCRIPTS_PATH
+	SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 	echo "">> $SHELLRC
 	echo "">> $SHELLRC
 	echo "# Pointer to edge-computing-thesis scripts">> $SHELLRC
-	echo "export SCRIPTS_PATH='$NEW_SCRIPTS_PATH'">> $SHELLRC
+	echo "export SCRIPTS_PATH='$SCRIPT_DIR'">> $SHELLRC
 	echo "source \$SCRIPTS_PATH/aliases.sh">> $SHELLRC
 	echo "">> $SHELLRC
 fi
