@@ -27,18 +27,29 @@ public class TranscriberDemo {
 
         recognizer.startRecognition(stream);
 	SpeechResult result;
-	String firstHypothesis = "";
+        List<String> stringList = new ArrayList<>();
 	boolean first = true;
         while ((result = recognizer.getResult()) != null) {
-	    System.out.format("(TranscriberDemo) Hypothesis: %s\n", result.getHypothesis());
-	    if(first) {
-		first = false;
-		firstHypothesis = result.getHypothesis();
-	    }
+            String text = result.getHypothesis();
+	    System.out.format("(TranscriberDemo) Hypothesis: %s\n", text);
+            stringList.add(string);
 	}
 	recognizer.stopRecognition();
 	
-	return firstHypothesis;
+	// Build the JSON string manually
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[");
+        for (int i = 0; i < stringList.size(); i++) {
+            String string = stringList.get(i);
+            jsonBuilder.append("\"").append(string).append("\"");
+            if (i < stringList.size() - 1) {
+                jsonBuilder.append(",");
+            }
+        }
+        jsonBuilder.append("]");
+        String jsonString = jsonBuilder.toString();
+	
+	return jsonString;
     }
 }
 

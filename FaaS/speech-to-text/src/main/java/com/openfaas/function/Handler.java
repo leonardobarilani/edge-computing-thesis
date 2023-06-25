@@ -22,7 +22,7 @@ public class Handler extends AbstractHandler {
         }
 
 
-        res.setBody("{\"message\":\"" + text + "\", \"statusCode\":200}");
+        res.setBody("{\"message\":" + text + ", \"statusCode\":200}");
         res.setStatusCode(200);
 
         return res;
