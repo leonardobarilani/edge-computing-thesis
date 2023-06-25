@@ -59,3 +59,8 @@ functions:
     annotations:
       topic: cron-trigger
       schedule: "*/1 * * * *" # 1 minute
+
+  speech-to-text:
+    lang: java17
+    handler: ./speech-to-text
+    image: k3d-docker-io.localhost:5000/speech-to-text:latest
