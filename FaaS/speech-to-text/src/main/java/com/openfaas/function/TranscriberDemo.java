@@ -3,8 +3,10 @@ package com.openfaas.function;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
@@ -28,11 +30,10 @@ public class TranscriberDemo {
         recognizer.startRecognition(stream);
 	SpeechResult result;
         List<String> stringList = new ArrayList<>();
-	boolean first = true;
         while ((result = recognizer.getResult()) != null) {
             String text = result.getHypothesis();
 	    System.out.format("(TranscriberDemo) Hypothesis: %s\n", text);
-            stringList.add(string);
+            stringList.add(text);
 	}
 	recognizer.stopRecognition();
 	
