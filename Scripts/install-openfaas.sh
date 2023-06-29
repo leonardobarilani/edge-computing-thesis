@@ -14,8 +14,11 @@ helm upgrade openfaas --install openfaas/openfaas \
   --namespace openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
-  --kube-context $1 \
   --set gateway.directFunctions=true \
+  --set gateway.readTimeout=1000 \
+  --set gateway.upstreamTimeout=1000 \
+  --set gateway.writeTimeout=1000 \
+  --kube-context $1 \
   --debug
 
 #helm upgrade --install cron-connector openfaas/cron-connector --namespace openfaas --set basic_auth=false --wait
