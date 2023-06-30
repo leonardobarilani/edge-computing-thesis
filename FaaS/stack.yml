@@ -64,3 +64,5 @@ functions:
     lang: java17
     handler: ./speech-to-text
     image: k3d-docker-io.localhost:5000/speech-to-text:latest
+    environment:
+      exec_timeout: 5m
