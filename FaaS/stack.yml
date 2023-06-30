@@ -66,3 +66,5 @@ functions:
     image: k3d-docker-io.localhost:5000/speech-to-text:latest
     environment:
       exec_timeout: 5m
+      write_timeout: 5m2s
+      read_timeout: 5m2s
