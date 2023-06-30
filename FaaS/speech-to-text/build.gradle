@@ -16,6 +16,9 @@ dependencies {
     implementation group: 'edu.cmu.sphinx', name: 'sphinx4-core', version:'5prealpha-SNAPSHOT'
     implementation group: 'edu.cmu.sphinx', name: 'sphinx4-data', version:'5prealpha-SNAPSHOT'
 
+
+    implementation ('com.openfaas:EdgeDb:2.0.0')
+
 }
 
 // In this section you declare where to find the dependencies of your project

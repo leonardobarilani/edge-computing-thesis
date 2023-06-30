@@ -1,10 +1,13 @@
 package com.openfaas.function;
 
+import com.openfaas.function.api.EdgeDB;
+import com.openfaas.function.api.Offloadable;
+import com.openfaas.function.utils.Logger;
 import  com.openfaas.model.*;
 
-public class Handler extends AbstractHandler {
+public class Handler extends Offloadable {
 
-    public IResponse Handle(IRequest req) {
+    public IResponse HandleOffload(IRequest req) {
         Response res = new Response();
         
         if (req.getBody() == null) {
@@ -21,6 +24,13 @@ public class Handler extends AbstractHandler {
             throw new RuntimeException(e);
         }
 
+        try {
+            var history = EdgeDB.getList("history");
+            history.add(text);
+            EdgeDB.setList("history", history);
+        } catch (Exception e) {
+            Logger.log("(HandlOffload) Error while saving history :(\n(HandlOffload) Text: " + text);
+        }
 
         res.setBody("{\"message\":" + text + ", \"statusCode\":200}");
         res.setStatusCode(200);
