@@ -5,6 +5,8 @@ import com.openfaas.function.api.Offloadable;
 import com.openfaas.function.utils.Logger;
 import  com.openfaas.model.*;
 
+import java.util.ArrayList;
+
 public class Handler extends Offloadable {
 
     public IResponse HandleOffload(IRequest req) {
@@ -26,9 +28,12 @@ public class Handler extends Offloadable {
 
         try {
             var history = EdgeDB.getList("history");
+            if (history == null)
+                history = new ArrayList<>();
             history.add(text);
             EdgeDB.setList("history", history);
         } catch (Exception e) {
+            e.printStackTrace();
             Logger.log("(HandlOffload) Error while saving history :(\n(HandlOffload) Text: " + text);
         }
 
