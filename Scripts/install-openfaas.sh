@@ -15,9 +15,9 @@ helm upgrade openfaas --install openfaas/openfaas \
   --set basic_auth=false \
   --set functionNamespace=openfaas-fn \
   --set gateway.directFunctions=true \
-  --set gateway.readTimeout=1000 \
-  --set gateway.upstreamTimeout=1000 \
-  --set gateway.writeTimeout=1000 \
+  --set gateway.readTimeout=1000s \
+  --set gateway.upstreamTimeout=1000s \
+  --set gateway.writeTimeout=1000s \
   --kube-context $1 \
   --debug
 
