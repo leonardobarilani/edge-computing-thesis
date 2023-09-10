@@ -9,8 +9,7 @@ Master of Science Thesis in Computer Science and Engineering at Politecnico di M
   infrastructure - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/FaaS/openfaas-offloading-session/session-offloading-manager)
 * Scripts: folder containing some helper scripts to install the whole framework and locally manage OpenFaaS
   functions - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/Scripts)
-* Tutorials: folder containing instructions on how to execute this
-  framework - [README](https://github.com/leonardobarilani/edge-computing-thesis/tree/main/Tutorials)
+* Doc: folder containing the Thesis and the Executive Summary
 
 ## Acknowledgements
 
